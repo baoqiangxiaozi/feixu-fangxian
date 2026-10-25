@@ -175,10 +175,32 @@
         white-space: nowrap;
       }
       .chip b { color: var(--accent); font-size: 17px; }
-      #btnHudSettings, #btnHudSupply {
+      /* FPS readout （显示帧率 toggle): small, translucent, tucked under
+         the top bar at the left edge — clear of the crosshair and chips.
+         Visibility is driven from the main loop (play mode only). */
+      #fpsMeter {
+        position: absolute; left: max(10px, env(safe-area-inset-left));
+        top: calc(max(10px, env(safe-area-inset-top)) + 48px);
+        background: rgba(8, 14, 22, .5); color: #d9ecff;
+        border: 1px solid rgba(255, 255, 255, .14); border-radius: 6px;
+        padding: 3px 9px; font-size: 13px; font-weight: 700; letter-spacing: .5px;
+        font-variant-numeric: tabular-nums; display: none; z-index: 6;
+      }
+      #btnHudSettings, #btnHudSupply, #btnHudMenu {
         pointer-events: auto; cursor: pointer; font-family: inherit; color: var(--hud);
       }
-      #btnHudSettings:active, #btnHudSupply:active { border-color: var(--accent); color: var(--accent); }
+      #btnHudSettings:active, #btnHudSupply:active, #btnHudMenu:active { border-color: var(--accent); color: var(--accent); }
+      /* HUD menu popup: the topbar's single 「菜单」 chip opens this
+         small panel with the 设置 / 补给 entries (补给 is hidden in
+         bomb mode by refreshHUD, exactly as the old chip was). */
+      #hudmenu {
+        position: absolute; right: max(10px, env(safe-area-inset-right));
+        top: calc(max(10px, env(safe-area-inset-top)) + 46px);
+        display: flex; flex-direction: column; gap: 8px; z-index: 7;
+        pointer-events: auto;
+      }
+      #hudmenu[hidden] { display: none; }
+      #hudmenu .chip { text-align: center; min-width: 96px; }
 
       #bottomleft {
         position: absolute; left: max(14px, env(safe-area-inset-left));
@@ -371,7 +393,10 @@
       .screen {
         position: fixed; inset: 0; z-index: 10; display: flex;
         background: radial-gradient(ellipse at 50% 35%, rgba(24,48,84,.88), rgba(5,10,20,.94));
-        padding: 20px; overflow-y: auto;
+        /* bottom padding clears the fixed model-loading pill, so a
+           scrolled card (map cards included) can always be scrolled
+           fully out from under it */
+        padding: 20px 20px 84px; overflow-y: auto;
       }
       .screen.hidden { display: none; }
       /* margin:auto centres the card while it fits, and collapses to 0
@@ -384,6 +409,7 @@
       .card h1 { font-size: clamp(30px, 7vw, 46px); margin: 0 0 6px; letter-spacing: 3px; }
       .card h1 .hl { color: var(--accent); }
       .card .sub { opacity: .85; font-size: 15px; margin: 0 0 22px; line-height: 1.6; }
+      #startScreen .card .sub { margin-bottom: 14px; }
       .rules {
         text-align: left; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
         border-radius: 14px; padding: 14px 18px; margin: 0 auto 24px; max-width: 420px;
@@ -400,6 +426,20 @@
         box-shadow: 0 6px 24px rgba(255,150,0,.35);
       }
       .bigbtn:active { transform: translateY(1px); }
+      /* Start screen: the start button is the hero — bigger, wider
+         and louder than every other button on the card. */
+      .bigbtn.hero {
+        font-size: 25px; letter-spacing: 5px; padding: 19px 40px;
+        width: min(430px, 94%); border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(255,150,0,.5);
+      }
+      /* Start screen grouping: 装备 / 更多 entry buttons + panels */
+      .entrybtn { font-size: 15px; padding: 10px 20px; }
+      .entrybtn.active { border-color: var(--accent); color: var(--accent); background: rgba(255,171,94,.13); }
+      /* Settings tab bar */
+      .settabs { display: flex; gap: 10px; justify-content: center; margin: 0 auto 18px; flex-wrap: wrap; }
+      .settab { font-size: 15px; padding: 9px 26px; letter-spacing: 2px; }
+      body:not(.touch) .keytouch-note { display: none; }
       .stats { display: flex; justify-content: center; gap: 26px; margin: 4px 0 24px; flex-wrap: wrap; }
       .stats .s b { display: block; font-size: 30px; color: var(--accent); }
       .stats .s span { font-size: 13px; opacity: .8; }
@@ -464,6 +504,29 @@
         display: block; width: 100%; height: 76px; object-fit: cover;
         border-radius: 8px; margin-bottom: 7px; pointer-events: none;
       }
+      /* start screen only: slightly shorter map art so the hero
+         start button stays in the first screen (the end screens
+         keep their original card art untouched) */
+      #startScreen .mappick img.mapimg { height: 62px; }
+      /* phones: the map grid is three rows tall — drop the cards'
+         description line (the name + art still identify the map)
+         so mode + maps + start + entries fit the first screen */
+      @media (max-width: 560px) {
+        #startScreen .mappick span { display: none; }
+        #startScreen .mappick img.mapimg { height: 46px; }
+        /* three-across maps (two rows instead of three) + tighter
+           title/rows: the whole first screen fits a phone */
+        #startScreen .maprow { grid-template-columns: repeat(3, 1fr); margin-bottom: 10px; }
+        #startScreen .mappick { padding: 8px; }
+        #startScreen .mappick b { font-size: 14px; }
+        #startScreen .card h1 { font-size: 30px; margin-bottom: 2px; }
+        #startScreen .card .sub { font-size: 13.5px; line-height: 1.5; }
+        #startScreen .setrow { margin-bottom: 12px; }
+        #startScreen .bigbtn.hero { padding: 15px 30px; font-size: 22px; }
+      }
+      /* while the model pill is up, menu screens pad their top so
+         no card title ever slides under it */
+      #loadpill.on ~ .screen { padding-top: 62px; }
 
       /* ---------- Character picker ---------- */
       .charrow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-width: 640px; margin: 0 auto 16px; }
@@ -725,7 +788,9 @@
 
       /* ---------- Model loading pill (staged GLB loading progress) ---------- */
       #loadpill {
-        position: fixed; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 30;
+        /* top-right corner: clear of the centred cards on menu
+           screens and of the centred topbar chips in-match */
+        position: fixed; right: max(10px, env(safe-area-inset-right)); top: max(10px, env(safe-area-inset-top)); z-index: 30;
         min-width: 176px; text-align: center; pointer-events: none;
         background: rgba(8, 14, 24, .72); border: 1px solid rgba(140, 180, 220, .35);
         border-radius: 999px; padding: 5px 14px 7px; font-size: 12px; color: #cfe2f2;
@@ -826,13 +891,17 @@
       <div id="streakpop" aria-hidden="true"></div>
       <div id="coinpop" aria-hidden="true"><span class="coindot"></span><span id="coinpopTxt">+3 金币</span></div>
       <div id="topbar">
-        <div class="chip">得分 <b id="ui-score">0</b></div>
+        <div class="chip">击杀 <b id="ui-kills">0</b> · <b id="ui-score">0</b> 分</div>
         <div class="chip">第 <b id="ui-wave">1</b> 关</div>
         <div class="chip">敌人 <b id="ui-left">0</b></div>
         <div class="chip"><span class="coindot"></span> 金币 <b id="ui-coins">0</b></div>
+        <button class="chip" id="btnHudMenu" type="button">菜单 ▾</button>
+      </div>
+      <div id="hudmenu" hidden>
         <button class="chip" id="btnHudSettings" type="button">设置</button>
         <button class="chip" id="btnHudSupply" type="button">补给</button>
       </div>
+      <div id="fpsMeter">-- FPS</div>
       <div id="throwwheel" class="radialwheel" aria-hidden="true">
         <svg viewBox="0 0 252 252" aria-hidden="true">
           <path class="wsector" data-k="fire" d="M 93.1,107 L 18.6,64 A 124 124 0 0 1 233.4,64 L 158.9,107 A 38 38 0 0 0 93.1,107 Z"/>
@@ -916,7 +985,7 @@
     <div class="screen" id="startScreen">
       <div class="card">
         <h1>废墟<span class="hl">防线</span></h1>
-        <p class="sub">射击防守：共 30 关，敌人一关比一关强——机器人、傀儡、蜘蛛、狼人……最后是终焉主宰。<br>5 张地图可选（废墟 / 荒漠 / 冰原 / 丛林 / 废土断桥），5 名人物可选（队长 / 游侠 / 雪卫 / 猎手 / 特工，造型各不相同），武器有弓箭、火箭筒和霰弹枪，还能扔燃烧弹、冰球和手榴弹（轮盘切换）。小心新出现的远程怪——它们会躲在远处放冷枪。守住阵地，别让它们碰到你。游戏中点顶部「设置」也能随时调设置。</p>
+        <p class="sub">射击防守：共 30 关，敌人一关比一关强，最后是终焉主宰。<br>5 张地图、5 名人物、7 把武器可选，还能扔燃烧弹、冰球和手榴弹。守住阵地，别让它们碰到你。</p>
         <button type="button" class="foldtoggle" data-fold="rulesBody" aria-expanded="false">玩法说明 <span class="arr">▸</span></button>
         <div class="foldbody" id="rulesBody" hidden>
         <div class="rules" id="rules-desktop">
@@ -970,6 +1039,17 @@
         <button type="button" class="foldtoggle" data-fold="changelogBody" aria-expanded="false">更新日志 <span class="arr">▸</span></button>
         <div class="foldbody" id="changelogBody" hidden>
           <div class="rules changelog">
+            <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 界面优化（网页版）</div>
+              <div>· <b style="color:var(--accent)">开始页归组、首屏更清爽</b>：开始按钮更大更醒目，首屏只留模式、地图、开始与「继续上一局」；武器 / 人物 / 皮肤商店收进「装备」，每日任务、战绩、存档码、玩法说明与更新日志收进「更多」，点开即达，原来的选择与存档完全不变</div>
+              <div>· <b style="color:var(--accent)">设置分三页 + 战斗顶栏减负</b>：设置改成「画面 / 操作 / 按键」三个标签页，选项一个不少；战斗顶栏把击杀与分数合并成一个筹码，「设置 / 补给」收进一个「菜单」按钮（补给仍只在闯关模式出现，菜单按钮也能在按钮布局里拖动）；模型加载提示不再压住地图卡片</div>
+            </div>
+            <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 帧率显示 + 自动画质（网页版）</div>
+              <div>· <b style="color:var(--accent)">设置里新增「显示帧率」开关</b>：打开后战斗中屏幕左上角会显示实时帧率（每半秒按滑动平均刷新），卡不卡一眼能看见；菜单和结算界面自动隐藏，不挡准星和信息栏</div>
+              <div>· <b style="color:var(--accent)">画质改为四项：自动（推荐）/ 精美 / 均衡 / 流畅</b>：选「自动」后，第一次进对局会静默测速约 3 秒（跳过开头热身帧、用真实帧时计），平均 55 帧以上升一档、40–54 帧保持、40 帧以下降一档（以进局时的当前档为基准，手机默认从流畅起、桌面从均衡起），定档结果会存档、之后直接用；战斗中帧率持续低于 24 超过 5 秒还会自动降一档兜底（每局最多一次，降档同样存档）。选具体档位就是手动锁定，自动逻辑永不改动——老玩家之前选过的档位保持不变，照旧生效</div>
+              <div>· 玩法、数值与判定不变；自动定档走的还是原来三档的同一套渲染参数（分辨率上限、阴影、粒子、自适应分辨率全部照旧），没有另起一套</div>
+            </div>
             <div class="clog-entry">
               <div class="clog-date">2026-10-25 更新 · 手机流畅度优化 + 横屏适配修复（网页版）</div>
               <div>· <b style="color:var(--accent)">手机上更省帧了</b>：手机打开默认走流畅配置——均衡档在手机上的渲染分辨率上限从 1.6 倍收到 1.25 倍、自适应分辨率最低不低于 0.75 倍（不再糊成马赛克）、手机端关掉抗锯齿的额外开销、均衡 / 精美档在手机上的阴影贴图分别降到 512 / 1024（桌面仍是 2048，画面不变）；流畅档照旧完全不开实时阴影。你在设置里手动选过的档位优先、照常存档，一个数值没动</div>
@@ -1212,14 +1292,21 @@
           <button class="setbtn act-restart-run" type="button">重新开始本局</button>
           <button class="setbtn dangerbtn act-wipe-save" type="button">清空所有存档</button>
         </div>
-        <div class="setrow">
-          <button class="setbtn" id="btnShop"><span class="coindot"></span> 皮肤商店 · 金币 <span class="coinbal">0</span></button>
-          <button class="setbtn" id="btnSettings">设置（视角 · 灵敏度 · 辅助瞄准 · 按键自定义）</button>
-        </div>
         <div class="setrow" id="continueRow" hidden>
           <button class="setbtn continuebtn" id="btnContinueRun" type="button">继续上一局</button>
         </div>
-        <button class="bigbtn" id="btnStart">开始战斗</button>
+        <button class="bigbtn hero" id="btnStart">开始战斗</button>
+        <div class="setrow entryrow">
+          <button class="setbtn entrybtn" id="btnEquip" type="button" aria-expanded="false">装备</button>
+          <button class="setbtn entrybtn" id="btnMore" type="button" aria-expanded="false">更多</button>
+          <button class="setbtn" id="btnSettings">设置（视角 · 灵敏度 · 辅助瞄准 · 按键自定义）</button>
+        </div>
+        <div id="equipPanel" hidden>
+          <div class="setrow">
+            <button class="setbtn" id="btnShop"><span class="coindot"></span> 皮肤商店 · 金币 <span class="coinbal">0</span></button>
+          </div>
+        </div>
+        <div id="morePanel" hidden></div>
       </div>
     </div>
 
@@ -1355,6 +1442,16 @@
       <div class="card">
         <h1>设<span class="hl">置</span></h1>
         <p class="sub">视角、灵敏度、辅助瞄准和按键都在这里调，改完点「完成」返回。</p>
+        <div class="settabs">
+          <button class="setbtn settab active" data-tab="gfx" type="button">画面</button>
+          <button class="setbtn settab" data-tab="ops" type="button">操作</button>
+          <button class="setbtn settab" data-tab="keys" type="button">按键</button>
+        </div>
+        <div class="setpage" data-page="gfx"></div>
+        <div class="setpage" data-page="ops" hidden></div>
+        <div class="setpage" data-page="keys" hidden>
+          <p class="savenote keytouch-note">触屏设备直接用屏幕按钮游玩；按钮的大小、位置和透明度在「操作」页的「按钮布局」里调。</p>
+        </div>
         <div class="setrow">
           <span class="orientlabel">画面方向</span>
           <button class="setbtn orientbtn active" data-o="landscape">横屏</button>
@@ -1370,9 +1467,13 @@
         </div>
         <div class="setrow">
           <span class="orientlabel">画质</span>
-          <button class="setbtn qbtn" data-q="smooth">流畅</button>
-          <button class="setbtn qbtn" data-q="balanced">均衡</button>
+          <button class="setbtn qbtn" data-q="auto">自动（推荐）</button>
           <button class="setbtn qbtn" data-q="fancy">精美</button>
+          <button class="setbtn qbtn" data-q="balanced">均衡</button>
+          <button class="setbtn qbtn" data-q="smooth">流畅</button>
+        </div>
+        <div class="setrow">
+          <button class="setbtn" id="setFps">显示帧率：关</button>
         </div>
         <div class="setrow">
           <button class="setbtn active" id="setDirHint">敌人方向提示：开</button>
@@ -1505,6 +1606,87 @@
           });
         })(foldToggles[ft]);
       }
+
+      /* ================= Start-screen grouping （装备 / 更多） =================
+         The start card's first screen carries only the mode pick,
+         the map pick, 继续上一局 and the hero start button. Everything
+         else is RELOCATED (same elements, same ids, same listeners —
+         appendChild moves a node without touching its handlers or
+         state) into two collapsible panels: 装备 holds the hero pick,
+         the weapon pick and the skin-shop entry; 更多 holds the two
+         fold sections （玩法说明 / 更新日志）, daily tasks, records,
+         the save-code rows and the danger row. */
+      (function () {
+        var card = document.querySelector("#startScreen .card");
+        var equip = document.getElementById("equipPanel");
+        var more = document.getElementById("morePanel");
+        if (!card || !equip || !more) return;
+        function title(txt) {
+          var ps = card.querySelectorAll(".picktitle");
+          for (var i = 0; i < ps.length; i++) if (ps[i].textContent.indexOf(txt) === 0) return ps[i];
+          return null;
+        }
+        function moveTo(panel, els) {
+          for (var i = 0; i < els.length; i++) if (els[i]) panel.appendChild(els[i]);
+        }
+        moveTo(equip, [title("选择人物"), card.querySelector(".charrow"),
+                       title("选择武器"), document.getElementById("pickrow")]);
+        var shopRow = equip.querySelector(".setrow"); // shop entry sits under the pickers
+        if (shopRow) equip.appendChild(shopRow);
+        var folds = card.querySelectorAll(".foldtoggle");
+        var codeBtn = document.getElementById("btnExportCode");
+        var note = null, notes = card.querySelectorAll(".savenote");
+        for (var ni = 0; ni < notes.length; ni++) if (notes[ni].parentNode === card) note = notes[ni];
+        var wipeBtn = card.querySelector(".act-wipe-save");
+        moveTo(more, [folds[0], document.getElementById("rulesBody"),
+                      folds[1], document.getElementById("changelogBody"),
+                      title("每日任务"), document.getElementById("taskList"),
+                      title("我的战绩"), document.getElementById("statsPanel"),
+                      codeBtn ? codeBtn.parentNode : null, document.getElementById("codeBoxWrap"),
+                      note, wipeBtn ? wipeBtn.parentNode : null]);
+        var bE = document.getElementById("btnEquip"), bM = document.getElementById("btnMore");
+        function toggle(panel, btn) {
+          var open = panel.hidden;
+          equip.hidden = true; more.hidden = true;
+          bE.classList.remove("active"); bM.classList.remove("active");
+          bE.setAttribute("aria-expanded", "false"); bM.setAttribute("aria-expanded", "false");
+          if (open) { panel.hidden = false; btn.classList.add("active"); btn.setAttribute("aria-expanded", "true"); }
+        }
+        bE.addEventListener("click", function () { toggle(equip, bE); });
+        bM.addEventListener("click", function () { toggle(more, bM); });
+      })();
+
+      /* ================= Settings tabs （画面 / 操作 / 按键） =================
+         The settings rows are relocated into three tab pages (same
+         elements/ids/listeners — see the start-screen note above):
+         画面 = quality, FPS readout, view, direction hints, shake;
+         操作 = sensitivity, aim assist, orientation, button layout;
+         按键 = the keyboard-remap entry (the remap list itself and
+         its 恢复默认 live on the key screen it opens). The 存档 row
+         stays under the pages, always visible. */
+      function showSetTab(name) {
+        var tabs = document.querySelectorAll(".settab");
+        for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle("active", tabs[i].getAttribute("data-tab") === name);
+        var pages = document.querySelectorAll(".setpage");
+        for (var j = 0; j < pages.length; j++) pages[j].hidden = pages[j].getAttribute("data-page") !== name;
+      }
+      (function () {
+        var setCard = document.querySelector("#settingsScreen .card");
+        if (!setCard) return;
+        function rowOf(el) {
+          while (el && !(el.classList && el.classList.contains("setrow"))) el = el.parentNode;
+          return el;
+        }
+        function rowWith(sel) { var el = setCard.querySelector(sel); return el ? rowOf(el) : null; }
+        function page(name) { return setCard.querySelector('.setpage[data-page="' + name + '"]'); }
+        function moveTo(panel, els) { for (var i = 0; i < els.length; i++) if (els[i] && panel) panel.appendChild(els[i]); }
+        moveTo(page("gfx"), [rowWith(".qbtn"), rowWith("#setFps"), rowWith(".viewbtn"), rowWith("#setDirHint"), rowWith("#setShake")]);
+        moveTo(page("ops"), [rowWith(".sensRange"), rowWith("#setAssist"), rowWith(".orientbtn"), setCard.querySelector(".layoutbtnrow")]);
+        moveTo(page("keys"), [setCard.querySelector(".kbdbtnrow")]);
+        var tabs = setCard.querySelectorAll(".settab");
+        for (var i = 0; i < tabs.length; i++)
+          (function (b) { b.addEventListener("click", function () { showSetTab(b.getAttribute("data-tab")); }); })(tabs[i]);
+      })();
 
       /* ================= Audio (synthesized, no assets) ================= */
       var AC = null;
@@ -1680,6 +1862,28 @@
          stepping down (and back up toward the grade's cap) with the
          frame rate. The choice persists in the save. */
       var qualityTier = isTouch ? "smooth" : "balanced";
+      /* ============ Auto quality + FPS meter ============
+         qualityMode is "auto" or "manual". Manual = the player picked
+         a concrete grade （精美 / 均衡 / 流畅） and the auto logic NEVER
+         touches it. Auto = the system grades the device: on the first
+         match entry with grading pending, a silent ~3 s benchmark
+         (0.5 s warm-up skipped, then real frame times) steps one grade
+         up from the benchmark-start grade at ≥55 fps, holds at 40–54,
+         steps down below 40; the result persists as autoTier and is
+         reused on later boots without re-measuring. Picking a manual
+         grade and then switching back to 自动 re-arms the benchmark
+         for the next match entry. While in auto mode, a match whose
+         sliding-average fps stays under 24 for over 5 s drops one
+         grade once per match (also persisted). New players default
+         to auto; saves written before this existed carry no qMode
+         and load as manual with their saved grade untouched.
+         showFps gates the small in-match frame-rate readout. */
+      var TIER_ORDER = ["smooth", "balanced", "fancy"];
+      var TIER_NAMES = { smooth: "流畅", balanced: "均衡", fancy: "精美" };
+      var qualityMode = "auto";
+      var autoTier = null;      // grade the auto logic settled on (persisted); null = not measured yet
+      var benchPending = true;  // grade on the next match entry (new players start pending)
+      var showFps = false;      // 显示帧率 toggle (persisted)
       var dirHintOn = true; // enemy direction hints (settings toggle, persisted)
       /* ================= Screen shake & haptics =================
          One master toggle （震动反馈， settings, persisted) drives
@@ -4552,7 +4756,8 @@
           binds: BINDS, sens: Math.round(sensMul * 100),
           view: viewMode, orient: orientMode, assist: assistOn,
           layout: btnLayout,
-          quality: qualityTier, dirHint: dirHintOn, shake: shakeOn, tasks: dailyTasks,
+          quality: qualityTier, qMode: qualityMode, qAuto: autoTier, showFps: showFps,
+          dirHint: dirHintOn, shake: shakeOn, tasks: dailyTasks,
           bomb: bombStats,
           stats: playerStats
         };
@@ -6044,7 +6249,7 @@
       var EYE = 1.7;
 
       var ui = {
-        score: document.getElementById("ui-score"), coins: document.getElementById("ui-coins"), wave: document.getElementById("ui-wave"),
+        score: document.getElementById("ui-score"), kills: document.getElementById("ui-kills"), coins: document.getElementById("ui-coins"), wave: document.getElementById("ui-wave"),
         left: document.getElementById("ui-left"), hp: document.getElementById("ui-hp"),
         hpfill: document.getElementById("hpfill"), ammo: document.getElementById("ui-ammo"),
         weapon: document.getElementById("ui-weapon"),
@@ -6073,6 +6278,7 @@
           if (supBtn) supBtn.style.display = supHide ? "none" : "";
         }
         setText("s", ui.score, STATE.score);
+        setText("k", ui.kills, STATE.kills);
         setText("c", ui.coins, STATE.coins);
         setText("w", ui.wave, Math.max(1, STATE.wave));
         setText("l", ui.left, enemies.length + STATE.toSpawn);
@@ -7877,16 +8083,37 @@
         setAssistBtn.classList.toggle("active", assistOn);
         saveProgress();
       });
-      /* Quality grade buttons + direction-hint toggle （设置） */
+      /* Quality grade buttons + direction-hint toggle （设置）.
+         Four choices: 自动（推荐） hands grading to the system (see the
+         benchmark in the main loop); a concrete grade is a manual lock
+         the auto logic never overrides. The auto button's label names
+         the settled grade once one exists. */
       var qBtns = document.querySelectorAll(".qbtn");
       function syncQualityBtns() {
-        for (var i = 0; i < qBtns.length; i++)
-          qBtns[i].classList.toggle("active", qBtns[i].getAttribute("data-q") === qualityTier);
+        var activeKey = qualityMode === "auto" ? "auto" : qualityTier;
+        for (var i = 0; i < qBtns.length; i++) {
+          var b = qBtns[i];
+          b.classList.toggle("active", b.getAttribute("data-q") === activeKey);
+          if (b.getAttribute("data-q") === "auto")
+            b.textContent = autoTier ? "自动 · " + TIER_NAMES[autoTier] : "自动（推荐）";
+        }
       }
       for (var qi = 0; qi < qBtns.length; qi++) {
         qBtns[qi].addEventListener("click", function () {
           var q = this.getAttribute("data-q");
+          if (q === "auto") {
+            if (qualityMode !== "auto") benchPending = true; // switched back to auto: re-grade next match
+            qualityMode = "auto";
+            if (autoTier) { qualityTier = autoTier; applyQuality(); }
+            else benchPending = true; // never graded on this device yet
+            syncQualityBtns();
+            saveProgress();
+            return;
+          }
           if (q !== "smooth" && q !== "balanced" && q !== "fancy") return;
+          qualityMode = "manual";
+          benchPending = false;
+          bench.active = false;
           qualityTier = q;
           applyQuality();
           syncQualityBtns();
@@ -7894,6 +8121,18 @@
         });
       }
       syncQualityBtns();
+      /* 显示帧率 toggle （设置）: shows the small FPS readout in-match */
+      var setFpsBtn = document.getElementById("setFps");
+      function syncFpsBtn() {
+        setFpsBtn.textContent = "显示帧率：" + (showFps ? "开" : "关");
+        setFpsBtn.classList.toggle("active", showFps);
+      }
+      setFpsBtn.addEventListener("click", function () {
+        showFps = !showFps;
+        syncFpsBtn();
+        saveProgress();
+      });
+      syncFpsBtn();
       var setDirHintBtn = document.getElementById("setDirHint");
       function syncDirHintBtn() {
         setDirHintBtn.textContent = "敌人方向提示：" + (dirHintOn ? "开" : "关");
@@ -8027,6 +8266,7 @@
       var settingsReturn = "startScreen";
       var settingsScreen = document.getElementById("settingsScreen");
       function openSettings(from) {
+        showSetTab("gfx"); // every entry point opens on the 画面 tab
         if (from === "play") {
           if (STATE.mode !== "play") return;
           settingsReturn = "play";
@@ -8054,11 +8294,27 @@
       document.getElementById("btnSettings").addEventListener("click", function () { openSettings("startScreen"); });
       document.getElementById("btnSettingsPause").addEventListener("click", function () { openSettings("pauseScreen"); });
       document.getElementById("btnSettingsDone").addEventListener("click", closeSettings);
+      /* HUD menu: one topbar chip replaces the old separate 设置 /
+         补给 chips. Tapping it pops a small panel with the two
+         entries; picking one closes the panel and runs the exact
+         same handlers (and mode guards) the chips always had. */
+      var hudMenuEl = document.getElementById("hudmenu");
+      function closeHudMenu() { if (hudMenuEl) hudMenuEl.hidden = true; }
+      var hudMenuBtn = document.getElementById("btnHudMenu");
+      if (hudMenuBtn) {
+        hudMenuBtn.addEventListener("mousedown", function (e) { e.stopPropagation(); });
+        hudMenuBtn.addEventListener("touchstart", function (e) { e.stopPropagation(); }, { passive: true });
+        hudMenuBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (typeof editing !== "undefined" && editing) return; // the layout editor drags this chip instead
+          if (hudMenuEl) hudMenuEl.hidden = !hudMenuEl.hidden;
+        });
+      }
       var hudSetBtn = document.getElementById("btnHudSettings");
       if (hudSetBtn) {
         hudSetBtn.addEventListener("mousedown", function (e) { e.stopPropagation(); });
         hudSetBtn.addEventListener("touchstart", function (e) { e.stopPropagation(); }, { passive: true });
-        hudSetBtn.addEventListener("click", function (e) { e.stopPropagation(); openSettings("play"); });
+        hudSetBtn.addEventListener("click", function (e) { e.stopPropagation(); closeHudMenu(); openSettings("play"); });
       }
       /* Standing supply entry: the topbar 「补给」 chip opens the
          supply shop mid-match (campaign only — bomb mode has its own
@@ -8073,6 +8329,7 @@
         hudSupBtn.addEventListener("click", function (e) {
           e.stopPropagation();
           if (STATE.gameMode === "bomb" || STATE.mode !== "play") return;
+          closeHudMenu();
           openSupply(true);
         });
       }
@@ -8090,7 +8347,7 @@
         ["btncrouch", "蹲"], ["btnscope", "瞄准"], ["btnpause", "暂停"],
         ["btnview", "视角"], ["stick", "移动摇杆"],
         ["btnwheel", "投掷轮盘"], ["btngunwheel", "武器轮盘"],
-        ["btnHudSupply", "补给"]
+        ["btnHudMenu", "菜单"]
       ];
       var btnLayout = {};   // id -> {cx, cy, bw, bh, s, op}
       var editing = false, selBtnId = null, dragBtn = null;
@@ -8118,10 +8375,10 @@
           el.style.top = (L.cy * innerHeight - h / 2) + "px";
           el.style.right = "auto"; el.style.bottom = "auto";
           el.style.opacity = L.op;
-          // the supply chip normally sits in the topbar's flex row;
+          // the menu chip normally sits in the topbar's flex row;
           // once it has a custom layout it pins to the viewport at
           // the stored fraction, like every other editable button
-          if (id === "btnHudSupply") el.style.position = "fixed";
+          if (id === "btnHudMenu") el.style.position = "fixed";
         }
       }
       function selectBtn(id) {
@@ -8135,17 +8392,18 @@
       }
       function enterLayout() {
         settingsScreen.classList.add("hidden");
+        closeHudMenu();
         editing = true;
         document.body.classList.add("editing");
         ui.hud.classList.add("on");
         ui.touchui.classList.add("on");
         ui.btnscope.classList.add("show"); // shown so it can be placed too
         for (var i = 0; i < CUSTOM_BTNS.length; i++) {
-          // the supply chip is hidden in bomb mode: measuring it then
-          // would snapshot a zero rect and wreck its saved spot
-          if (CUSTOM_BTNS[i][0] === "btnHudSupply") {
-            var supEl = document.getElementById("btnHudSupply");
-            if (!supEl || supEl.getBoundingClientRect().width === 0) continue;
+          // a zero-rect button must never be measured: snapshotting
+          // it would wreck its saved spot
+          if (CUSTOM_BTNS[i][0] === "btnHudMenu") {
+            var menuEl = document.getElementById("btnHudMenu");
+            if (!menuEl || menuEl.getBoundingClientRect().width === 0) continue;
           }
           btnEntry(CUSTOM_BTNS[i][0]);
         }
@@ -10111,6 +10369,55 @@
       // hot loop allocates nothing and the GC never hitches a frame.
       var tmpP2 = { x: 0, z: 0 }, tmpEP = { x: 0, z: 0 };
       var fpsAcc = 0, fpsFrames = 0, frameNo = 0;
+      var curAvgFps = 60; // latest ~30-frame sliding average, published by the adaptive block below
+      /* ============ Auto grading: benchmark + in-match safety drop ============
+         The benchmark runs silently inside real matches: it arms when
+         play is entered fresh (not on pause / settings / supply
+         resumes), skips a 0.5 s warm-up, then averages real frame
+         times for 2.5 s and steps ONE grade from the grade it started
+         on (≥55 up, 40–54 hold, <40 down). The in-match safety net is
+         auto-mode only: a sliding average under 24 fps sustained for
+         over 5 s drops one grade, at most once per match. Both paths
+         apply through the same applyQuality() + saveProgress() route
+         as a manual grade pick — no second set of render parameters. */
+      var bench = { active: false, phase: 0, t: 0, acc: 0, frames: 0, base: "balanced" };
+      var prevModeForBench = "menu";
+      var matchDropUsed = false;
+      var lowFpsSecs = 0;
+      var lastFrameNow = 0;
+      var fpsMeterEl = document.getElementById("fpsMeter");
+      var fpsDispAcc = 0, fpsDispFrames = 0, fpsDispT = 0;
+      function startBench() {
+        bench.active = true; bench.phase = 0; bench.t = 0;
+        bench.acc = 0; bench.frames = 0; bench.base = qualityTier;
+      }
+      function finishBench() {
+        bench.active = false;
+        benchPending = false;
+        var avg = bench.frames / Math.max(bench.acc, 0.001);
+        var idx = TIER_ORDER.indexOf(bench.base);
+        if (avg >= 55) idx = Math.min(TIER_ORDER.length - 1, idx + 1);
+        else if (avg < 40) idx = Math.max(0, idx - 1);
+        autoTier = TIER_ORDER[idx];
+        qualityTier = autoTier;
+        applyQuality();
+        syncQualityBtns();
+        saveProgress();
+        lowFpsSecs = 0;
+        showInfoToast("已按你的设备自动设置画质：" + TIER_NAMES[autoTier]);
+      }
+      function dropAutoTier() {
+        matchDropUsed = true;
+        lowFpsSecs = 0;
+        var idx = TIER_ORDER.indexOf(qualityTier);
+        if (idx <= 0) return; // already 流畅： nowhere lower to go — stay silent
+        qualityTier = TIER_ORDER[idx - 1];
+        autoTier = qualityTier;
+        applyQuality();
+        syncQualityBtns();
+        saveProgress();
+        showInfoToast("帧率偏低，已自动降低画质");
+      }
       function animate() {
         requestAnimationFrame(animate);
         frameNo++;
@@ -10144,9 +10451,56 @@
         fpsAcc += dt; fpsFrames++;
         if (fpsFrames >= 30) {
           var avgFps = fpsFrames / Math.max(fpsAcc, 0.001);
+          curAvgFps = avgFps;
           if (avgFps < 45 && prCur > 0.75) { prCur = Math.max(0.75, prCur - 0.2); renderer.setPixelRatio(prCur); }
           else if (avgFps > 57 && prCur < prCap) { prCur = Math.min(prCap, prCur + 0.25); renderer.setPixelRatio(prCur); }
           fpsAcc = 0; fpsFrames = 0;
+        }
+
+        /* ---- FPS meter, auto benchmark, auto safety drop ----
+           frameDt is the real (uncapped) time between frames; freak
+           gaps (tab switch, hitch over 250 ms) are skipped rather
+           than counted, so they can't poison a measurement. */
+        var frameDt = lastFrameNow ? (now - lastFrameNow) / 1000 : 0;
+        lastFrameNow = now;
+        if (frameDt > 0.25) frameDt = 0;
+        if (STATE.mode === "play" && prevModeForBench !== "play") {
+          var freshEntry = prevModeForBench !== "pause" && prevModeForBench !== "settings" && prevModeForBench !== "supply";
+          if (freshEntry) {
+            matchDropUsed = false;
+            lowFpsSecs = 0;
+            if (qualityMode === "auto" && benchPending && !bench.active) startBench();
+          }
+        }
+        if (STATE.mode !== "play" && bench.active) bench.active = false; // match ended mid-measure: abort, stay pending
+        prevModeForBench = STATE.mode;
+        if (bench.active && STATE.mode === "play") {
+          bench.t += frameDt;
+          if (bench.phase === 0) {
+            if (bench.t >= 0.5) { bench.phase = 1; bench.t = 0; bench.acc = 0; bench.frames = 0; }
+          } else {
+            if (frameDt > 0) { bench.acc += frameDt; bench.frames++; }
+            if (bench.t >= 2.5) finishBench();
+          }
+        } else if (qualityMode === "auto" && STATE.mode === "play" && !matchDropUsed) {
+          if (curAvgFps < 24) {
+            lowFpsSecs += frameDt;
+            if (lowFpsSecs >= 5) dropAutoTier();
+          } else lowFpsSecs = 0;
+        }
+        if (STATE.mode !== "play") lowFpsSecs = 0;
+        // FPS readout: 0.5 s window average, refreshed twice a second,
+        // visible only while actually playing
+        if (fpsMeterEl) {
+          if (showFps && STATE.mode === "play") {
+            if (frameDt > 0) { fpsDispAcc += frameDt; fpsDispFrames++; }
+            fpsDispT += frameDt;
+            if (fpsDispT >= 0.5) {
+              fpsMeterEl.textContent = Math.round(fpsDispFrames / Math.max(fpsDispAcc, 0.001)) + " FPS";
+              fpsDispAcc = 0; fpsDispFrames = 0; fpsDispT = 0;
+            }
+            if (fpsMeterEl.style.display !== "block") fpsMeterEl.style.display = "block";
+          } else if (fpsMeterEl.style.display !== "none") fpsMeterEl.style.display = "none";
         }
 
         updateClouds(dt);
@@ -10623,11 +10977,32 @@
           setAssistBtn.textContent = "辅助瞄准：" + (assistOn ? "开 · 8%" : "关");
           setAssistBtn.classList.toggle("active", assistOn);
         }
-        if (d.quality === "smooth" || d.quality === "balanced" || d.quality === "fancy") {
+        if (d.qMode === "auto") {
+          // auto player: reuse the persisted grading when there is
+          // one; otherwise keep the device-default base grade and
+          // grade on the next match entry. (Saves from before the
+          // auto grade existed have no qMode and fall through to the
+          // manual branch below — their grade is a manual choice and
+          // is never migrated or overwritten.)
+          qualityMode = "auto";
+          if (d.qAuto === "smooth" || d.qAuto === "balanced" || d.qAuto === "fancy") {
+            autoTier = d.qAuto;
+            qualityTier = d.qAuto;
+            benchPending = false;
+          } else {
+            autoTier = null;
+            benchPending = true;
+          }
+          applyQuality();
+          syncQualityBtns();
+        } else if (d.quality === "smooth" || d.quality === "balanced" || d.quality === "fancy") {
+          qualityMode = "manual";
+          benchPending = false;
           qualityTier = d.quality;
           applyQuality();
           syncQualityBtns();
         }
+        if (typeof d.showFps === "boolean") { showFps = d.showFps; syncFpsBtn(); }
         if (typeof d.dirHint === "boolean") { dirHintOn = d.dirHint; syncDirHintBtn(); }
         if (typeof d.shake === "boolean") { shakeOn = d.shake; syncShakeBtn(); }
         if (d.tasks && d.tasks.date === todayStr() && d.tasks.list && d.tasks.list.length === 3) {
@@ -10647,6 +11022,17 @@
         ensureTasks();
         renderTasks();
         if (d.layout && typeof d.layout === "object") {
+          // HUD menu migration: saves from before the menu chip
+          // carry a standalone 补给 chip entry — the menu chip
+          // inherits that entry (it sat right where 设置/补给
+          // were), so the player's arrangement survives; every
+          // other button's entry below is read exactly as before,
+          // and the orphaned 补给 entry is simply never read again.
+          if (!d.layout.btnHudMenu && d.layout.btnHudSupply) {
+            var slm = d.layout.btnHudSupply;
+            if (isFinite(slm.cx) && isFinite(slm.cy) && isFinite(slm.bw) && isFinite(slm.bh) && isFinite(slm.s) && isFinite(slm.op))
+              d.layout.btnHudMenu = { cx: +slm.cx, cy: +slm.cy, bw: +slm.bw, bh: +slm.bh, s: +slm.s, op: +slm.op };
+          }
           for (i = 0; i < CUSTOM_BTNS.length; i++) {
             var L = d.layout[CUSTOM_BTNS[i][0]];
             if (L && isFinite(L.cx) && isFinite(L.cy) && isFinite(L.bw) && isFinite(L.bh) && isFinite(L.s) && isFinite(L.op))
