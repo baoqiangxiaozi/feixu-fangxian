@@ -957,6 +957,12 @@
         <div class="foldbody" id="changelogBody" hidden>
           <div class="rules changelog">
             <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 人物穿车修复 + 人物图全身统一（网页版）</div>
+              <div>· <b style="color:var(--accent)">报废车回到自己的碰撞范围</b>：真汽车模型之前按包围盒角点摆放，整辆车比它的碰撞范围偏出半个车身——人站在合法位置上却被画进车体里（废土断桥出生点旁那辆最明显）；现在车体按中心对齐并收进碰撞范围、四边各留边距，人在车外就绝不会再陷进车里。集装箱、木箱、仙人掌、灌木等其他真模型掩体同样改按中心对齐，逐个复核不再探出自己的碰撞范围</div>
+              <div>· <b style="color:var(--accent)">人物按完整外形量取</b>：之前只量了待机造型的本体，法师的宽檐帽、骑士的披风这些配件在动画里会探出碰撞范围、贴掩体时插进掩体；现在按待机 / 行走 / 奔跑动画里的完整外形（含帽檐、披风、头盔）逐帧实测，超出碰撞半径的视觉层会等比收回范围内并留边距。<b style="color:var(--accent)">受击判定、身高数值、移速、存档全部不变</b>，只收视觉层</div>
+              <div>· <b style="color:var(--accent)">人物图全部换成全身照 + 统一尺寸</b>：五位英雄的选人卡与十张英雄皮肤图全部重绘为全身像——头到脚完整入画、人物居中、占画面比例一致、同一深色底，15 张图的像素尺寸完全统一，卡片里不再出现大头特写或只剩半张脸的裁图；极地雪卫的选人卡也改回冰蓝法师原装造型（圣诞老人只在它的圣诞皮肤里出现）</div>
+            </div>
+            <div class="clog-entry">
               <div class="clog-date">2026-10-25 更新 · 模型穿模修复 + 英雄图片换 Q 版（网页版）</div>
               <div>· <b style="color:var(--accent)">集装箱对齐碰撞</b>：真集装箱模型的原点不在箱体正中，之前视觉比碰撞偏出近一米——一侧会陷进旁边的掩体、另一侧隔空撞墙；现在按实测包围盒三轴居中，箱面和挡弹 / 拦人范围严丝合缝</div>
               <div>· <b style="color:var(--accent)">Q 版人物站位校正</b>：骑士、潜行者等模型的量取范围之前把手里的剑 / 盾 / 弩也算了进去，人物本体被偏出半米，贴墙时会陷进墙里；现在按隐藏配件后的本体重新量取居中，人物站回判定正中</div>
@@ -2118,10 +2124,12 @@
       function addBushGLB(x, z, w, h, d, i) {
         addCoverGLB(glbTemplates.bush, x, z, w, h, d, false, false);
         // satellite offsets + half-widths stay inside the AABB
-        // footprint (≤ 0.475 of w/d from centre): the old 0.27/0.62
-        // pairing reached 0.58 and spilled leaves into the next
-        // cover spot / walkway — visible clipping.
-        var offs = [[0.20, 0.13, 0.55], [-0.21, -0.14, 0.52]];
+        // footprint even with the satellites' random yaw (≤ 0.46 of
+        // w/d from centre): the old 0.27/0.62 pairing reached 0.58
+        // and spilled leaves into the next cover spot / walkway —
+        // visible clipping. Satellites are centred on the measured
+        // box centre like every other cover clone.
+        var offs = [[0.20, 0.13, 0.50], [-0.21, -0.14, 0.47]];
         for (var k = 0; k < 2; k++) {
           var tpl = glbTemplates.bush;
           var outer = new THREE.Group();
@@ -2129,7 +2137,7 @@
           var s = tpl.size;
           var sw = w * offs[k][2], sh = h * 0.82, sd = d * offs[k][2];
           inner.scale.set(sw / s.x, sh / s.y, sd / s.z);
-          inner.position.set(-tpl.min.x * inner.scale.x, -tpl.min.y * inner.scale.y, -tpl.min.z * inner.scale.z);
+          inner.position.set(-tpl.center.x * inner.scale.x, -tpl.min.y * inner.scale.y, -tpl.center.z * inner.scale.z);
           outer.add(inner);
           outer.position.set(x + w * offs[k][0], 0, z + d * offs[k][1]);
           outer.rotation.y = (i * 1.3 + k * 2.1) % (Math.PI * 2);
@@ -2227,15 +2235,22 @@
       // The wreck's long axis (z in file space) follows the AABB's
       // long side, like the containers: stretched the other way it
       // read as a sideways-squashed shell wedged across its spot.
+      // The clone is CENTRED on the measured box centre and the
+      // footprint is shrunk 0.07 m inside the collider on every
+      // side: the previous min-corner anchoring parked the visible
+      // shell half a footprint away from its collider, so a player
+      // standing legally beside the spot was drawn inside the car
+      // body (the clipping reported from the wasteland map).
       function addCarGLB(x, z, w, h, d) {
         var tpl = glbTemplates.car;
         var outer = new THREE.Group();
         var inner = tpl.root.clone(true);
         var s = tpl.size;
         var alongX = w > d;
-        var sx = (alongX ? d : w) / s.x, sy = h / s.y, sz = (alongX ? w : d) / s.z;
+        var lx = Math.max(0.6, (alongX ? d : w) - 0.14), lz = Math.max(0.6, (alongX ? w : d) - 0.14);
+        var sx = lx / s.x, sy = h / s.y, sz = lz / s.z;
         inner.scale.set(sx, sy, sz);
-        inner.position.set(-tpl.min.x * sx, -tpl.min.y * sy, -tpl.min.z * sz);
+        inner.position.set(-tpl.center.x * sx, -tpl.min.y * sy, -tpl.center.z * sz);
         outer.add(inner);
         if (alongX) outer.rotation.y = Math.PI / 2;
         outer.position.set(x, 0, z);
@@ -2332,14 +2347,15 @@
         // the model's length axis (z) maps to the AABB's long side,
         // its width (x) to the short side, height stretches to h.
         // The file's origin is NOT at its footprint centre (the shell
-        // sits ~0.69 units toward +z in file space), so all three
-        // axes are re-centred on the measured min — without the x/z
-        // terms the visual sat ~0.9 m off its collider, sunk into
-        // the neighbouring cover on one side with a phantom wall on
-        // the other (the clipping players reported).
+        // sits ~0.69 units toward +z in file space), so x/z are
+        // re-centred on the measured box CENTRE and y seats on the
+        // measured min: anchoring x/z on the min corner instead
+        // parked the visual half a footprint off its collider —
+        // sunk into the neighbouring cover on one side with a
+        // phantom wall on the other (the clipping players reported).
         var sx = Math.min(w, d) / s.x, sy = h / s.y, sz = Math.max(w, d) / s.z;
         inner.scale.set(sx, sy, sz);
-        inner.position.set(-tpl.min.x * sx, -tpl.min.y * sy, -tpl.min.z * sz);
+        inner.position.set(-tpl.center.x * sx, -tpl.min.y * sy, -tpl.center.z * sz);
         outer.add(inner);
         if (w >= d) outer.rotation.y = Math.PI / 2;
         outer.position.set(x, 0, z);
@@ -2352,7 +2368,7 @@
         var inner = tpl.root.clone(true);
         var s = tpl.size;
         inner.scale.set(w / s.x, h / s.y, d / s.z);
-        inner.position.set(-tpl.min.x * inner.scale.x, -tpl.min.y * inner.scale.y, -tpl.min.z * inner.scale.z);
+        inner.position.set(-tpl.center.x * inner.scale.x, -tpl.min.y * inner.scale.y, -tpl.center.z * inner.scale.z);
         outer.add(inner);
         outer.position.set(x, 0, z);
         glbRegister(outer, false);
@@ -2378,7 +2394,7 @@
         var inner = tpl.root.clone(true);
         var s = tpl.size;
         inner.scale.set(w / s.x, h / s.y, d / s.z);
-        inner.position.set(-tpl.min.x * inner.scale.x, -tpl.min.y * inner.scale.y, -tpl.min.z * inner.scale.z);
+        inner.position.set(-tpl.center.x * inner.scale.x, -tpl.min.y * inner.scale.y, -tpl.center.z * inner.scale.z);
         outer.add(inner);
         outer.position.set(x, 0, z);
         glbRegister(outer, shootable);
@@ -3546,7 +3562,112 @@
           else if (opacity !== undefined) { m.transparent = false; m.opacity = 1; }
         }
       }
-      function makeCharInstance(key, targetH, tintHex, opacity) {
+      /* ---- Full-extent pose calibration (clipping fix, round 2) ----
+         measureCharTemplate bounds the BIND pose, but what a player
+         sees pressed against a car is the ANIMATED figure: the
+         mage's wide hat brim pitches forward in idle, capes hang
+         behind the body axis, arms swing in walk. Several of those
+         parts reach well past the figure's collision radius (hero
+         0.6 m / enemy 0.55 m), so a figure standing legally against
+         a wreck still drew its hat or cape inside the car body.
+         This pass builds a throwaway instance exactly the way
+         makeCharInstance does (accessory variants hidden, head bone
+         scaled), plays the locomotion clips (idle / walk / run) and
+         measures the TRUE rendered reach around the body axis —
+         skinned vertices through the same bone-matrix chain the
+         renderer uses, rigid bone-children (hat / cape / helmet)
+         through their world matrices. The widest Chebyshev reach
+         (|x| / |z| from the axis, template units at sc = 1) is
+         cached as tpl.poseRadius; makeCharInstance then shrinks
+         ONLY the decorative GLB layer uniformly when that reach
+         would poke past the caller's collision radius (minus a
+         0.04 m margin the callers fold in), never below 60% size.
+         Hitboxes, gameplay heights and every gameplay number are
+         untouched. */
+      function skinnedMeshRadius(mesh) {
+        var geo = mesh.geometry;
+        var posA = geo.attributes.position, siA = geo.attributes.skinIndex, swA = geo.attributes.skinWeight;
+        if (!posA || !siA || !swA || !mesh.skeleton) return 0;
+        mesh.skeleton.update();
+        var bm = mesh.skeleton.boneMatrices;
+        var bE = mesh.bindMatrix.elements, biE = mesh.bindMatrixInverse.elements, mwE = mesh.matrixWorld.elements;
+        var pos = posA.array, si = siA.array, sw = swA.array;
+        var maxR = 0;
+        for (var vi = 0; vi < posA.count; vi++) {
+          var vx = pos[vi * 3], vy = pos[vi * 3 + 1], vz = pos[vi * 3 + 2];
+          var bx = bE[0] * vx + bE[4] * vy + bE[8] * vz + bE[12];
+          var by = bE[1] * vx + bE[5] * vy + bE[9] * vz + bE[13];
+          var bz = bE[2] * vx + bE[6] * vy + bE[10] * vz + bE[14];
+          var sx2 = 0, sy2 = 0, sz2 = 0;
+          for (var k = 0; k < 4; k++) {
+            var wgt = sw[vi * 4 + k];
+            if (!wgt) continue;
+            var off = si[vi * 4 + k] * 16;
+            sx2 += wgt * (bm[off] * bx + bm[off + 4] * by + bm[off + 8] * bz + bm[off + 12]);
+            sy2 += wgt * (bm[off + 1] * bx + bm[off + 5] * by + bm[off + 9] * bz + bm[off + 13]);
+            sz2 += wgt * (bm[off + 2] * bx + bm[off + 6] * by + bm[off + 10] * bz + bm[off + 14]);
+          }
+          var tx = biE[0] * sx2 + biE[4] * sy2 + biE[8] * sz2 + biE[12];
+          var ty = biE[1] * sx2 + biE[5] * sy2 + biE[9] * sz2 + biE[13];
+          var tz = biE[2] * sx2 + biE[6] * sy2 + biE[10] * sz2 + biE[14];
+          var wx = mwE[0] * tx + mwE[4] * ty + mwE[8] * tz + mwE[12];
+          var wz = mwE[2] * tx + mwE[6] * ty + mwE[10] * tz + mwE[14];
+          var r = Math.max(Math.abs(wx), Math.abs(wz));
+          if (r > maxR) maxR = r;
+        }
+        return maxR;
+      }
+      function calibrateCharPoseRadius(key) {
+        var tpl = charTemplates[key];
+        if (!tpl || tpl.poseRadius !== undefined) return;
+        tpl.poseRadius = 0;
+        try {
+          var def = tpl.def;
+          var c = cloneCharRoot(tpl);
+          c.root.traverse(function (o) { if (o.name && CHAR_ACCESSORY_RE.test(o.name)) o.visible = false; });
+          var inner = c.root;
+          inner.scale.set(def.squashX, def.squashY, def.squashX); // sc = 1: template units
+          inner.position.set(-tpl.center.x * def.squashX, -tpl.min.y * def.squashY, -tpl.center.z * def.squashX);
+          inner.rotation.y = def.rotY;
+          var wrap = new THREE.Group();
+          wrap.add(inner);
+          if (def.headBone && def.headScale !== 1) {
+            var hb = findNodeByName(inner, def.headBone);
+            if (hb) hb.scale.multiplyScalar(def.headScale);
+          }
+          var mixer = new THREE.AnimationMixer(inner);
+          var maxR = 0;
+          var box = new THREE.Box3();
+          function measurePose() {
+            wrap.updateMatrixWorld(true);
+            inner.traverse(function (o) {
+              if (o.isSkinnedMesh) {
+                var r = skinnedMeshRadius(o);
+                if (r > maxR) maxR = r;
+              } else if (o.isMesh) {
+                if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+                box.copy(o.geometry.boundingBox).applyMatrix4(o.matrixWorld);
+                var rr = Math.max(Math.abs(box.min.x), Math.abs(box.max.x), Math.abs(box.min.z), Math.abs(box.max.z));
+                if (rr > maxR) maxR = rr;
+              }
+            });
+          }
+          var roles = ["idle", "walk", "run"];
+          for (var ri = 0; ri < roles.length; ri++) {
+            var clip = findClipByName(tpl.animations, def.clips[roles[ri]]);
+            if (!clip) continue;
+            var act = mixer.clipAction(clip);
+            mixer.stopAllAction();
+            act.reset(); act.setLoop(THREE.LoopRepeat, Infinity); act.play();
+            var step = (clip.duration || 1) / 5;
+            for (var sIdx = 0; sIdx < 5; sIdx++) { mixer.update(step); measurePose(); }
+            act.stop();
+          }
+          mixer.stopAllAction();
+          if (maxR > 0 && isFinite(maxR)) tpl.poseRadius = maxR;
+        } catch (e) { tpl.poseRadius = 0; }
+      }
+      function makeCharInstance(key, targetH, tintHex, opacity, fitRadius) {
         var tpl = charTemplates[key];
         if (!tpl) return null;
         var def = tpl.def;
@@ -3558,6 +3679,17 @@
         inner.scale.set(sc * def.squashX, sc * def.squashY, sc * def.squashX);
         inner.position.set(-tpl.center.x * sc * def.squashX, -tpl.min.y * sc * def.squashY, -tpl.center.z * sc * def.squashX);
         inner.rotation.y = def.rotY;
+        if (fitRadius) {
+          if (tpl.poseRadius === undefined) calibrateCharPoseRadius(key);
+          if (tpl.poseRadius > 0) {
+            var fit = Math.min(1, fitRadius / (tpl.poseRadius * sc));
+            if (fit < 1) {
+              fit = Math.max(0.6, fit);
+              inner.scale.multiplyScalar(fit);
+              inner.position.multiplyScalar(fit);
+            }
+          }
+        }
         var wrap = new THREE.Group();
         wrap.add(inner);
         if (def.headBone && def.headScale !== 1) {
@@ -3696,7 +3828,7 @@
         if (!fam || !charTemplates[fam.tpl]) return;
         var u = g.userData;
         var targetH = ((T.aimY || 1.3) + 0.72) * (fam.scale || 1) * (u.isBoss ? 1.6 : 1);
-        var inst = makeCharInstance(fam.tpl, targetH, fam.tint, fam.opacity || 1);
+        var inst = makeCharInstance(fam.tpl, targetH, fam.tint, fam.opacity || 1, Math.max(0.3, (u.radius || 0.55) - 0.04));
         if (!inst) return;
         // hide the procedural figure (hitboxes stay live: r128's
         // raycaster ignores visibility, flinch / flash keep working
@@ -3714,7 +3846,7 @@
         if (!lig || lig.glbInst) return;
         var def = HERO_GLB[heroIdx];
         if (!def || !charTemplates[def.tpl]) return;
-        var inst = makeCharInstance(def.tpl, 2.02, def.tint, 1);
+        var inst = makeCharInstance(def.tpl, 2.02, def.tint, 1, isMate ? 0.51 : 0.56);
         if (!inst) return;
         var keep = {};
         if (lig.propGun) lig.propGun.traverse(function (o) { keep[o.uuid] = true; });
