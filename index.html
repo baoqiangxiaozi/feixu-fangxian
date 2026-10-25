@@ -723,6 +723,18 @@
       .clog-entry { margin-bottom: 14px; }
       .clog-entry:last-child { margin-bottom: 0; }
 
+      /* ---------- Model loading pill (staged GLB loading progress) ---------- */
+      #loadpill {
+        position: fixed; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 30;
+        min-width: 176px; text-align: center; pointer-events: none;
+        background: rgba(8, 14, 24, .72); border: 1px solid rgba(140, 180, 220, .35);
+        border-radius: 999px; padding: 5px 14px 7px; font-size: 12px; color: #cfe2f2;
+        opacity: 0; transition: opacity .45s;
+      }
+      #loadpill.on { opacity: 1; }
+      #loadpill .lpbar { height: 3px; border-radius: 2px; background: rgba(255,255,255,.18); margin-top: 4px; overflow: hidden; }
+      #loadpill .lpfill { height: 100%; width: 0%; background: var(--accent); border-radius: 2px; transition: width .3s; }
+
       /* ---------- Rotate-to-landscape tip (touch, portrait, in game, landscape mode only) ---------- */
       #rotatetip {
         position: fixed; inset: 0; z-index: 8; display: none;
@@ -793,6 +805,7 @@
   </head>
   <body class="orient-landscape">
     <div id="game"></div>
+    <div id="loadpill"><span id="loadtxt">3D 模型加载中 0/21</span><div class="lpbar"><div class="lpfill" id="lpfill"></div></div></div>
 
     <!-- HUD -->
     <div id="hud">
@@ -957,6 +970,14 @@
         <button type="button" class="foldtoggle" data-fold="changelogBody" aria-expanded="false">更新日志 <span class="arr">▸</span></button>
         <div class="foldbody" id="changelogBody" hidden>
           <div class="rules changelog">
+            <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 手机流畅度优化 + 横屏适配修复（网页版）</div>
+              <div>· <b style="color:var(--accent)">手机上更省帧了</b>：手机打开默认走流畅配置——均衡档在手机上的渲染分辨率上限从 1.6 倍收到 1.25 倍、自适应分辨率最低不低于 0.75 倍（不再糊成马赛克）、手机端关掉抗锯齿的额外开销、均衡 / 精美档在手机上的阴影贴图分别降到 512 / 1024（桌面仍是 2048，画面不变）；流畅档照旧完全不开实时阴影。你在设置里手动选过的档位优先、照常存档，一个数值没动</div>
+              <div>· <b style="color:var(--accent)">3D 模型改成按需加载，不再开局全量下载</b>：以前一打开就把全部约 8MB 模型一起下，弱网手机容易卡在打开阶段；现在进游戏只先下当前地图的掩体、当前英雄和步枪（约 1.4MB），其余武器 / 地图 / 角色模型在后台分批补齐，屏幕下方有「3D 模型加载中 x/21」进度条；切地图、切英雄、进关卡、换枪时需要哪个先下哪个。还没下到的模型自动用程序造型顶着，外观和玩法不受影响</div>
+              <div>· <b style="color:var(--accent)">远处敌人动画降频</b>：流畅档下中远距离敌人的骨骼动画改为隔帧 / 隔两帧更新（时间照常累计，动作不变慢），近处敌人和判定、移速完全不变，同屏敌人多时帧数更稳</div>
+              <div>· <b style="color:var(--accent)">横屏没反应修好了</b>：以前只监听一个窗口尺寸事件，微信内置浏览器等环境里把手机横过来、画面不跟着变；现在旋转、窗口尺寸、视觉视口三条路径都会重新适配画布与相机宽高比——横过来就是真正的宽屏布局，摇杆和按钮按新宽高重新落位，竖屏同理；手机浏览器地址栏伸缩也不会再把画面顶出去或留黑边。设置里的「画面方向」只管提示与竖屏布局微调，不再有锁死方向、物理旋转不理人的状态</div>
+              <div>· 玩法、数值、受击判定与存档全部不变，这一版只动性能与方向适配</div>
+            </div>
             <div class="clog-entry">
               <div class="clog-date">2026-10-25 更新 · 补给商店改为游戏内常驻（网页版）</div>
               <div>· <b style="color:var(--accent)">过关不再弹补给商店</b>：闯关模式每过一关直接顺畅进入下一关，过关奖励（回血 +15、每种投掷物 +1）照常发放，不再被商店面板打断节奏</div>
@@ -1456,6 +1477,11 @@
     (function () {
       "use strict";
       var isTouch = ("ontouchstart" in window) || navigator.maxTouchPoints > 0;
+      // A phone / small tablet, as opposed to a touch-capable laptop:
+      // the rendering budget decisions below (no MSAA, tighter pixel
+      // ratio caps, smaller shadow maps) key off this, so a desktop
+      // with a touchscreen keeps its full-fat defaults.
+      var isPhone = isTouch && ((window.screen && Math.min(screen.width, screen.height) <= 860) || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || ""));
       if (isTouch) {
         document.body.classList.add("touch");
         document.getElementById("rules-touch").style.display = "block";
@@ -1626,12 +1652,16 @@
       scene.fog = new THREE.Fog(0x9db8cc, 42, 115);
 
       var camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 300);
-      // Antialiasing stays on for every device and the render resolution
-      // starts near the display's native pixel ratio, so edges and distant
-      // enemies stay crisp; the adaptive scaler in the main loop still
-      // steps the resolution down if the frame rate sags, and back up
-      // toward the cap whenever there is real headroom.
-      var renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+      // The render resolution starts at the quality grade's cap (near
+      // the display's native pixel ratio on desktop, tighter on
+      // phones), so edges and distant enemies stay crisp; the adaptive
+      // scaler in the main loop still steps the resolution down if
+      // the frame rate sags, and back up toward the cap whenever
+      // there is real headroom.
+      // Phones skip MSAA: on tile-based mobile GPUs the multisample
+      // resolve is a real per-frame cost, and at the 流畅 grade's 1x
+      // cap it buys little; desktops keep full antialiasing.
+      var renderer = new THREE.WebGLRenderer({ antialias: !isPhone, powerPreference: "high-performance" });
       /* ================= Quality tiers =================
          Three grades chosen in 设置 （流畅 / 均衡 / 精美； phones default
          to 流畅， desktops to 均衡）: the grade caps the render
@@ -1643,8 +1673,9 @@
          budget where it shows: 流畅 targets a steady 60 fps on
          mid/low phones (1x resolution, fewest particles, tightest
          LOD), 精美 raises the ceiling the merge savings bought —
-         up to 2.5x resolution, a 2048px shadow map, the highest
-         particle cap and full texture anisotropy. The adaptive
+         up to 2.5x resolution on desktop (2x on phones), a 2048px
+         shadow map on desktop (1024 on phones; 均衡 phones get 512),
+         the highest particle cap and full texture anisotropy. The adaptive
          scaler in the main loop still runs underneath every grade,
          stepping down (and back up toward the grade's cap) with the
          frame rate. The choice persists in the save. */
@@ -1678,8 +1709,8 @@
       function tierPrCap(t) {
         var dpr = window.devicePixelRatio || 1;
         if (t === "smooth") return Math.min(dpr, 1);
-        if (t === "fancy") return Math.min(dpr, 2.5);
-        return Math.min(dpr, isTouch ? 1.6 : 2);
+        if (t === "fancy") return Math.min(dpr, isTouch ? 2 : 2.5);
+        return Math.min(dpr, isTouch ? 1.25 : 2);
       }
       var particleCap = qualityTier === "smooth" ? 60 : 110;
       var prCap = tierPrCap(qualityTier);
@@ -1749,6 +1780,19 @@
           renderer.shadowMap.enabled = sh;
           // materials must recompile when the shadow pipeline toggles
           scene.traverse(function (o) { if (o.material) o.material.needsUpdate = true; });
+        }
+        // shadow map resolution follows device class: the shipped
+        // 2048px map stays on desktop, phones render the same shadow
+        // frustum into 1024 （精美） / 512 （均衡） — the shadow pass
+        // re-renders every caster each frame, so on a phone this is
+        // one of the biggest single savings. 流畅 never gets here
+        // with sh on: its shadow pipeline is fully disabled above.
+        if (sh) {
+          var shSize = qualityTier === "fancy" ? (isPhone ? 1024 : 2048) : (isPhone ? 512 : 2048);
+          if (sun.shadow.mapSize.x !== shSize) {
+            sun.shadow.mapSize.set(shSize, shSize);
+            if (sun.shadow.map) { sun.shadow.map.dispose(); sun.shadow.map = null; }
+          }
         }
         sun.castShadow = sh;
         refreshShadowFlags();
@@ -3024,6 +3068,7 @@
       function applyMap(idx) {
         idx = Math.max(0, Math.min(MAPS.length - 1, idx));
         currentMap = idx;
+        demandMapCovers(idx); // staged loading: this map's real-model covers jump the queue
         var M0 = MAPS[idx];
         // arena half-size is per map: the standard arenas are 34,
         // 灰漠小镇 is a bigger town (46). Ground, pad and grid are
@@ -3317,6 +3362,91 @@
          its authored factory finish (its materials are textured PBR,
          not the palette slots the procedural skins recolour). */
       var glbLoader = (typeof THREE !== "undefined" && THREE.GLTFLoader) ? new THREE.GLTFLoader() : null;
+      /* ================= Staged model loading =================
+         The model set is ~8 MB all told, and firing every file at
+         boot made a phone browser spend its first seconds (and its
+         weakest CPU bursts) downloading and parsing models the
+         player may not see for minutes. Loading is therefore a
+         registry of named jobs with three ways in:
+           · priority — the current map's cover templates, the
+             selected hero and the rifle viewmodel start at once
+             (~1.4 MB), so the first screen and first match are
+             fully dressed;
+           · demand — applyMap / applyCharacter / startLevel /
+             startGame / switchWeapon pull exactly what they are
+             about to show, ahead of the idle pump;
+           · idle pump — everything else trickles in one file per
+             tick behind the menus; character templates (the big
+             files) never START mid-match from the pump, so a parse
+             burst can't hitch a fight.
+         Every job still lands in the same swap-in hooks as before,
+         and the procedural fallback covers any gap, so staging is
+         invisible in play. The pill at the bottom of the screen
+         shows settled/total until the whole set is in. */
+      var GLB_TOTAL = 21; // 6 gun viewmodels + 8 cover templates + 7 character templates
+      var glbDoneCount = 0;
+      var glbJobs = null;   // key -> { started, run }; created below, guarded for early applyMap calls
+      var glbQueue = [];
+      var coverRebuildTimer = 0;
+      var COVER_NEEDS = { // cover templates each map layout actually places
+        0: ["container", "crate", "barrel"],
+        1: ["cactus", "crate", "barrel"],
+        2: ["pine", "crate", "barrel"],
+        3: ["tree", "bush", "crate"],
+        4: ["car", "crate", "barrel"],
+        5: ["container", "crate", "barrel"]
+      };
+      function glbJob(key, run) { if (!glbJobs) glbJobs = {}; glbJobs[key] = { started: false, run: run }; }
+      function demandGlb(key) {
+        if (!glbJobs) return;
+        var j = glbJobs[key];
+        if (!j || j.started) return;
+        j.started = true;
+        j.run();
+      }
+      function queueGlb(key) { if (glbJobs && glbJobs[key] && !glbJobs[key].started) glbQueue.push(key); }
+      function demandMapCovers(idx) {
+        if (!glbJobs || typeof MAPS === "undefined" || !MAPS[idx]) return;
+        var need = COVER_NEEDS[MAPS[idx].layout] || [];
+        for (var i = 0; i < need.length; i++) demandGlb("cover:" + need[i]);
+      }
+      function updateLoadPill() {
+        var pill = document.getElementById("loadpill");
+        if (!pill) return;
+        if (!glbLoader || glbDoneCount >= GLB_TOTAL) { pill.classList.remove("on"); return; }
+        pill.classList.add("on");
+        var t = document.getElementById("loadtxt");
+        if (t) t.textContent = "3D 模型加载中 " + glbDoneCount + "/" + GLB_TOTAL;
+        var f = document.getElementById("lpfill");
+        if (f) f.style.width = Math.round(glbDoneCount / GLB_TOTAL * 100) + "%";
+      }
+      function glbOneDone() { glbDoneCount++; updateLoadPill(); }
+      function coverArrived(name) {
+        glbOneDone();
+        // a cover template the visible map uses swaps the menu's
+        // procedural stands-ins for the real models (debounced: a
+        // batch landing together rebuilds once). Mid-match arrivals
+        // simply wait for the next applyMap, exactly as before.
+        if (typeof STATE === "undefined" || STATE.mode === "play") return;
+        var need = (typeof MAPS !== "undefined" && MAPS[currentMap]) ? (COVER_NEEDS[MAPS[currentMap].layout] || []) : [];
+        if (need.indexOf(name) < 0 || coverRebuildTimer) return;
+        coverRebuildTimer = setTimeout(function () {
+          coverRebuildTimer = 0;
+          if (typeof STATE !== "undefined" && STATE.mode !== "play") applyMap(currentMap);
+        }, 220);
+      }
+      function pumpGlbQueue() {
+        while (glbQueue.length) {
+          var key = glbQueue[0];
+          var j = glbJobs && glbJobs[key];
+          if (!j || j.started) { glbQueue.shift(); continue; }
+          if (key.indexOf("char:") === 0 && typeof STATE !== "undefined" && STATE.mode === "play") break; // demanded chars bypass via demandGlb
+          glbQueue.shift();
+          demandGlb(key);
+          break; // one file per tick: parse bursts stay spread out
+        }
+        if (glbQueue.length) setTimeout(pumpGlbQueue, 650);
+      }
       // rotY turns each pack model's native axis so the muzzle faces
       // -Z (native muzzle directions differ per file — the pistol
       // toward -X, the other long guns toward +X, the launcher
@@ -3421,40 +3551,50 @@
       }
       if (glbLoader) {
         Object.keys(GLB_GUNS).forEach(function (kind) {
-          glbLoader.load("assets/models/" + GLB_GUNS[kind].file, function (gltf) {
-            glbFixMaterials(gltf.scene, 0.6);
-            swapGunModel(kind, makeViewmodel(kind, gltf));
-          }, undefined, function () { /* load failed: the procedural gun stays */ });
-        });
-        // cover templates: when all seven have settled (in any
-        // state), rebuild the visible map once if the player is
-        // still in the menus, so the start screen already shows the
-        // real models; mid-match the swap waits for the next rebuild
-        var glbPending = 8;
-        function glbSettled() {
-          if (--glbPending > 0) return;
-          if (typeof STATE !== "undefined" && STATE.mode !== "play") applyMap(currentMap);
-        }
-        glbLoader.load("assets/models/container.glb", function (gltf) { buildContainerLiveries(gltf.scene); glbSettled(); }, undefined, glbSettled);
-        glbLoader.load("assets/models/crate.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.crate = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
-        glbLoader.load("assets/models/barrel.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.15); glbTemplates.barrel = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
-        glbLoader.load("assets/models/cactus.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.cactus = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
-        glbLoader.load("assets/models/tree.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.3); glbTemplates.tree = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
-        glbLoader.load("assets/models/pine-snow.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.pine = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
-        glbLoader.load("assets/models/bush.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.bush = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
-        glbLoader.load("assets/models/car-wreck.glb", function (gltf) {
-          glbFixMaterials(gltf.scene, 0.25);
-          // pre-wrecked in the file already; one darkening pass over
-          // each unique material sells the burnt-out wasteland read
-          var seen = [];
-          gltf.scene.traverse(function (o) {
-            if (!o.isMesh) return;
-            (Array.isArray(o.material) ? o.material : [o.material]).forEach(function (m) {
-              if (m.color && seen.indexOf(m) < 0) { seen.push(m); m.color.multiplyScalar(0.78); }
-            });
+          glbJob("gun:" + kind, function () {
+            glbLoader.load("assets/models/" + GLB_GUNS[kind].file, function (gltf) {
+              glbFixMaterials(gltf.scene, 0.6);
+              swapGunModel(kind, makeViewmodel(kind, gltf));
+              glbOneDone();
+            }, undefined, function () { glbOneDone(); /* load failed: the procedural gun stays */ });
           });
-          glbTemplates.car = measureTemplate(gltf.scene); glbSettled();
-        }, undefined, glbSettled);
+        });
+        glbJob("cover:container", function () {
+          glbLoader.load("assets/models/container.glb", function (gltf) { buildContainerLiveries(gltf.scene); coverArrived("container"); }, undefined, function () { coverArrived("container"); });
+        });
+        glbJob("cover:crate", function () {
+          glbLoader.load("assets/models/crate.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.crate = measureTemplate(gltf.scene); coverArrived("crate"); }, undefined, function () { coverArrived("crate"); });
+        });
+        glbJob("cover:barrel", function () {
+          glbLoader.load("assets/models/barrel.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.15); glbTemplates.barrel = measureTemplate(gltf.scene); coverArrived("barrel"); }, undefined, function () { coverArrived("barrel"); });
+        });
+        glbJob("cover:cactus", function () {
+          glbLoader.load("assets/models/cactus.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.cactus = measureTemplate(gltf.scene); coverArrived("cactus"); }, undefined, function () { coverArrived("cactus"); });
+        });
+        glbJob("cover:tree", function () {
+          glbLoader.load("assets/models/tree.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.3); glbTemplates.tree = measureTemplate(gltf.scene); coverArrived("tree"); }, undefined, function () { coverArrived("tree"); });
+        });
+        glbJob("cover:pine", function () {
+          glbLoader.load("assets/models/pine-snow.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.pine = measureTemplate(gltf.scene); coverArrived("pine"); }, undefined, function () { coverArrived("pine"); });
+        });
+        glbJob("cover:bush", function () {
+          glbLoader.load("assets/models/bush.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.bush = measureTemplate(gltf.scene); coverArrived("bush"); }, undefined, function () { coverArrived("bush"); });
+        });
+        glbJob("cover:car", function () {
+          glbLoader.load("assets/models/car-wreck.glb", function (gltf) {
+            glbFixMaterials(gltf.scene, 0.25);
+            // pre-wrecked in the file already; one darkening pass over
+            // each unique material sells the burnt-out wasteland read
+            var seen = [];
+            gltf.scene.traverse(function (o) {
+              if (!o.isMesh) return;
+              (Array.isArray(o.material) ? o.material : [o.material]).forEach(function (m) {
+                if (m.color && seen.indexOf(m) < 0) { seen.push(m); m.color.multiplyScalar(0.78); }
+              });
+            });
+            glbTemplates.car = measureTemplate(gltf.scene); coverArrived("car");
+          }, undefined, function () { coverArrived("car"); });
+        });
       }
       /* ================= Real 3D characters (Q-style GLB) =================
          Heroes and humanoid enemies wear real rigged GLB models in a
@@ -3916,7 +4056,14 @@
             else if (u.ranged) role = (!moving && dist < 34) ? "cast" : (moving ? (u.speed >= 2 ? "run" : "walk") : "idle");
             else if (dist <= (u.range || 1.45) + 0.3) role = "attack";
             else if (moving) role = u.speed >= 2 ? "run" : "walk";
-            if (dist > 42 && (frameNo + i) % 3 !== 0) { inst.acc += dt; continue; }
+            // mixer tick rate by distance: far enemies update one
+            // frame in three (skipped time accumulates into acc, so
+            // the motion itself never slows); on the 流畅 grade the
+            // bands pull in — mid-range ticks every other frame —
+            // because a phone CPU running a dozen skinned mixers is
+            // the campaign's biggest per-frame cost after rendering
+            var farStep = qualityTier === "smooth" ? (dist > 30 ? 3 : (dist > 18 ? 2 : 1)) : (dist > 42 ? 3 : 1);
+            if (farStep > 1 && (frameNo + i) % farStep !== 0) { inst.acc += dt; continue; }
           } else if (inst.kind === "hero") {
             if (typeof firing !== "undefined" && (firing || fireHeld)) role = "shoot";
             else if (moving) role = "run";
@@ -4062,16 +4209,34 @@
       if (glbLoader) {
         Object.keys(CHAR_TPL_DEFS).forEach(function (key) {
           var def = CHAR_TPL_DEFS[key];
-          glbLoader.load("assets/models/" + def.file, function (gltf) {
-            glbFixMaterials(gltf.scene, 0.35);
-            var mt = measureCharTemplate(gltf.scene);
-            mt.scene = gltf.scene;
-            mt.animations = gltf.animations || [];
-            mt.def = def;
-            charTemplates[key] = mt;
-            upgradeAllHeroFigures();
-          }, undefined, function () { /* load failed: procedural figures stay */ });
+          glbJob("char:" + key, function () {
+            glbLoader.load("assets/models/" + def.file, function (gltf) {
+              glbFixMaterials(gltf.scene, 0.35);
+              var mt = measureCharTemplate(gltf.scene);
+              mt.scene = gltf.scene;
+              mt.animations = gltf.animations || [];
+              mt.def = def;
+              charTemplates[key] = mt;
+              upgradeAllHeroFigures();
+              glbOneDone();
+            }, undefined, function () { glbOneDone(); /* load failed: procedural figures stay */ });
+          });
         });
+        /* Staged-loading kickoff: only what the first screen can
+           show starts now — the current map's cover templates, the
+           selected hero's template and the rifle viewmodel (~1.4 MB
+           of the ~8 MB set). Everything else queues for the idle
+           pump: remaining covers and guns first, the big character
+           files last. Demand hooks elsewhere jump the queue. */
+        demandMapCovers(currentMap);
+        demandGlb("char:" + (HERO_GLB[typeof currentChar === "number" ? currentChar : 0] || HERO_GLB[0]).tpl);
+        demandGlb("gun:rifle");
+        ["cover:container", "cover:crate", "cover:barrel", "cover:cactus", "cover:tree", "cover:pine", "cover:bush", "cover:car",
+         "gun:pistol", "gun:smg", "gun:sniper", "gun:shotgun", "gun:rocket",
+         "char:knight", "char:barbarian", "char:mage", "char:rogue", "char:rogueHooded", "char:skeleton", "char:robot"
+        ].forEach(queueGlb);
+        updateLoadPill();
+        setTimeout(pumpGlbQueue, 900);
       }
 
       var flashLight = new THREE.PointLight(0xffc860, 0, 9); scene.add(flashLight);
@@ -4225,6 +4390,7 @@
       function applyCharacter(idx) {
         idx = Math.max(0, Math.min(CHARACTERS.length - 1, idx));
         currentChar = idx;
+        if (HERO_GLB[idx]) demandGlb("char:" + HERO_GLB[idx].tpl); // staged loading: this hero's model first
         var f = charFigures[idx];
         playerModel = f.group;
         pShL = f.shL; pShR = f.shR; propGun = f.propGun;
@@ -6190,6 +6356,7 @@
       }
       function switchWeapon(kind, silent) {
         if (!WEAPONS[kind]) return;
+        demandGlb("gun:" + kind); // staged loading: the drawn gun's real model first (bow has none: no-op)
         if (STATE.weapon === kind && gun === guns[kind]) { updateWeaponUI(); return; }
         cancelThrowAim(); // switching weapons puts a held throwable away
         closeWheel();
@@ -6372,6 +6539,11 @@
       function startLevel(n) {
         STATE.wave = n;
         var L = LEVELS[n - 1];
+        // staged loading: this level's enemy families jump the queue
+        for (var li = 0; li < L.mix.length; li++) {
+          var lfam = ENEMY_GLB_FAMILY[L.mix[li][0]];
+          if (lfam) demandGlb("char:" + lfam.tpl);
+        }
         // every 5th level (and the finale) is a Boss level: its headline
         // kind wears the boss bar at the top of the screen
         STATE.bossType = (n % 5 === 0) ? L.mix[0][0] : -1;
@@ -8341,6 +8513,10 @@
       }
       function startBombMatch() {
         audio();
+        // staged loading: mates wear the other heroes' models and
+        // the enemy bots are robots — pull all of them up the queue
+        for (var hi = 0; hi < HERO_GLB.length; hi++) demandGlb("char:" + HERO_GLB[hi].tpl);
+        demandGlb("char:robot");
         if (BOMB_MAP_LIST.indexOf(bombMapSel) < 0) bombMapSel = 0;
         if (currentMap !== bombMapSel) applyMap(bombMapSel);
         STATE.gameMode = "bomb";
@@ -9818,6 +9994,7 @@
       }
       function startGame() {
         audio();
+        demandGlb("char:" + (HERO_GLB[currentChar] || HERO_GLB[0]).tpl); // staged loading: the hero's model first
         STATE.gameMode = "campaign";
         if (currentMap > 4) applyMap(0); // 灰漠小镇 is bomb-mode only
         bombBarEl.classList.remove("on");
@@ -9967,7 +10144,7 @@
         fpsAcc += dt; fpsFrames++;
         if (fpsFrames >= 30) {
           var avgFps = fpsFrames / Math.max(fpsAcc, 0.001);
-          if (avgFps < 45 && prCur > 0.7) { prCur = Math.max(0.7, prCur - 0.2); renderer.setPixelRatio(prCur); }
+          if (avgFps < 45 && prCur > 0.75) { prCur = Math.max(0.75, prCur - 0.2); renderer.setPixelRatio(prCur); }
           else if (avgFps > 57 && prCur < prCap) { prCur = Math.min(prCap, prCur + 0.25); renderer.setPixelRatio(prCur); }
           fpsAcc = 0; fpsFrames = 0;
         }
@@ -10489,12 +10666,49 @@
 
       animate();
 
-      window.addEventListener("resize", function () {
-        camera.aspect = innerWidth / innerHeight;
+      /* ================= Viewport fitting (rotation-proof) =================
+         One fitter, every signal: rotating the phone must re-shape
+         the canvas, the camera aspect and the fraction-based button
+         layout to the NEW width/height, whichever event a browser
+         actually sends. The old code listened to window resize
+         alone — WeChat's built-in browser (and several Android
+         webviews) may rotate without a usable resize, or fire it
+         while innerWidth still reports the pre-rotation size, which
+         is exactly the "横屏没反应" players hit. So: resize,
+         orientationchange (plus two delayed re-fits to outlast
+         stale readings), visualViewport resize (also tracks the
+         mobile URL bar, so the picture is never pushed off or
+         letterboxed by chrome) and screen.orientation change all
+         funnel into fitViewport(). Sizes come from the visual
+         viewport when available — that is the area the player
+         actually sees. The 画面方向 setting never gates any of
+         this: it only drives the rotate tip and the portrait
+         layout tweaks, and the orientation lock attempt in
+         applyOrientation() stays a best-effort extra — nothing
+         depends on it succeeding. */
+      function fitViewport() {
+        var w = window.innerWidth || 1, h = window.innerHeight || 1;
+        if (window.visualViewport && visualViewport.width > 0 && visualViewport.height > 0) {
+          w = Math.round(visualViewport.width);
+          h = Math.round(visualViewport.height);
+        }
+        camera.aspect = w / h;
         camera.updateProjectionMatrix();
-        renderer.setSize(innerWidth, innerHeight);
+        renderer.setSize(w, h);
+        document.body.classList.toggle("phys-landscape", w > h);
+        document.body.classList.toggle("phys-portrait", h >= w);
         applyBtnLayout(); // custom button positions are screen fractions
+      }
+      window.addEventListener("resize", fitViewport);
+      window.addEventListener("orientationchange", function () {
+        fitViewport();
+        setTimeout(fitViewport, 120);
+        setTimeout(fitViewport, 420);
       });
+      if (window.visualViewport && visualViewport.addEventListener) visualViewport.addEventListener("resize", fitViewport);
+      if (window.screen && screen.orientation && screen.orientation.addEventListener) screen.orientation.addEventListener("change", fitViewport);
+      window.addEventListener("pageshow", fitViewport);
+      fitViewport();
     })();
     </script>
   </body>
