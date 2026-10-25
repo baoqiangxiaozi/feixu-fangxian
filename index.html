@@ -175,10 +175,10 @@
         white-space: nowrap;
       }
       .chip b { color: var(--accent); font-size: 17px; }
-      #btnHudSettings {
+      #btnHudSettings, #btnHudSupply {
         pointer-events: auto; cursor: pointer; font-family: inherit; color: var(--hud);
       }
-      #btnHudSettings:active { border-color: var(--accent); color: var(--accent); }
+      #btnHudSettings:active, #btnHudSupply:active { border-color: var(--accent); color: var(--accent); }
 
       #bottomleft {
         position: absolute; left: max(14px, env(safe-area-inset-left));
@@ -818,6 +818,7 @@
         <div class="chip">敌人 <b id="ui-left">0</b></div>
         <div class="chip"><span class="coindot"></span> 金币 <b id="ui-coins">0</b></div>
         <button class="chip" id="btnHudSettings" type="button">设置</button>
+        <button class="chip" id="btnHudSupply" type="button">补给</button>
       </div>
       <div id="throwwheel" class="radialwheel" aria-hidden="true">
         <svg viewBox="0 0 252 252" aria-hidden="true">
@@ -956,6 +957,18 @@
         <button type="button" class="foldtoggle" data-fold="changelogBody" aria-expanded="false">更新日志 <span class="arr">▸</span></button>
         <div class="foldbody" id="changelogBody" hidden>
           <div class="rules changelog">
+            <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 补给商店改为游戏内常驻（网页版）</div>
+              <div>· <b style="color:var(--accent)">过关不再弹补给商店</b>：闯关模式每过一关直接顺畅进入下一关，过关奖励（回血 +15、每种投掷物 +1）照常发放，不再被商店面板打断节奏</div>
+              <div>· <b style="color:var(--accent)">补给改成常驻入口</b>：对局内顶部信息栏新增「补给」按钮（和「设置」并排），战斗中、关间任何时候点开就能买——回血、补燃烧弹 / 冰球 / 手榴弹、下一关扩容弹匣，商品、价格和之前完全一样，买的东西立即生效；打开时游戏暂停，点「返回战斗」立刻回到对局。这个按钮也能在「按钮布局」里拖动、改大小和透明度，和其他按钮一样</div>
+              <div>· <b style="color:var(--accent)">爆破模式不受影响</b>：爆破里不出现这个入口，局间补给商店照旧；金币、存档、数值全部不变</div>
+            </div>
+            <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 枪真正握进手里（网页版）</div>
+              <div>· <b style="color:var(--accent)">第三人称的枪回到手上了</b>：之前枪只是按固定角度塞进模型的手部挂点，而真模型的手掌挂点自身是拧着的——枪在手里滚转了近 90°，从背后看就像一件小东西悬空飘在胸前、根本没握住。现在每套骨骼都按它瞄准姿势下的手掌位置逐个实测求解：枪握把正落掌心、枪口顺着人物朝向，待机、奔跑、瞄准、开火时都牢牢跟着右手，五位英雄全部生效</div>
+              <div>· <b style="color:var(--accent)">爆破模式全员同步</b>：4 名队友与 5 名敌方机器人的步枪同样改用掌心求解握持（机器人骨骼的手掌在百倍缩放的骨架下、还有一个静止的假手挂点，这次一并绕开），红 / 蓝队标记不变；第三人称手持投掷物（燃烧瓶 / 冰球 / 手雷）时也改握在真模型的手里，持物期间枪会暂时离手、扔出或收起后自动回到手中</div>
+              <div>· 所有武器的<b style="color:var(--accent)">数值、弹道、受击判定、人物碰撞与存档全部不变</b>，这一版只修握持姿势</div>
+            </div>
             <div class="clog-entry">
               <div class="clog-date">2026-10-25 更新 · 人物穿车修复 + 人物图全身统一（网页版）</div>
               <div>· <b style="color:var(--accent)">报废车回到自己的碰撞范围</b>：真汽车模型之前按包围盒角点摆放，整辆车比它的碰撞范围偏出半个车身——人站在合法位置上却被画进车体里（废土断桥出生点旁那辆最明显）；现在车体按中心对齐并收进碰撞范围、四边各留边距，人在车外就绝不会再陷进车里。集装箱、木箱、仙人掌、灌木等其他真模型掩体同样改按中心对齐，逐个复核不再探出自己的碰撞范围</div>
@@ -1268,12 +1281,14 @@
       </div>
     </div>
 
-    <!-- Inter-level supply shop: level clear opens this instead of
-         auto-advancing; 「进入下一关」 starts the next level -->
+    <!-- Supply shop: a standing panel, not a level-clear popup. The
+         topbar 「补给」 chip opens it mid-match (closing returns to
+         the fight); bomb mode opens it between rounds, where its
+         button starts the next round -->
     <div class="screen hidden" id="supplyScreen">
       <div class="card">
         <h1>过关<span class="hl">补给</span></h1>
-        <p class="sub" id="supplySub">这一关守住了！过关奖励已发放（回血 +15、每种投掷物 +1）。花金币补给一下再进下一关——这里是补给商店，和皮肤商店分开。金币余额 <span class="coinbal">0</span></p>
+        <p class="sub" id="supplySub">补给商店：花金币买回血、投掷物和下一关弹容，买完继续战斗——这里是补给商店，和皮肤商店分开。金币余额 <span class="coinbal">0</span></p>
         <div id="supplyList"></div>
         <button class="bigbtn" id="btnSupplyNext">进入下一关</button>
       </div>
@@ -3703,8 +3718,156 @@
           if (clip) actions[role] = mixer.clipAction(clip);
         }
         return { key: key, wrap: wrap, inner: inner, mats: c.mats, mixer: mixer, actions: actions, role: "",
-                 handR: findNodeByName(inner, "handslot.r") || findNodeByName(inner, "hand.r") || findNodeByName(inner, "Hand.R"),
+                 handR: findNodeByName(inner, "handslotr") || findNodeByName(inner, "handslot.r") || findNodeByName(inner, "handr") || findNodeByName(inner, "hand.r") || findNodeByName(inner, "Palm2R") || findNodeByName(inner, "Palm2.R") || findNodeByName(inner, "Palm1R") || findNodeByName(inner, "Palm1.R") || findNodeByName(inner, "HandR") || findNodeByName(inner, "Hand.R"),
                  lx: null, lz: null, acc: 0, kind: "", ref: null, hostGroup: null };
+      }
+      /* ---- Gun-in-hand solve ----
+         Every bone-parented gun used to be dropped into the right
+         hand slot with an identity rotation and a small offset —
+         but the slot was never found at all: the GLTF loader
+         sanitises node names (PropertyBinding strips the dots), so
+         the rigs' "handslot.r" arrives as "handslotr" and every
+         lookup for the dotted name missed. The hero's gun therefore
+         stayed bolted to the figure root in front of the chest
+         (the floating gun in the user's screenshot), bomb bots fell
+         back to a root-mounted gun, and only the mates' procedural
+         shoulder solve ever held anything. Even once found, the
+         slot's local frame is rolled ~90° inside the hand bone, so
+         an identity rotation would still hang the gun a
+         quarter-turn off the fist; and the robot rig is worse
+         still: its real hand bones are the palm joints under a
+         ×100 armature, while the node literally named "Hand.R" is
+         a static, unanimated leftover at head height — a gun
+         parented there neither follows the arm nor keeps its size. The solve follows the
+         pose-radius pattern above: build a throwaway instance of
+         the template, play its aiming clip (the robot's punch — the
+         only clip where its arm comes forward), and record the
+         hand anchor's world matrix in figure space. A gun's local
+         matrix is then anchor⁻¹ ∘ (gun upright, barrel along the
+         figure's facing, grip point on the palm), so the grip
+         lands in the fist on every rig and at every instance
+         scale — the inverse divides the armature's ×100 back out.
+         The result is pose-independent (the gun stays rigid in the
+         hand while the bones animate), so it is cached per
+         template and every instance just wears it. */
+      function calibrateGunGrip(key) {
+        var tpl = charTemplates[key];
+        if (!tpl || tpl.gunGrip !== undefined) return;
+        tpl.gunGrip = null;
+        try {
+          var def = tpl.def;
+          var c = cloneCharRoot(tpl);
+          c.root.traverse(function (o) { if (o.name && CHAR_ACCESSORY_RE.test(o.name)) o.visible = false; });
+          var inner = c.root;
+          inner.scale.set(def.squashX, def.squashY, def.squashX); // sc = 1: template units
+          inner.position.set(-tpl.center.x * def.squashX, -tpl.min.y * def.squashY, -tpl.center.z * def.squashX);
+          inner.rotation.y = def.rotY;
+          var wrap = new THREE.Group();
+          wrap.add(inner);
+          if (def.headBone && def.headScale !== 1) {
+            var hb = findNodeByName(inner, def.headBone);
+            if (hb) hb.scale.multiplyScalar(def.headScale);
+          }
+          var anchor = findNodeByName(inner, "handslotr") || findNodeByName(inner, "handslot.r") || findNodeByName(inner, "handr") || findNodeByName(inner, "hand.r") ||
+                       findNodeByName(inner, "Palm2R") || findNodeByName(inner, "Palm2.R") || findNodeByName(inner, "Palm1R") || findNodeByName(inner, "Palm1.R") || findNodeByName(inner, "HandR") || findNodeByName(inner, "Hand.R");
+          if (!anchor) return;
+          var mixer = new THREE.AnimationMixer(inner);
+          // Sample one clip at one instant and return the gun-local
+          // matrix that puts the grip point on the palm with the
+          // barrel along the figure's facing in that pose. NB: the
+          // matrix must be read BEFORE the action is stopped —
+          // stopping the last action on a binding restores the
+          // bone's original (bind) state in this three.js build, so
+          // a read after stop() would silently solve the bind pose
+          // instead (barrel a quarter-turn off in the aiming pose).
+          function sampleL(clipName, frac) {
+            var clip = clipName ? findClipByName(tpl.animations, clipName) : null;
+            if (!clip) return null;
+            var act = mixer.clipAction(clip);
+            mixer.stopAllAction();
+            act.reset(); act.setLoop(THREE.LoopRepeat, Infinity); act.play();
+            mixer.update((clip.duration || 0.6) * frac);
+            wrap.updateMatrixWorld(true);
+            var palm = new THREE.Vector3().setFromMatrixPosition(anchor.matrixWorld);
+            var inv = new THREE.Matrix4().copy(anchor.matrixWorld).invert();
+            act.stop();
+            return inv.multiply(new THREE.Matrix4().makeTranslation(palm.x, palm.y, palm.z));
+          }
+          // Two anchor poses are solved per rig, because a rigid gun
+          // can only be "right" for the hand orientation it was
+          // solved in: in the aiming pose the barrel rides level and
+          // forward, but with the arm hanging (idle / walk / run)
+          // that same rigid gun pitches skyward — the vertical rifle
+          // seen on a strolling teammate. The carry solve samples a
+          // locomotion clip near mid-stride instead, and
+          // updateHandGuns eases each held gun between the two
+          // solves as the figure's role crosses between the pose
+          // families (the roles crossfade over ~0.16 s, the gun
+          // follows on the same beat).
+          var aimClip = (def.clips.aim && def.clips.aim !== def.clips.idle) ? def.clips.aim : (def.clips.shoot || def.clips.attack);
+          var aimL = sampleL(aimClip, 0.45) || sampleL(def.clips.idle, 0.1);
+          var carryL = sampleL(def.clips.run || def.clips.walk, 0.25) || sampleL(def.clips.idle, 0.1) || aimL;
+          if (aimL) tpl.gunGrip = { aim: aimL, carry: carryL || aimL };
+        } catch (e) { tpl.gunGrip = null; }
+      }
+      /* Parent `gun` into the instance's right hand with its grip
+         point (`grip`, gun-local [x, y, z] of the pistol grip)
+         solved onto the palm. Returns false when the rig has no
+         usable hand anchor — the gun is then left untouched for
+         the caller's own fallback placement. */
+      var gunGripM = new THREE.Matrix4(), gunGripT = new THREE.Matrix4();
+      var handGunReg = []; // { gun, inst, grip, init } — driven by updateHandGuns
+      function attachGunToHand(inst, gun, grip) {
+        if (!inst || !inst.handR || !gun) return false;
+        var tpl = charTemplates[inst.key];
+        if (!tpl) return false;
+        if (tpl.gunGrip === undefined) calibrateGunGrip(inst.key);
+        if (gun.parent) gun.parent.remove(gun);
+        inst.handR.add(gun);
+        if (tpl.gunGrip) {
+          gunGripM.copy(tpl.gunGrip.aim);
+          if (grip) gunGripM.multiply(gunGripT.makeTranslation(-grip[0], -grip[1], -grip[2]));
+          gunGripM.decompose(gun.position, gun.quaternion, gun.scale);
+          for (var ri = 0; ri < handGunReg.length; ri++)
+            if (handGunReg[ri].gun === gun) { handGunReg.splice(ri, 1); break; }
+          handGunReg.push({ gun: gun, inst: inst, grip: grip || [0, 0, 0], init: false });
+        } else {
+          gun.position.set(0, 0.02, -0.05);
+          gun.rotation.set(0, 0, 0);
+          gun.scale.setScalar(1);
+        }
+        return true;
+      }
+      /* Per-frame driver for hand-held guns: ease each gun's local
+         transform toward the solve matching its figure's current
+         role family — aiming-family roles (aim / shoot / cast /
+         melee) wear the aim solve, locomotion and idle wear the
+         carry solve. Entries whose gun has left the hand (thrown
+         items, re-parented props) drop out on their own. */
+      var hgM = new THREE.Matrix4(), hgT = new THREE.Matrix4();
+      var hgP = new THREE.Vector3(), hgQ = new THREE.Quaternion(), hgS = new THREE.Vector3();
+      function updateHandGuns(dt) {
+        if (!handGunReg.length) return;
+        var k = 1 - Math.exp(-dt * 18);
+        for (var i = handGunReg.length - 1; i >= 0; i--) {
+          var e = handGunReg[i];
+          if (e.gun.parent !== e.inst.handR) { handGunReg.splice(i, 1); continue; }
+          var tpl = charTemplates[e.inst.key];
+          if (!tpl || !tpl.gunGrip) continue;
+          var r = e.inst.role;
+          var base = (r === "aim" || r === "shoot" || r === "cast" || r === "attack" || r === "slice" || r === "hit" || r === "death")
+            ? tpl.gunGrip.aim : tpl.gunGrip.carry;
+          hgM.copy(base).multiply(hgT.makeTranslation(-e.grip[0], -e.grip[1], -e.grip[2]));
+          hgM.decompose(hgP, hgQ, hgS);
+          if (!e.init) {
+            e.gun.position.copy(hgP); e.gun.quaternion.copy(hgQ); e.gun.scale.copy(hgS);
+            e.init = true;
+          } else {
+            e.gun.position.lerp(hgP, k);
+            e.gun.quaternion.slerp(hgQ, k);
+            e.gun.scale.lerp(hgS, k);
+          }
+        }
       }
       function setCharRole(inst, role) {
         if (!inst || inst.role === role) return;
@@ -3833,12 +3996,17 @@
         // hide the procedural figure (hitboxes stay live: r128's
         // raycaster ignores visibility, flinch / flash keep working
         // on the hidden meshes, and the GLB gets its own emissive
-        // flash through damageEnemy / the AI restore block)
-        g.traverse(function (o) { if (o.isMesh && o !== u.blob) o.visible = false; });
+        // flash through damageEnemy / the AI restore block) — a
+        // bomb bot's already-issued rifle is exempt from the hiding
+        // and is re-solved into the real hand below
+        var gunKeep = {};
+        if (u.gunMesh) u.gunMesh.traverse(function (o) { gunKeep[o.uuid] = true; });
+        g.traverse(function (o) { if (o.isMesh && o !== u.blob && !gunKeep[o.uuid]) o.visible = false; });
         g.add(inst.wrap);
         u.glbInst = inst;
         u.glbMats = inst.mats;
         registerCharAnim(inst, "enemy", u, g);
+        if (u.gunMesh && u.bombRole) attachGunToHand(inst, u.gunMesh, [0, -0.15, 0.17]);
         if (qualityTier === "fancy" || qualityTier === "balanced")
           inst.wrap.traverse(function (o) { if (o.isMesh) o.castShadow = true; });
       }
@@ -3850,19 +4018,26 @@
         if (!inst) return;
         var keep = {};
         if (lig.propGun) lig.propGun.traverse(function (o) { keep[o.uuid] = true; });
+        if (lig.aiGun) lig.aiGun.traverse(function (o) { keep[o.uuid] = true; });
         lig.group.traverse(function (o) { if (o.isMesh && !keep[o.uuid]) o.visible = false; });
         lig.group.add(inst.wrap);
         lig.glbInst = inst;
         lig.glbMats = inst.mats;
         inst.hostGroup = lig.group;
         registerCharAnim(inst, isMate ? "mate" : "hero", lig, lig.group);
-        if (!isMate && lig.propGun && inst.handR) {
-          // the toy rifle moves into the model's right hand; the
-          // main loop's reload-dip only drives it while it is still
-          // parented to the figure root (guarded there)
-          inst.handR.add(lig.propGun);
-          lig.propGun.position.set(0, 0.02, -0.08);
-          lig.propGun.rotation.set(0, 0, 0);
+        if (!isMate && lig.propGun) {
+          // the toy rifle moves into the model's right hand, grip
+          // solved onto the palm (see calibrateGunGrip); the main
+          // loop's reload-dip only drives it while it is still
+          // parented to the figure root (guarded there). If the rig
+          // has no hand anchor it simply stays root-mounted.
+          attachGunToHand(inst, lig.propGun, [0, -0.10, -0.02]);
+        }
+        if (isMate && lig.aiGun) {
+          // a mate built before this template landed carries its AI
+          // rifle on the (now hidden) procedural shoulder pivot —
+          // move it into the real hand as well
+          attachGunToHand(inst, lig.aiGun, [0, -0.15, 0.17]);
         }
         if (qualityTier === "fancy" || qualityTier === "balanced")
           inst.wrap.traverse(function (o) { if (o.isMesh) o.castShadow = true; });
@@ -4746,16 +4921,22 @@
         if (b && b.getAttribute && b.getAttribute("data-kind"))
           onSkinAction(b.getAttribute("data-kind"), b.getAttribute("data-item"), b.getAttribute("data-id"));
       });
-      /* ================= Inter-level supply shop =================
-         Clearing a level no longer auto-advances: this screen opens
-         (mode "supply" freezes the fight) and sells restock for coins
-         — heals, throwable refills (capped at 5 like every other
+      /* ================= Supply shop （补给商店） =================
+         A standing in-game shop, NOT a level-clear popup: clearing a
+         level advances straight into the next one, and the player
+         opens this screen whenever they want via the topbar 「补给」
+         chip (mode "supply" freezes the fight, like settings;
+         closing returns to the match). It sells restock for coins —
+         heals, throwable refills (capped at 5 like every other
          source) and a one-level +50% magazine boost. It is a separate
          shop from the skin shop: different screen, different goods,
-         same coin purse. Buys apply instantly and save at once;
-         「进入下一关」 starts the next level. Prices: heal +50 = 30,
-         full heal = 60, molotov / iceball = 15 each, grenade = 20,
-         mag boost = 40. */
+         same coin purse. Buys apply instantly and save at once.
+         supplyReturn decides what the bottom button does: "resume"
+         (opened from the HUD chip mid-match) just closes back into
+         the fight; "next" (bomb between-rounds) starts the next
+         round. Prices: heal +50 = 30, full heal = 60, molotov /
+         iceball = 15 each, grenade = 20, mag boost = 40. */
+      var supplyReturn = "next";
       var supplyScreen = document.getElementById("supplyScreen");
       function supplyItems() {
         return [
@@ -4779,7 +4960,8 @@
         document.getElementById("supplyList").innerHTML = h;
         refreshCoinUI();
       }
-      function openSupply() {
+      function openSupply(fromHud) {
+        supplyReturn = fromHud ? "resume" : "next";
         STATE.mode = "supply";
         closeWheel();
         setScoped(false);
@@ -4789,9 +4971,12 @@
         var supSub = document.getElementById("supplySub");
         if (supSub) supSub.innerHTML = STATE.gameMode === "bomb"
           ? "本局打完了！下一局生命与弹药自动回满，这里主要补投掷物和弹容——和皮肤商店分开。金币余额 <span class=\"coinbal\">0</span>"
-          : "这一关守住了！过关奖励已发放（回血 +15、每种投掷物 +1）。花金币补给一下再进下一关——这里是补给商店，和皮肤商店分开。金币余额 <span class=\"coinbal\">0</span>";
+          : (supplyReturn === "resume"
+            ? "补给商店随时能开：花金币买回血、补投掷物、给下一关备好扩容弹匣，买的东西立即生效——这里是补给商店，和皮肤商店分开。金币余额 <span class=\"coinbal\">0</span>"
+            : "这一关守住了！过关奖励已发放（回血 +15、每种投掷物 +1）。花金币补给一下再进下一关——这里是补给商店，和皮肤商店分开。金币余额 <span class=\"coinbal\">0</span>");
+        document.getElementById("btnSupplyNext").textContent = supplyReturn === "resume" ? "返回战斗" : "进入下一关";
         refreshCoinUI();
-        saveProgress(); // bank the level-clear rewards + task progress now
+        saveProgress(); // bank rewards / progress before shopping
         supplyScreen.classList.remove("hidden");
       }
       function buySupply(id) {
@@ -4818,6 +5003,12 @@
       });
       document.getElementById("btnSupplyNext").addEventListener("click", function () {
         supplyScreen.classList.add("hidden");
+        if (supplyReturn === "resume") { // opened mid-match from the HUD chip: straight back into the fight
+          STATE.mode = "play";
+          refreshHUD();
+          lockPointer();
+          return;
+        }
         if (STATE.gameMode === "bomb") { startBombRound(); return; }
         STATE.mode = "play";
         startLevel(STATE.wave + 1);
@@ -5707,6 +5898,14 @@
         if (hudCache[key] !== val) { hudCache[key] = val; el.textContent = val; }
       }
       function refreshHUD() {
+        // the standing supply chip is campaign-only: bomb mode runs
+        // its own economy, so the entry never appears there
+        var supHide = STATE.gameMode === "bomb";
+        if (hudCache.sup !== supHide) {
+          hudCache.sup = supHide;
+          var supBtn = document.getElementById("btnHudSupply");
+          if (supBtn) supBtn.style.display = supHide ? "none" : "";
+        }
         setText("s", ui.score, STATE.score);
         setText("c", ui.coins, STATE.coins);
         setText("w", ui.wave, Math.max(1, STATE.wave));
@@ -6814,7 +7013,19 @@
         var m = throwAim.mesh;
         if (m.parent) m.parent.remove(m);
         m.rotation.set(0, 0, 0);
-        if (viewMode === "tp") { pShR.add(m); m.position.set(0, -0.88, 0.02); }
+        m.scale.setScalar(1);
+        if (viewMode === "tp") {
+          // real-model hero: the item sits in the model's right
+          // hand (grip solved onto the palm, like the gun) and the
+          // gun leaves the hand while it is held; the procedural
+          // figure keeps the old shoulder-pivot anchor
+          var hfig = charFigures[currentChar];
+          if (hfig && hfig.glbInst && attachGunToHand(hfig.glbInst, m, [0, -0.03, 0])) {
+            if (propGun) propGun.visible = false;
+            return;
+          }
+          pShR.add(m); m.position.set(0, -0.88, 0.02);
+        }
         else { handHold.add(m); m.position.set(0, 0, 0); }
       }
       function startThrowAim(kind) {
@@ -6837,6 +7048,7 @@
         if (trajLine) trajLine.visible = false;
         if (trajRing) trajRing.visible = false;
         if (throwHintEl) throwHintEl.classList.remove("on");
+        if (propGun) propGun.visible = true; // the gun comes back into the hero's hand
         restoreGunVis();
       }
       function cancelThrowAim() {
@@ -7676,6 +7888,22 @@
         hudSetBtn.addEventListener("touchstart", function (e) { e.stopPropagation(); }, { passive: true });
         hudSetBtn.addEventListener("click", function (e) { e.stopPropagation(); openSettings("play"); });
       }
+      /* Standing supply entry: the topbar 「补给」 chip opens the
+         supply shop mid-match (campaign only — bomb mode has its own
+         economy and never shows this chip; refreshHUD hides it). The
+         shop freezes the fight like settings and its button returns
+         straight to play. Same event shielding as the settings chip
+         so taps never leak into aiming / firing underneath. */
+      var hudSupBtn = document.getElementById("btnHudSupply");
+      if (hudSupBtn) {
+        hudSupBtn.addEventListener("mousedown", function (e) { e.stopPropagation(); });
+        hudSupBtn.addEventListener("touchstart", function (e) { e.stopPropagation(); }, { passive: true });
+        hudSupBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (STATE.gameMode === "bomb" || STATE.mode !== "play") return;
+          openSupply(true);
+        });
+      }
 
       /* ================= Touch button layout editor =================
          Players arrange the on-screen buttons themselves: tap a button
@@ -7689,7 +7917,8 @@
         ["btnfire", "开火"], ["btnreload", "换弹"], ["btnjump", "跳"],
         ["btncrouch", "蹲"], ["btnscope", "瞄准"], ["btnpause", "暂停"],
         ["btnview", "视角"], ["stick", "移动摇杆"],
-        ["btnwheel", "投掷轮盘"], ["btngunwheel", "武器轮盘"]
+        ["btnwheel", "投掷轮盘"], ["btngunwheel", "武器轮盘"],
+        ["btnHudSupply", "补给"]
       ];
       var btnLayout = {};   // id -> {cx, cy, bw, bh, s, op}
       var editing = false, selBtnId = null, dragBtn = null;
@@ -7717,6 +7946,10 @@
           el.style.top = (L.cy * innerHeight - h / 2) + "px";
           el.style.right = "auto"; el.style.bottom = "auto";
           el.style.opacity = L.op;
+          // the supply chip normally sits in the topbar's flex row;
+          // once it has a custom layout it pins to the viewport at
+          // the stored fraction, like every other editable button
+          if (id === "btnHudSupply") el.style.position = "fixed";
         }
       }
       function selectBtn(id) {
@@ -7735,7 +7968,15 @@
         ui.hud.classList.add("on");
         ui.touchui.classList.add("on");
         ui.btnscope.classList.add("show"); // shown so it can be placed too
-        for (var i = 0; i < CUSTOM_BTNS.length; i++) btnEntry(CUSTOM_BTNS[i][0]);
+        for (var i = 0; i < CUSTOM_BTNS.length; i++) {
+          // the supply chip is hidden in bomb mode: measuring it then
+          // would snapshot a zero rect and wreck its saved spot
+          if (CUSTOM_BTNS[i][0] === "btnHudSupply") {
+            var supEl = document.getElementById("btnHudSupply");
+            if (!supEl || supEl.getBoundingClientRect().width === 0) continue;
+          }
+          btnEntry(CUSTOM_BTNS[i][0]);
+        }
         applyBtnLayout();
         layoutbar.classList.add("on");
         selectBtn("btnfire");
@@ -7757,7 +7998,7 @@
         for (var i = 0; i < CUSTOM_BTNS.length; i++) {
           var el = document.getElementById(CUSTOM_BTNS[i][0]);
           el.style.width = ""; el.style.height = ""; el.style.left = ""; el.style.top = "";
-          el.style.right = ""; el.style.bottom = ""; el.style.opacity = "";
+          el.style.right = ""; el.style.bottom = ""; el.style.opacity = ""; el.style.position = "";
         }
         for (var j = 0; j < CUSTOM_BTNS.length; j++) btnEntry(CUSTOM_BTNS[j][0]);
         if (selBtnId) selectBtn(selBtnId);
@@ -7784,8 +8025,8 @@
       // button doesn't jump to the finger.
       var dragOff = { x: 0, y: 0 };
       function customBtnFrom(el) {
-        var touchuiEl = document.getElementById("touchui");
-        while (el && el !== touchuiEl) {
+        var hudEl = document.getElementById("hud");
+        while (el && el !== hudEl) {
           for (var i = 0; i < CUSTOM_BTNS.length; i++) if (el.id === CUSTOM_BTNS[i][0]) return el.id;
           el = el.parentNode;
         }
@@ -7821,6 +8062,21 @@
       window.addEventListener("touchend", function () { if (editing) dragBtn = null; });
       window.addEventListener("touchcancel", function () { if (editing) dragBtn = null; });
       touchuiEl2.addEventListener("mousedown", function (e) {
+        if (!editing) return;
+        var id = customBtnFrom(e.target);
+        if (id) { editPress(id, e.clientX, e.clientY); e.preventDefault(); }
+      });
+      // The supply chip lives in the topbar, outside #touchui: give
+      // it the same editor press handling so it can be dragged and
+      // selected exactly like the touch buttons.
+      var topbarEl = document.getElementById("topbar");
+      topbarEl.addEventListener("touchstart", function (e) {
+        if (!editing) return;
+        e.preventDefault(); e.stopPropagation();
+        var id = customBtnFrom(e.target);
+        if (id) { var t = e.changedTouches[0]; editPress(id, t.clientX, t.clientY); }
+      }, { capture: true, passive: false });
+      topbarEl.addEventListener("mousedown", function (e) {
         if (!editing) return;
         var id = customBtnFrom(e.target);
         if (id) { editPress(id, e.clientX, e.clientY); e.preventDefault(); }
@@ -8178,15 +8434,11 @@
       function armBombEnemy(g, u) {
         var gun = buildAIGun();
         if (u.glbInst) {
-          // real-model path: the rifle rides the model's right hand
-          // bone (its shooting clip poses the arm), and the red team
-          // strips sit at fixed heights derived from aimY — the
-          // procedural arms they used to sit on are hidden
-          if (u.glbInst.handR) {
-            gun.position.set(0, 0.02, -0.05);
-            gun.rotation.set(0, 0, 0);
-            u.glbInst.handR.add(gun);
-          } else {
+          // real-model path: the rifle rides the model's right hand,
+          // grip solved onto the palm (see calibrateGunGrip), and
+          // the red team strips sit at fixed heights derived from
+          // aimY — the procedural arms they used to sit on are hidden
+          if (!attachGunToHand(u.glbInst, gun, [0, -0.15, 0.17])) {
             gun.position.set(0.18, 1.24, -0.42);
             g.add(gun);
           }
@@ -8776,11 +9028,8 @@
           // hand sits at the same local point on every hero.
           if (fig.propGun) fig.propGun.visible = false;
           var aiGun = buildAIGun();
-          if (fig.glbInst && fig.glbInst.handR) {
-            // real-model path: the rifle rides the model's right hand bone
-            aiGun.position.set(0, 0.02, -0.05);
-            fig.glbInst.handR.add(aiGun);
-          } else {
+          fig.aiGun = aiGun; // kept on the figure so a late template upgrade can re-solve it into the real hand
+          if (!(fig.glbInst && attachGunToHand(fig.glbInst, aiGun, [0, -0.15, 0.17]))) {
             aiGun.quaternion.copy(fig.shR.quaternion).invert();
             var mGripW = new THREE.Vector3(0, -0.15, 0.17).applyQuaternion(aiGun.quaternion);
             aiGun.position.set(0, -0.84, 0).sub(mGripW);
@@ -9970,7 +10219,8 @@
                 STATE.iceball = Math.min(5, STATE.iceball + 1);
                 STATE.grenade = Math.min(5, STATE.grenade + 1);
                 addTaskProg("clears", 1);
-                openSupply(); // inter-level supply shop; its 「进入下一关」 starts the next level
+                saveProgress(); // bank the level-clear rewards + task progress now
+                startLevel(STATE.wave + 1); // straight into the next level — no forced supply stop; the shop is a standing HUD entry
               }
               refreshHUD();
             }
@@ -10132,6 +10382,7 @@
         updateParticles(dt);
         updateDmgNums(dt);
         updateCharAnims(dt);
+        updateHandGuns(dt); // held guns ease between the aim / carry solves as roles change
         renderer.render(scene, camera);
       }
       /* ================= Restore the local save =================
