@@ -10,11 +10,11 @@
       :root {
         color-scheme: dark;
         --hud: #e8f4ff;
-        --accent: #ffb020;
+        --accent: #ffab5e;
         --danger: #ff4757;
         --ok: #2ed573;
-        --panel: rgba(10, 18, 30, 0.82);
-        --panel-line: rgba(120, 200, 255, 0.35);
+        --panel: rgba(10, 12, 18, 0.55);
+        --panel-line: rgba(255, 240, 220, 0.30);
       }
       * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
       html, body { margin: 0; height: 100%; overflow: hidden; background: #0a1220; }
@@ -78,7 +78,7 @@
       /* ---------- Headshot-kill pop (just above the crosshair) ---------- */
       #headpop {
         position: absolute; left: 50%; top: calc(50% - 62px); transform: translate(-50%, -50%) scale(.6);
-        font-size: 21px; font-weight: 900; letter-spacing: 3px; color: #ffb020;
+        font-size: 21px; font-weight: 900; letter-spacing: 3px; color: #ffab5e;
         text-shadow: 0 1px 4px rgba(0,0,0,.9), 0 0 12px rgba(255,90,38,.55);
         opacity: 0; pointer-events: none; white-space: nowrap;
       }
@@ -127,7 +127,7 @@
       }
       #drawui.on { display: flex; }
       #drawbar { position: relative; width: 11px; height: 204px; border-radius: 6px; background: rgba(10,14,20,.55); border: 1px solid rgba(232,244,255,.35); overflow: hidden; flex: none; }
-      #drawfill { position: absolute; left: 0; bottom: 0; width: 100%; height: 0%; background: #ffb020; }
+      #drawfill { position: absolute; left: 0; bottom: 0; width: 100%; height: 0%; background: #ffab5e; }
       #drawtext { writing-mode: vertical-rl; text-orientation: upright; font-size: 13px; font-weight: 700; letter-spacing: 1px; color: #ffe9b0; text-shadow: 0 1px 4px rgba(0,0,0,.9); white-space: nowrap; }
       #throwhint {
         position: absolute; left: 50%; top: calc(50% + 46px); transform: translateX(-50%);
@@ -170,7 +170,7 @@
         flex-wrap: wrap; row-gap: 6px;
       }
       .chip {
-        background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px;
+        background: var(--panel); border: 1px solid var(--panel-line); border-radius: 6px;
         padding: 6px 14px; font-size: 15px; font-weight: 600; letter-spacing: .5px;
         white-space: nowrap;
       }
@@ -187,9 +187,9 @@
       #hpwrap {
         background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px; padding: 8px 12px;
       }
-      #hpwrap .label { font-size: 12px; opacity: .85; display: flex; justify-content: space-between; margin-bottom: 5px; }
-      #hpbar { height: 12px; border-radius: 6px; background: rgba(255,255,255,.15); overflow: hidden; }
-      #hpfill { height: 100%; width: 100%; background: var(--ok); border-radius: 6px; transition: width .15s; }
+      #hpwrap .label { font-size: 11px; opacity: .85; display: flex; justify-content: space-between; margin-bottom: 4px; letter-spacing: 1px; }
+      #hpbar { height: 6px; border-radius: 3px; background: rgba(255,255,255,.15); overflow: hidden; }
+      #hpfill { height: 100%; width: 100%; background: #ffb36b; border-radius: 3px; transition: width .15s; }
       #hpfill.low { background: var(--danger); }
 
       #bottomright {
@@ -199,7 +199,7 @@
       #ammo {
         background: var(--panel); border: 1px solid var(--panel-line); border-radius: 10px; padding: 8px 14px;
       }
-      #ammo .big { font-size: 30px; font-weight: 800; line-height: 1; }
+      #ammo .big { font-size: 36px; font-weight: 800; line-height: 1; }
       #ammo .big.empty { color: var(--danger); }
       #ammo .small { font-size: 13px; opacity: .8; }
       #reloadtip { font-size: 13px; color: var(--accent); margin-top: 6px; min-height: 18px; font-weight: 600; }
@@ -207,7 +207,7 @@
       #wavebanner {
         position: absolute; left: 50%; top: 22%; transform: translateX(-50%);
         font-size: clamp(26px, 6vw, 44px); font-weight: 800; letter-spacing: 4px;
-        color: #fff; text-shadow: 0 2px 14px rgba(0,0,0,.7), 0 0 30px rgba(255,176,32,.5);
+        color: #fff; text-shadow: 0 2px 14px rgba(0,0,0,.7), 0 0 30px rgba(255,171,94,.5);
         opacity: 0; transition: opacity .4s; white-space: nowrap;
       }
       #wavebanner.show { opacity: 1; }
@@ -285,10 +285,10 @@
       }
       #btninteract {
         right: 208px; bottom: 96px; width: 70px; height: 70px; font-size: 15px; display: none;
-        background: rgba(255,176,32,.3); border-color: rgba(255,200,90,.8); color: #ffe9b0;
+        background: rgba(255,171,94,.3); border-color: rgba(255,200,90,.8); color: #ffe9b0;
       }
       #btninteract.on { display: flex; }
-      #btninteract.holding { background: rgba(255,176,32,.6); box-shadow: 0 0 0 2px var(--accent), 0 0 16px rgba(255,176,32,.6); }
+      #btninteract.holding { background: rgba(255,171,94,.6); box-shadow: 0 0 0 2px var(--accent), 0 0 16px rgba(255,171,94,.6); }
       body.bright-scene #btninteract { background: rgba(214,140,20,.6); }
       .bombmaprow { grid-template-columns: repeat(3, 1fr); max-width: 520px; }
       @media (max-width: 560px) { .bombmaprow { grid-template-columns: repeat(3, 1fr); } .bombmaprow .mappick span { display: none; } }
@@ -323,7 +323,7 @@
       .taskmid { white-space: nowrap; }
       .taskbtn, .supbtn {
         pointer-events: auto; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 14px;
-        background: rgba(255,176,32,.16); color: var(--accent); border: 1px solid var(--accent);
+        background: rgba(255,171,94,.16); color: var(--accent); border: 1px solid var(--accent);
         border-radius: 8px; padding: 7px 14px; white-space: nowrap;
       }
       .taskbtn[disabled], .supbtn[disabled] { opacity: .45; cursor: default; border-color: var(--panel-line); color: inherit; background: rgba(255,255,255,.06); }
@@ -346,12 +346,12 @@
         background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.35);
         color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center;
       }
-      .tbtn:active { background: rgba(255,176,32,.4); }
+      .tbtn:active { background: rgba(255,171,94,.4); }
       #btnfire { right: 26px; bottom: 108px; width: 86px; height: 86px; font-size: 17px; background: rgba(255,71,87,.28); border-color: rgba(255,120,130,.6); }
       #btnreload { right: 126px; bottom: 84px; width: 56px; height: 56px; font-size: 13px; }
       #btnjump { right: 34px; bottom: 208px; width: 56px; height: 56px; font-size: 13px; }
       #btncrouch { right: 126px; bottom: 262px; width: 56px; height: 56px; font-size: 13px; }
-      #btncrouch.active { background: rgba(255,176,32,.45); border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent), 0 0 14px rgba(255,176,32,.55); }
+      #btncrouch.active { background: rgba(255,171,94,.45); border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent), 0 0 14px rgba(255,171,94,.55); }
       #btnpause { position: absolute; top: max(56px, calc(env(safe-area-inset-top) + 48px)); right: 12px; width: 42px; height: 42px; font-size: 15px; pointer-events: auto; }
 
       /* ---------- Bright-scene button contrast ----------
@@ -361,9 +361,9 @@
          the buttons and stick sit on a deep-blue backing so they stay
          readable; every other map keeps the original styling. */
       body.bright-scene .tbtn { background: rgba(14,30,50,.55); border-color: rgba(205,235,255,.85); text-shadow: 0 1px 3px rgba(0,0,0,.7); }
-      body.bright-scene .tbtn:active { background: rgba(255,176,32,.55); }
+      body.bright-scene .tbtn:active { background: rgba(255,171,94,.55); }
       body.bright-scene #btnfire { background: rgba(214,40,57,.62); border-color: rgba(255,170,178,.95); }
-      body.bright-scene #btncrouch.active, body.bright-scene #btnscope.active { background: rgba(255,176,32,.6); border-color: var(--accent); }
+      body.bright-scene #btncrouch.active, body.bright-scene #btnscope.active { background: rgba(255,171,94,.6); border-color: var(--accent); }
       body.bright-scene #stick { background: rgba(14,30,50,.38); border-color: rgba(205,235,255,.7); }
       body.bright-scene #stickknob { background: rgba(228,243,255,.8); border-color: rgba(14,40,64,.6); }
 
@@ -395,7 +395,7 @@
       }
       .bigbtn {
         pointer-events: auto; cursor: pointer; border: none; border-radius: 14px;
-        background: linear-gradient(180deg, #ffb020, #f08c00); color: #231600;
+        background: linear-gradient(180deg, #ffab5e, #f08c00); color: #231600;
         font-size: 20px; font-weight: 800; letter-spacing: 2px; padding: 15px 46px;
         box-shadow: 0 6px 24px rgba(255,150,0,.35);
       }
@@ -432,7 +432,7 @@
       /* ---------- Extra touch buttons ---------- */
       #btnscope { right: 126px; bottom: 178px; width: 56px; height: 56px; font-size: 13px; display: none; }
       #btnscope.show { display: flex; }
-      #btnscope.active { background: rgba(255,176,32,.45); border-color: var(--accent); }
+      #btnscope.active { background: rgba(255,171,94,.45); border-color: var(--accent); }
 
       /* ---------- Start screen: weapon picker + toggles ---------- */
       .picktitle { font-size: 13px; opacity: .75; letter-spacing: 3px; margin: 0 0 8px; }
@@ -445,7 +445,7 @@
       }
       .pick b { display: block; font-size: 16px; margin-bottom: 3px; }
       .pick span { display: block; font-size: 11.5px; opacity: .8; line-height: 1.55; }
-      .pick.active { border-color: var(--accent); background: rgba(255,176,32,.14); }
+      .pick.active { border-color: var(--accent); background: rgba(255,171,94,.14); }
       .setrow { display: flex; gap: 10px; justify-content: center; margin: 0 auto 22px; flex-wrap: wrap; }
       .setbtn {
         pointer-events: auto; cursor: pointer; background: rgba(255,255,255,.07); color: var(--hud);
@@ -476,7 +476,7 @@
       /* ---------- Coins & skin shop ---------- */
       .coindot {
         display: inline-block; width: 13px; height: 13px; border-radius: 50%; flex: none;
-        background: radial-gradient(circle at 35% 32%, #ffe98a, #ffb020 55%, #c47f06);
+        background: radial-gradient(circle at 35% 32%, #ffe98a, #ffab5e 55%, #c47f06);
         border: 1px solid #8a5c02; box-shadow: inset 0 0 0 2px rgba(255,240,190,.55);
         vertical-align: -2px;
       }
@@ -507,7 +507,7 @@
         display: flex; align-items: center; gap: 2px;
         min-height: 48px; padding: 10px 22px 10px 16px;
         font-family: inherit; font-size: 17px; font-weight: 800; letter-spacing: 1px;
-        color: #231600; background: linear-gradient(180deg, #ffb020, #f08c00);
+        color: #231600; background: linear-gradient(180deg, #ffab5e, #f08c00);
         border: none; border-radius: 999px; box-shadow: 0 4px 16px rgba(0,0,0,.5);
       }
       .shopback:active { transform: translateY(1px); }
@@ -519,7 +519,7 @@
         text-align: left; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16);
         border-radius: 12px; padding: 8px;
       }
-      .skincard.equipped { border-color: var(--accent); background: rgba(255,176,32,.13); }
+      .skincard.equipped { border-color: var(--accent); background: rgba(255,171,94,.13); }
       .skincard b { display: block; font-size: 14.5px; margin: 7px 2px 8px; }
       /* Skins are shown as pictures, never colour chips: weapon skins
          use the wide side-view render, hero skins the tall portrait */
@@ -530,10 +530,10 @@
       .skinbtn {
         pointer-events: auto; cursor: pointer; width: 100%; font-family: inherit;
         font-weight: 700; font-size: 13.5px; border-radius: 9px; padding: 7px 6px;
-        border: 1px solid rgba(255,176,32,.75); background: rgba(255,176,32,.16); color: #ffd98a;
+        border: 1px solid rgba(255,171,94,.75); background: rgba(255,171,94,.16); color: #ffd98a;
       }
       .skinbtn.owned { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.08); color: var(--hud); }
-      .skinbtn.equipped { border-color: var(--accent); background: rgba(255,176,32,.3); color: #ffe9b0; }
+      .skinbtn.equipped { border-color: var(--accent); background: rgba(255,171,94,.3); color: #ffe9b0; }
       .skinbtn:disabled { opacity: .5; cursor: default; }
       .shoprow2 { grid-template-columns: repeat(3, 1fr); max-width: 640px; }
       @media (max-width: 560px) { .shoprow2 { grid-template-columns: repeat(3, 1fr); } }
@@ -547,7 +547,7 @@
         position: fixed; left: 50%; top: max(64px, calc(env(safe-area-inset-top) + 56px));
         transform: translate(-50%, -16px); z-index: 30;
         display: flex; align-items: center; gap: 7px; white-space: nowrap;
-        background: rgba(18,22,30,.94); border: 1px solid rgba(255,176,32,.75);
+        background: rgba(18,22,30,.94); border: 1px solid rgba(255,171,94,.75);
         color: #ffe9b0; font-weight: 700; font-size: 15px;
         padding: 10px 18px; border-radius: 999px; box-shadow: 0 6px 24px rgba(0,0,0,.45);
         opacity: 0; pointer-events: none;
@@ -566,7 +566,7 @@
         color: var(--hud); font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px;
         padding: 10px; resize: vertical; user-select: text; -webkit-user-select: text;
       }
-      .continuebtn { border-color: var(--accent); color: var(--accent); background: rgba(255,176,32,.14); font-size: 15px; padding: 10px 22px; }
+      .continuebtn { border-color: var(--accent); color: var(--accent); background: rgba(255,171,94,.14); font-size: 15px; padding: 10px 22px; }
       .dangerbtn { border-color: rgba(255,71,87,.8); color: #ff8a94; }
       .dangerbtn.solid { background: rgba(255,71,87,.25); color: #ffd7db; }
       .modalwrap {
@@ -672,7 +672,7 @@
       .radialwheel svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
       .wsector { fill: rgba(14,22,38,.94); stroke: rgba(255,255,255,.28); stroke-width: 1.5; }
       .wsector.cur { fill: rgba(120,180,255,.18); }
-      .wsector.sel { fill: rgba(255,176,32,.42); stroke: var(--accent); stroke-width: 2; }
+      .wsector.sel { fill: rgba(255,171,94,.42); stroke: var(--accent); stroke-width: 2; }
       .wheelhub { fill: rgba(9,14,24,.96); stroke: rgba(255,255,255,.35); stroke-width: 1.5; }
       .wheelcenter {
         position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
@@ -685,7 +685,7 @@
       .wheelitem .gunpic { display: block; width: 100%; height: 100%; }
       .wheelitem .gunpic img { border-radius: 50%; }
       .wheelitem.sel { transform: scale(1.12); }
-      .wheelitem.sel img { border-color: var(--accent); box-shadow: 0 0 16px rgba(255,176,32,.65); }
+      .wheelitem.sel img { border-color: var(--accent); box-shadow: 0 0 16px rgba(255,171,94,.65); }
       .wheelitem.cur img { border-color: rgba(140,200,255,.95); }
       .wheelitem.empty img { filter: grayscale(.85); opacity: .45; }
       .wheelitem .tcount { right: 0; bottom: 0; font-size: 12px; }
@@ -703,7 +703,7 @@
       .wheelitem.sel .wname { color: var(--accent); }
       .wheelitem.cur .wname { color: #9adcff; }
       .wheelitem.gunitem { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
-      #btnwheel { right: 202px; bottom: 244px; width: 58px; height: 58px; background: rgba(255,176,32,.25); border-color: rgba(255,200,90,.65); }
+      #btnwheel { right: 202px; bottom: 244px; width: 58px; height: 58px; background: rgba(255,171,94,.25); border-color: rgba(255,200,90,.65); }
       #btngunwheel { right: 202px; bottom: 316px; width: 58px; height: 58px; background: rgba(120,170,255,.22); border-color: rgba(160,200,255,.6); }
 
       /* ---------- Start-screen fold sections （玩法说明 / 更新日志） ----------
@@ -750,7 +750,7 @@
       /* ---------- Portrait-mode layout (player chose 竖屏) ---------- */
       @media (orientation: portrait) {
         body.orient-portrait #bottomleft { width: 168px; }
-        body.orient-portrait #ammo .big { font-size: 26px; }
+        body.orient-portrait #ammo .big { font-size: 30px; }
       }
 
       /* ---------- Landscape layout (phone held sideways, short height) ---------- */
@@ -762,7 +762,7 @@
         #hpwrap { padding: 6px 10px; }
         #bottomright { right: 12px; bottom: 10px; }
         #ammo { padding: 6px 10px; }
-        #ammo .big { font-size: 24px; }
+        #ammo .big { font-size: 28px; }
         #stick { left: 18px; bottom: 76px; width: 104px; height: 104px; }
         #btnfire { right: 22px; bottom: 80px; width: 78px; height: 78px; font-size: 16px; }
         #btnreload { right: 112px; bottom: 58px; }
@@ -805,7 +805,7 @@
       <div id="throwhint"></div>
       <div id="killpop" aria-hidden="true">
         <svg class="ic-norm" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="10" r="6.2" stroke="#e8f4ff" stroke-width="2"/><circle cx="9.6" cy="9.6" r="1.15" fill="#e8f4ff"/><circle cx="14.4" cy="9.6" r="1.15" fill="#e8f4ff"/><path d="M9 15.6v2M12 16v2.2M15 15.6v2" stroke="#e8f4ff" stroke-width="2" stroke-linecap="round"/></svg>
-        <svg class="ic-head" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.4" stroke="#ff4757" stroke-width="2"/><path d="M12 1.8v4M12 18.2v4M1.8 12h4M18.2 12h4" stroke="#ff4757" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="11" r="3.4" stroke="#ffb020" stroke-width="2"/><circle cx="10.8" cy="10.6" r=".7" fill="#ffb020"/><circle cx="13.2" cy="10.6" r=".7" fill="#ffb020"/></svg>
+        <svg class="ic-head" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.4" stroke="#ff4757" stroke-width="2"/><path d="M12 1.8v4M12 18.2v4M1.8 12h4M18.2 12h4" stroke="#ff4757" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="11" r="3.4" stroke="#ffab5e" stroke-width="2"/><circle cx="10.8" cy="10.6" r=".7" fill="#ffab5e"/><circle cx="13.2" cy="10.6" r=".7" fill="#ffab5e"/></svg>
         <span id="killpop-text">击杀</span>
       </div>
       <div id="dmgnums" aria-hidden="true"></div>
@@ -826,9 +826,9 @@
           <path class="wsector" data-k="ice" d="M 126,164 L 126,250 A 124 124 0 0 1 18.6,64 L 93.1,107 A 38 38 0 0 0 126,164 Z"/>
           <circle class="wheelhub" cx="126" cy="126" r="37"/>
         </svg>
-        <div class="wheelitem" data-k="fire" style="left:50%;top:18%"><img src="assets/asset-6f64d11b1620.jpg" alt="燃烧弹"><span class="tcount" id="wk-fire">×3</span><span class="wname">燃烧弹</span></div>
-        <div class="wheelitem" data-k="ice" style="left:22.5%;top:66%"><img src="assets/asset-d2390c54a7ba.jpg" alt="冰球"><span class="tcount" id="wk-ice">×3</span><span class="wname">冰球</span></div>
-        <div class="wheelitem" data-k="grenade" style="left:77.5%;top:66%"><img src="assets/asset-201d4d3a85e3.jpg" alt="手榴弹"><span class="tcount" id="wk-grenade">×3</span><span class="wname">手榴弹</span></div>
+        <div class="wheelitem" data-k="fire" style="left:50%;top:18%"><img src="assets/item-molotov.jpg" alt="燃烧弹"><span class="tcount" id="wk-fire">×3</span><span class="wname">燃烧弹</span></div>
+        <div class="wheelitem" data-k="ice" style="left:22.5%;top:66%"><img src="assets/item-iceball.jpg" alt="冰球"><span class="tcount" id="wk-ice">×3</span><span class="wname">冰球</span></div>
+        <div class="wheelitem" data-k="grenade" style="left:77.5%;top:66%"><img src="assets/item-grenade.jpg" alt="手榴弹"><span class="tcount" id="wk-grenade">×3</span><span class="wname">手榴弹</span></div>
         <div class="wheelcenter">投掷物</div>
       </div>
       <div id="gunwheel" class="radialwheel" aria-hidden="true">
@@ -875,13 +875,13 @@
       </div>
       <div id="touchui">
         <div id="stick"><div id="stickknob"></div></div>
-        <div class="tbtn" id="btnfire"><img class="tbtnimg" src="assets/asset-6c9c4165c8da.jpg" alt="开火"></div>
-        <div class="tbtn" id="btnreload"><img class="tbtnimg" src="assets/asset-a9bd1cd7e925.jpg" alt="换弹"></div>
-        <div class="tbtn" id="btnjump"><img class="tbtnimg" src="assets/asset-d3e911112f3e.jpg" alt="跳"></div>
-        <div class="tbtn" id="btncrouch"><img class="tbtnimg" src="assets/asset-1010aaefef61.jpg" alt="蹲"></div>
+        <div class="tbtn" id="btnfire"><img class="tbtnimg" src="assets/icon-fire.jpg" alt="开火"></div>
+        <div class="tbtn" id="btnreload"><img class="tbtnimg" src="assets/icon-reload.jpg" alt="换弹"></div>
+        <div class="tbtn" id="btnjump"><img class="tbtnimg" src="assets/icon-jump.jpg" alt="跳"></div>
+        <div class="tbtn" id="btncrouch"><img class="tbtnimg" src="assets/icon-crouch.jpg" alt="蹲"></div>
         <div class="tbtn" id="btnscope">瞄准</div>
-        <div class="tbtn" id="btnwheel"><img class="tbtnimg" src="assets/asset-ac37fe27f11d.jpg" alt="投掷轮盘"></div>
-        <div class="tbtn" id="btngunwheel"><img class="tbtnimg" src="assets/asset-d09e51dcac25.jpg" alt="武器轮盘"></div>
+        <div class="tbtn" id="btnwheel"><img class="tbtnimg" src="assets/item-wheel.jpg" alt="投掷轮盘"></div>
+        <div class="tbtn" id="btngunwheel"><img class="tbtnimg" src="assets/item-gunwheel.jpg" alt="武器轮盘"></div>
         <div class="tbtn" id="btnpause">| |</div>
         <div class="tbtn" id="btninteract">安包</div>
         <div class="tbtn" id="btnspec">切换视角</div>
@@ -956,6 +956,46 @@
         <button type="button" class="foldtoggle" data-fold="changelogBody" aria-expanded="false">更新日志 <span class="arr">▸</span></button>
         <div class="foldbody" id="changelogBody" hidden>
           <div class="rules changelog">
+            <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 模型穿模修复 + 英雄图片换 Q 版（网页版）</div>
+              <div>· <b style="color:var(--accent)">集装箱对齐碰撞</b>：真集装箱模型的原点不在箱体正中，之前视觉比碰撞偏出近一米——一侧会陷进旁边的掩体、另一侧隔空撞墙；现在按实测包围盒三轴居中，箱面和挡弹 / 拦人范围严丝合缝</div>
+              <div>· <b style="color:var(--accent)">Q 版人物站位校正</b>：骑士、潜行者等模型的量取范围之前把手里的剑 / 盾 / 弩也算了进去，人物本体被偏出半米，贴墙时会陷进墙里；现在按隐藏配件后的本体重新量取居中，人物站回判定正中</div>
+              <div>· <b style="color:var(--accent)">丛林灌木收回掩体范围</b>：两侧的小灌木之前探出掩体边缘、叶子插进相邻通道，现在整簇收回本方格内；废土报废车的长边改为顺着掩体长边停放，不再横着挤压变形</div>
+              <div>· <b style="color:var(--accent)">第三人称相机不再钻掩体</b>：背靠集装箱 / 墙壁时相机会自动沿视线拉近到掩体前方，不会再出现镜头陷进箱子、画面被箱体糊住的情况</div>
+              <div>· <b style="color:var(--accent)">英雄图片全换 Q 版</b>：选人界面的五位英雄人物图、英雄皮肤商店的十张皮肤图，全部换成与游戏内 Q 版真模型一一对应的大头 Q 版形象（队长小骑士、游侠野蛮人、雪卫冰蓝法师、猎手绿兜帽、特工冷灰潜行者），皮肤图按各自的染色配色绘制；武器与武器皮肤图不变</div>
+              <div>· 所有掩体的<b style="color:var(--accent)">位置、大小、碰撞、挡弹数量</b>与人物的<b style="color:var(--accent)">身高、受击判定、数值、存档全部不变</b>，这一版只修视觉对齐</div>
+            </div>
+            <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 人物全员换 Q 版真实 3D 模型 + 丛林灌木换真模型（网页版）</div>
+              <div>· <b style="color:var(--accent)">五位英雄全员换成 Q 版真角色</b>：大头短身的真实骨骼模型——蓝盾队长是骑士、荒漠游侠是野蛮人、极地雪卫是冰蓝法袍法师、丛林猎手是兜帽潜行者、暗夜特工是冷灰潜行者，职业和配色各不相同；走路、奔跑、待机、瞄准、开火都是模型自带的骨骼动画，第三人称和爆破队友同步换装。英雄皮肤照常购买装备，装到真模型上以染色方式呈现（和真模型枪械的政策一致）</div>
+              <div>· <b style="color:var(--accent)">人形敌人按家族换 Q 版真模型</b>：骑士家族（血月骑士 / 末日骑士王 / 终焉主宰）、野蛮人家族（傀儡 / 狼人 / 熔岩魔像 / 泰坦巨兽）、法师家族（寒冰女巫 / 混沌法师 / 喷吐者 / 虚空炮手）、潜行者家族（外星猎手 / 影子刺客 / 虚空行者 / 暗影君主 / 星际掠夺者 / 时空猎手）、骷髅家族（骷髅兵 / 幽灵）用染色 + 缩放区分；机器人家族（机器人 / 重装机甲 / 雷电机甲 / 轨道炮手）用可爱风机器人模型，头部放大、身子压矮往 Q 版靠。Boss 在同家族模型上再放大 1.6 倍。蜘蛛、石像鬼、恶魔、毒液爬行者、蜂巢女王、深渊触手怪、荆棘树妖、熔火魔君、不死凤凰、虚空魔龙这类异形没有可信的免费真模型，保留原来的造型</div>
+              <div>· <b style="color:var(--accent)">丛林灌木换真模型</b>：「暮色丛林」的灌木丛换成真实低多边形灌木（一大两小成簇），仍是软掩体——挡人不挡弹，位置、大小、碰撞和数量一个没动</div>
+              <div>· 每个敌人的<b style="color:var(--accent)">身高、受击判定、血量、移速、攻击和爆破规则全部不变</b>，手感零变化；模型加载失败会自动退回原来的程序造型，不会卡住刷怪。爆破模式敌人的枪挂在真模型的手上，红 / 蓝队标记照旧</div>
+              <div>· 素材致谢：英雄与人形敌人 KayKit 冒险者 + 骷髅战士（Kay Lousberg，CC0，经官方 GitHub 仓库获取）；机器人与灌木 Quaternius（CC0，经 Poly Pizza 获取）。模型文件已瘦身至只保留用到的动画片段</div>
+            </div>
+            <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 真实模型 + 真阴影推广到全部地图（网页版）</div>
+              <div>· <b style="color:var(--accent)">全部地图都有真阴影 + 电影级色调了</b>：灼热荒漠、极地冰原、暮色丛林、废土断桥和爆破图「灰漠小镇」跟废墟都市一样，精美 / 均衡两档开启真实阴影（流畅档不变），ACES 色调让真模型读出金属与漆面的质感；每张图保留自己的天空和色板——荒漠还是大白天、冰原还是钢蓝色，没有被染成黄昏</div>
+              <div>· <b style="color:var(--accent)">逐图换上对口真模型</b>：荒漠的仙人掌、丛林的大树（树干挡弹、树冠在头顶，和原来的分工一致）、废土的报废汽车（已做旧压暗）都换成真实模型；冰原暂无对口的冰块模型，保留冰雕冰块，改为在场地外点缀了一圈带雪的松树；小镇的建筑保持原样，木箱换成和城市同款的实木框架箱；集装箱、木箱、铁桶在所有用得到的地图上统一复用真模型</div>
+              <div>· 所有掩体的<b style="color:var(--accent)">位置、大小、碰撞、挡弹规则与数量逐图不变</b>，玩法、数值、存档不受影响；模型加载失败仍会自动退回原来的程序模型，不会卡住游戏</div>
+              <div>· 素材致谢：仙人掌、树木、雪松、报废汽车 Quaternius（CC0），经 Poly Pizza 获取；其余同前一条</div>
+            </div>
+            <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 真实 3D 模型上线（网页版）</div>
+              <div>· <b style="color:var(--accent)">六把枪换上真实 3D 模型</b>：手枪、冲锋枪、步枪、狙击枪、霰弹枪、火箭筒全部换成真实模型文件——步枪按黄昏参考图的比例放大，长枪管、导轨、红点、弯弹匣一应俱全，占据画面右下；枪口焰和曳光从真模型的枪口尖端发出。弓没有对应模型，保持原样</div>
+              <div>· <b style="color:var(--accent)">「废墟都市」集装箱、木箱、铁桶换真模型</b>：集装箱仍是灰 / 蓝 / 橙 / 褪红四色区分，木箱换成实木框架箱、铁桶换成带贴图的真铁桶；所有掩体的位置、大小、碰撞、挡弹与数量一个没动。托盘堆保持原样</div>
+              <div>· <b style="color:var(--accent)">黄昏光影补强</b>：这张图开启电影级色调（ACES）+ 真阴影（精美 / 均衡两档都有，夕阳把集装箱的长影子拖过整个场地），太阳方向多了一团暖色眩光，远景楼群改成被夕阳照透的暖橙色；其他地图的画面和以前完全一样</div>
+              <div>· 武器数值、弹容、射速、存档全部不变；某个模型万一加载失败会自动用回原来的方块模型，不会卡住游戏。枪械皮肤照常购买装备，真模型武器先以原装出厂外观出战</div>
+              <div>· 素材致谢：枪械模型 Polyy.AI（CC0）；木箱、铁桶 Quaternius（CC0）；集装箱 Clint Chilcott（CC-BY），均经 Poly Pizza / itch.io 获取</div>
+            </div>
+            <div class="clog-entry">
+              <div class="clog-date">2026-10-25 更新 · 黄昏试点：「废墟都市」改版</div>
+              <div>· <b style="color:var(--accent)">「废墟都市」先行换上黄昏风</b>：夕阳暖橙光打低角度照进来，天空是紫到橙的渐变，远景楼群成了融进晚霞的深色剪影（带天线和瞭望塔），地面还添了几处焦土斑——先在这一张图试点，看顺眼了再推广到其他地图</div>
+              <div>· <b style="color:var(--accent)">掩体只换装、不换位</b>：石板换成石板灰 / 蓝 / 橙 / 褪红四色集装箱（带瓦楞肋条和四角柱），木箱换成暖棕木箱、托盘堆和铁桶；每个掩体的位置、大小、碰撞、挡弹和可站立规则与之前完全一致</div>
+              <div>· <b style="color:var(--accent)">步枪细节化</b>：加了导轨段、红点瞄具（小镜框里一颗红色光点）、护木肋条、带弧度的弹匣和枪口制退器；伤害、射速、弹容、枪口位置都没变，皮肤换色照常跟随</div>
+              <div>· <b style="color:var(--accent)">HUD 极简休整</b>：生命改成细条 + 暖橙填充，顶部信息改成深色半透小方块，右下弹药数字加大，全局点缀色统一成暖橙；按钮的位置和大小一个都没动</div>
+              <div>· 其他地图、玩法、数值与存档<b style="color:var(--accent)">完全不受影响</b></div>
+            </div>
             <div class="clog-entry">
               <div class="clog-date">2026-10-24 更新 · 游戏改名</div>
               <div>· 游戏名称由《爆枪小子》改回 <b style="color:var(--accent)">《废墟防线》</b>，与微信小游戏账号名统一——开始界面主标题、浏览器标签页等所有界面显示的名字都已更换</div>
@@ -1076,28 +1116,28 @@
           <p class="sub" style="margin:2px auto 4px;max-width:520px">开局随机决定你方先攻还是先守，进场即公布；两队总分到 4 分时交换一次攻守。先赢 5 局拿下整场（最多 9 局）。</p>
           <p class="picktitle">爆破地图（双包点 A / B · 先赢 5 局）</p>
           <div class="maprow bombmaprow">
-            <button class="pick mappick bombpick active" data-bm="0"><img class="mapimg" src="assets/asset-0d2121e33cbb.jpg" alt="废墟都市地图预览图"><b>废墟都市</b><span>A 点西侧广场 · B 点东侧废墟<br>每局 100 秒</span></button>
-            <button class="pick mappick bombpick" data-bm="4"><img class="mapimg" src="assets/asset-d2e22eec7a17.jpg" alt="废土断桥地图预览图"><b>废土断桥</b><span>A 点桥头废车 · B 点断墙街角<br>每局 100 秒</span></button>
-            <button class="pick mappick bombpick" data-bm="5"><img class="mapimg" src="assets/asset-a3865b349b47.jpg" alt="灰漠小镇地图预览图"><b>灰漠小镇</b><span>大地图 · 中路 / A 通 / B 通三路<br>每局 120 秒</span></button>
+            <button class="pick mappick bombpick active" data-bm="0"><img class="mapimg" src="assets/map-ruins.jpg" alt="废墟都市地图预览图"><b>废墟都市</b><span>A 点西侧广场 · B 点东侧废墟<br>每局 100 秒</span></button>
+            <button class="pick mappick bombpick" data-bm="4"><img class="mapimg" src="assets/map-wasteland.jpg" alt="废土断桥地图预览图"><b>废土断桥</b><span>A 点桥头废车 · B 点断墙街角<br>每局 100 秒</span></button>
+            <button class="pick mappick bombpick" data-bm="5"><img class="mapimg" src="assets/map-town.jpg" alt="灰漠小镇地图预览图"><b>灰漠小镇</b><span>大地图 · 中路 / A 通 / B 通三路<br>每局 120 秒</span></button>
           </div>
         </div>
         <div id="campaignMaps">
         <p class="picktitle">选择地图</p>
         <div class="maprow">
-          <button class="pick mappick active" data-m="0"><img class="mapimg" src="assets/asset-0d2121e33cbb.jpg" alt="废墟都市地图预览图"><b>废墟都市</b><span>经典战场 · 晴空废墟<br>掩体均衡，新手友好</span></button>
-          <button class="pick mappick" data-m="1"><img class="mapimg" src="assets/asset-e645e7b25300.jpg" alt="灼热荒漠地图预览图"><b>灼热荒漠</b><span>黄沙漫天 · 视野开阔<br>中央空旷，拼枪法</span></button>
-          <button class="pick mappick" data-m="2"><img class="mapimg" src="assets/asset-7cb23691baea.jpg" alt="极地冰原地图预览图"><b>极地冰原</b><span>冰天雪地 · 冷雾弥漫<br>掩体错落，近战多</span></button>
-          <button class="pick mappick" data-m="3"><img class="mapimg" src="assets/asset-ee86daab0497.jpg" alt="暮色丛林地图预览图"><b>暮色丛林</b><span>黄昏密林 · 光线昏暗<br>林木密集，绕后多</span></button>
-          <button class="pick mappick" data-m="4"><img class="mapimg" src="assets/asset-d2e22eec7a17.jpg" alt="废土断桥地图预览图"><b>废土断桥</b><span>写实废土 · 浓雾断桥<br>灰冷压抑，废车瓦砾多</span></button>
+          <button class="pick mappick active" data-m="0"><img class="mapimg" src="assets/map-ruins.jpg" alt="废墟都市地图预览图"><b>废墟都市</b><span>经典战场 · 黄昏集装箱<br>掩体均衡，新手友好</span></button>
+          <button class="pick mappick" data-m="1"><img class="mapimg" src="assets/map-desert.jpg" alt="灼热荒漠地图预览图"><b>灼热荒漠</b><span>黄沙漫天 · 视野开阔<br>中央空旷，拼枪法</span></button>
+          <button class="pick mappick" data-m="2"><img class="mapimg" src="assets/map-ice.jpg" alt="极地冰原地图预览图"><b>极地冰原</b><span>冰天雪地 · 冷雾弥漫<br>掩体错落，近战多</span></button>
+          <button class="pick mappick" data-m="3"><img class="mapimg" src="assets/map-jungle.jpg" alt="暮色丛林地图预览图"><b>暮色丛林</b><span>黄昏密林 · 光线昏暗<br>林木密集，绕后多</span></button>
+          <button class="pick mappick" data-m="4"><img class="mapimg" src="assets/map-wasteland.jpg" alt="废土断桥地图预览图"><b>废土断桥</b><span>写实废土 · 浓雾断桥<br>灰冷压抑，废车瓦砾多</span></button>
         </div>
         </div>
         <p class="picktitle">选择人物</p>
         <div class="charrow">
-          <button class="pick charpick active" data-c="0"><img class="charimg" src="assets/asset-b0e1eedfc63f.jpg" alt="蓝盾队长人物图"><b>蓝盾队长</b><span>蓝制服 · 橙色鸭舌帽<br>均衡老兵，经典造型</span></button>
-          <button class="pick charpick" data-c="1"><img class="charimg" src="assets/asset-effb49cb3880.jpg" alt="荒漠游侠人物图"><b>荒漠游侠</b><span>宽檐帽 + 风镜 + 橙围巾<br>闯荡沙漠的老手</span></button>
-          <button class="pick charpick" data-c="2"><img class="charimg" src="assets/asset-5e06e89c8e96.jpg" alt="极地雪卫人物图"><b>极地雪卫</b><span>毛领棉服 · 体型魁梧<br>冰原里的移动堡垒</span></button>
-          <button class="pick charpick" data-c="3"><img class="charimg" src="assets/asset-5a7b0a820b54.jpg" alt="丛林猎手人物图"><b>丛林猎手</b><span>迷彩服 · 树叶兜帽 · 油彩脸<br>密林潜行的猎手</span></button>
-          <button class="pick charpick" data-c="4"><img class="charimg" src="assets/asset-28df464fcddc.jpg" alt="暗夜特工人物图"><b>暗夜特工</b><span>黑战衣 · 红目镜 · 面罩<br>身形利落的夜行者</span></button>
+          <button class="pick charpick active" data-c="0"><img class="charimg" src="assets/char-captain.jpg" alt="蓝盾队长人物图"><b>蓝盾队长</b><span>大头盔 · 红披风 · 蓝盾<br>Q 版小骑士，均衡老兵</span></button>
+          <button class="pick charpick" data-c="1"><img class="charimg" src="assets/char-ranger.jpg" alt="荒漠游侠人物图"><b>荒漠游侠</b><span>兽皮蛮荒装 · 野性发型<br>Q 版野蛮人，沙漠老手</span></button>
+          <button class="pick charpick" data-c="2"><img class="charimg" src="assets/char-arctic.jpg" alt="极地雪卫人物图"><b>极地雪卫</b><span>冰蓝法袍 · 尖顶法师帽<br>Q 版法师，冰原堡垒</span></button>
+          <button class="pick charpick" data-c="3"><img class="charimg" src="assets/char-jungle.jpg" alt="丛林猎手人物图"><b>丛林猎手</b><span>叶绿兜帽 · 潜行装束<br>Q 版潜行者，密林猎手</span></button>
+          <button class="pick charpick" data-c="4"><img class="charimg" src="assets/char-agent.jpg" alt="暗夜特工人物图"><b>暗夜特工</b><span>冷灰战衣 · 利落短装<br>Q 版潜行者，夜行特工</span></button>
         </div>
         <p class="picktitle">选择武器（游戏中可随时切换）</p>
         <div class="pickrow pickrow5" id="pickrow">
@@ -1171,19 +1211,19 @@
         </div>
         <p class="picktitle">换个地图再战</p>
         <div class="maprow">
-          <button class="pick mappick active" data-m="0"><img class="mapimg" src="assets/asset-0d2121e33cbb.jpg" alt="废墟都市地图预览图"><b>废墟都市</b><span>晴空废墟 · 掩体均衡</span></button>
-          <button class="pick mappick" data-m="1"><img class="mapimg" src="assets/asset-e645e7b25300.jpg" alt="灼热荒漠地图预览图"><b>灼热荒漠</b><span>黄沙开阔 · 拼枪法</span></button>
-          <button class="pick mappick" data-m="2"><img class="mapimg" src="assets/asset-7cb23691baea.jpg" alt="极地冰原地图预览图"><b>极地冰原</b><span>冷雾雪地 · 近战多</span></button>
-          <button class="pick mappick" data-m="3"><img class="mapimg" src="assets/asset-ee86daab0497.jpg" alt="暮色丛林地图预览图"><b>暮色丛林</b><span>黄昏密林 · 绕后多</span></button>
-          <button class="pick mappick" data-m="4"><img class="mapimg" src="assets/asset-d2e22eec7a17.jpg" alt="废土断桥地图预览图"><b>废土断桥</b><span>浓雾废土 · 断桥废车</span></button>
+          <button class="pick mappick active" data-m="0"><img class="mapimg" src="assets/map-ruins.jpg" alt="废墟都市地图预览图"><b>废墟都市</b><span>黄昏集装箱 · 掩体均衡</span></button>
+          <button class="pick mappick" data-m="1"><img class="mapimg" src="assets/map-desert.jpg" alt="灼热荒漠地图预览图"><b>灼热荒漠</b><span>黄沙开阔 · 拼枪法</span></button>
+          <button class="pick mappick" data-m="2"><img class="mapimg" src="assets/map-ice.jpg" alt="极地冰原地图预览图"><b>极地冰原</b><span>冷雾雪地 · 近战多</span></button>
+          <button class="pick mappick" data-m="3"><img class="mapimg" src="assets/map-jungle.jpg" alt="暮色丛林地图预览图"><b>暮色丛林</b><span>黄昏密林 · 绕后多</span></button>
+          <button class="pick mappick" data-m="4"><img class="mapimg" src="assets/map-wasteland.jpg" alt="废土断桥地图预览图"><b>废土断桥</b><span>浓雾废土 · 断桥废车</span></button>
         </div>
         <p class="picktitle">换个人物再战</p>
         <div class="charrow">
-          <button class="pick charpick active" data-c="0"><img class="charimg" src="assets/asset-b0e1eedfc63f.jpg" alt="蓝盾队长人物图"><b>蓝盾队长</b><span>蓝制服 · 橙帽</span></button>
-          <button class="pick charpick" data-c="1"><img class="charimg" src="assets/asset-effb49cb3880.jpg" alt="荒漠游侠人物图"><b>荒漠游侠</b><span>宽檐帽 · 围巾</span></button>
-          <button class="pick charpick" data-c="2"><img class="charimg" src="assets/asset-5e06e89c8e96.jpg" alt="极地雪卫人物图"><b>极地雪卫</b><span>毛领棉服 · 魁梧</span></button>
-          <button class="pick charpick" data-c="3"><img class="charimg" src="assets/asset-5a7b0a820b54.jpg" alt="丛林猎手人物图"><b>丛林猎手</b><span>迷彩 · 树叶兜帽</span></button>
-          <button class="pick charpick" data-c="4"><img class="charimg" src="assets/asset-28df464fcddc.jpg" alt="暗夜特工人物图"><b>暗夜特工</b><span>黑战衣 · 红目镜</span></button>
+          <button class="pick charpick active" data-c="0"><img class="charimg" src="assets/char-captain.jpg" alt="蓝盾队长人物图"><b>蓝盾队长</b><span>大头盔 · 红披风</span></button>
+          <button class="pick charpick" data-c="1"><img class="charimg" src="assets/char-ranger.jpg" alt="荒漠游侠人物图"><b>荒漠游侠</b><span>兽皮蛮荒装</span></button>
+          <button class="pick charpick" data-c="2"><img class="charimg" src="assets/char-arctic.jpg" alt="极地雪卫人物图"><b>极地雪卫</b><span>冰蓝法袍 · 法师帽</span></button>
+          <button class="pick charpick" data-c="3"><img class="charimg" src="assets/char-jungle.jpg" alt="丛林猎手人物图"><b>丛林猎手</b><span>叶绿兜帽 · 潜行</span></button>
+          <button class="pick charpick" data-c="4"><img class="charimg" src="assets/char-agent.jpg" alt="暗夜特工人物图"><b>暗夜特工</b><span>冷灰战衣 · 潜行</span></button>
         </div>
         <button class="bigbtn" id="btnRestart">再来一局</button>
         <button class="ghostbtn" id="btnShopOver">皮肤商店</button>
@@ -1203,19 +1243,19 @@
         </div>
         <p class="picktitle">换个地图再战</p>
         <div class="maprow">
-          <button class="pick mappick active" data-m="0"><img class="mapimg" src="assets/asset-0d2121e33cbb.jpg" alt="废墟都市地图预览图"><b>废墟都市</b><span>晴空废墟 · 掩体均衡</span></button>
-          <button class="pick mappick" data-m="1"><img class="mapimg" src="assets/asset-e645e7b25300.jpg" alt="灼热荒漠地图预览图"><b>灼热荒漠</b><span>黄沙开阔 · 拼枪法</span></button>
-          <button class="pick mappick" data-m="2"><img class="mapimg" src="assets/asset-7cb23691baea.jpg" alt="极地冰原地图预览图"><b>极地冰原</b><span>冷雾雪地 · 近战多</span></button>
-          <button class="pick mappick" data-m="3"><img class="mapimg" src="assets/asset-ee86daab0497.jpg" alt="暮色丛林地图预览图"><b>暮色丛林</b><span>黄昏密林 · 绕后多</span></button>
-          <button class="pick mappick" data-m="4"><img class="mapimg" src="assets/asset-d2e22eec7a17.jpg" alt="废土断桥地图预览图"><b>废土断桥</b><span>浓雾废土 · 断桥废车</span></button>
+          <button class="pick mappick active" data-m="0"><img class="mapimg" src="assets/map-ruins.jpg" alt="废墟都市地图预览图"><b>废墟都市</b><span>黄昏集装箱 · 掩体均衡</span></button>
+          <button class="pick mappick" data-m="1"><img class="mapimg" src="assets/map-desert.jpg" alt="灼热荒漠地图预览图"><b>灼热荒漠</b><span>黄沙开阔 · 拼枪法</span></button>
+          <button class="pick mappick" data-m="2"><img class="mapimg" src="assets/map-ice.jpg" alt="极地冰原地图预览图"><b>极地冰原</b><span>冷雾雪地 · 近战多</span></button>
+          <button class="pick mappick" data-m="3"><img class="mapimg" src="assets/map-jungle.jpg" alt="暮色丛林地图预览图"><b>暮色丛林</b><span>黄昏密林 · 绕后多</span></button>
+          <button class="pick mappick" data-m="4"><img class="mapimg" src="assets/map-wasteland.jpg" alt="废土断桥地图预览图"><b>废土断桥</b><span>浓雾废土 · 断桥废车</span></button>
         </div>
         <p class="picktitle">换个人物再战</p>
         <div class="charrow">
-          <button class="pick charpick active" data-c="0"><img class="charimg" src="assets/asset-b0e1eedfc63f.jpg" alt="蓝盾队长人物图"><b>蓝盾队长</b><span>蓝制服 · 橙帽</span></button>
-          <button class="pick charpick" data-c="1"><img class="charimg" src="assets/asset-effb49cb3880.jpg" alt="荒漠游侠人物图"><b>荒漠游侠</b><span>宽檐帽 · 围巾</span></button>
-          <button class="pick charpick" data-c="2"><img class="charimg" src="assets/asset-5e06e89c8e96.jpg" alt="极地雪卫人物图"><b>极地雪卫</b><span>毛领棉服 · 魁梧</span></button>
-          <button class="pick charpick" data-c="3"><img class="charimg" src="assets/asset-5a7b0a820b54.jpg" alt="丛林猎手人物图"><b>丛林猎手</b><span>迷彩 · 树叶兜帽</span></button>
-          <button class="pick charpick" data-c="4"><img class="charimg" src="assets/asset-28df464fcddc.jpg" alt="暗夜特工人物图"><b>暗夜特工</b><span>黑战衣 · 红目镜</span></button>
+          <button class="pick charpick active" data-c="0"><img class="charimg" src="assets/char-captain.jpg" alt="蓝盾队长人物图"><b>蓝盾队长</b><span>大头盔 · 红披风</span></button>
+          <button class="pick charpick" data-c="1"><img class="charimg" src="assets/char-ranger.jpg" alt="荒漠游侠人物图"><b>荒漠游侠</b><span>兽皮蛮荒装</span></button>
+          <button class="pick charpick" data-c="2"><img class="charimg" src="assets/char-arctic.jpg" alt="极地雪卫人物图"><b>极地雪卫</b><span>冰蓝法袍 · 法师帽</span></button>
+          <button class="pick charpick" data-c="3"><img class="charimg" src="assets/char-jungle.jpg" alt="丛林猎手人物图"><b>丛林猎手</b><span>叶绿兜帽 · 潜行</span></button>
+          <button class="pick charpick" data-c="4"><img class="charimg" src="assets/char-agent.jpg" alt="暗夜特工人物图"><b>暗夜特工</b><span>冷灰战衣 · 潜行</span></button>
         </div>
         <button class="bigbtn" id="btnRestart2">再来一局</button>
         <button class="ghostbtn" id="btnShopWin">皮肤商店</button>
@@ -1389,7 +1429,8 @@
       </div>
     </div>
 
-    <script src="assets/asset-9274bbcec8d9.bin"></script>
+    <script src="assets/three.min.js"></script>
+    <script src="assets/GLTFLoader.js"></script>
     <script>
     (function () {
       "use strict";
@@ -1647,9 +1688,15 @@
       sun.shadow.camera.near = 1; sun.shadow.camera.far = 140;
       sun.shadow.bias = -0.002;
       function refreshShadowFlags() {
-        var sh = qualityTier === "fancy";
+        var sh = qualityTier === "fancy" || qualityTier === "balanced";
         ground.receiveShadow = sh; pad.receiveShadow = sh;
-        for (var i = 0; i < envMeshes.length; i++) { envMeshes[i].castShadow = sh && !envMeshes[i].userData.farDecor; envMeshes[i].receiveShadow = sh; }
+        for (var i = 0; i < envMeshes.length; i++) {
+          var em = envMeshes[i];
+          if (em.userData.glbModel) { // real-model cover (a group): flag every child mesh
+            var gsh = sh && !em.userData.farDecor;
+            em.traverse(function (o) { if (o.isMesh) { o.castShadow = gsh; o.receiveShadow = sh; } });
+          } else { em.castShadow = sh && !em.userData.farDecor; em.receiveShadow = sh; }
+        }
         if (enemies) for (var j = 0; j < enemies.length; j++)
           enemies[j].traverse(function (o) { if (o.isMesh && !o.userData.noCast) o.castShadow = sh; });
         if (typeof playerModel !== "undefined" && playerModel)
@@ -1673,7 +1720,10 @@
         // grades; on 精美 the real shadow does the work, so the discs
         // fade to a whisper instead of double-darkening
         if (typeof blobMat !== "undefined") blobMat.opacity = qualityTier === "fancy" ? 0.16 : 0.3;
-        var sh = qualityTier === "fancy";
+        // real-time shadows ride the top two grades on EVERY map
+        // (rolled out from the dusk city, where the low sun made the
+        // long shadows the look); 流畅 keeps the baked contact discs
+        var sh = qualityTier === "fancy" || qualityTier === "balanced";
         if (renderer.shadowMap.enabled !== sh) {
           renderer.shadowMap.enabled = sh;
           // materials must recompile when the shadow pipeline toggles
@@ -1998,6 +2048,7 @@
       // Jungle hard cover: a thick-trunked tree. The trunk stops
       // bullets; the canopy is pure decor above head height.
       function addTree(x, z, w, h, d, i) {
+        if (glbTemplates.tree) { addTreeGLB(x, z, w, h, d, i); return; }
         var r = Math.min(w, d) * 0.3;
         var trunk = envMesh(new THREE.Mesh(new THREE.CylinderGeometry(r * 0.72, r, h, 8), trunkMat), true);
         trunk.position.set(x, h / 2, z);
@@ -2014,6 +2065,7 @@
       // bullets fly through, and its flat top can be stood on, exactly
       // like a crate. Wide footprints get a pup cactus beside the main.
       function addCactus(x, z, w, h, d, i) {
+        if (glbTemplates.cactus) { addCoverGLB(glbTemplates.cactus, x, z, w, h, d, false, false); return; }
         var r = Math.min(w, d) * 0.32;
         var mat = i % 2 ? cactusMat : cactusMat2;
         var body = envMesh(new THREE.Mesh(new THREE.CylinderGeometry(r * 0.85, r, h, 9), mat), false);
@@ -2058,8 +2110,35 @@
         }
         softCollider(x, z, w, d, h);
       }
+      // Jungle soft cover (real model): a cluster of Quaternius bush
+      // GLBs — one stretched onto the exact AABB (files the soft
+      // collider via addCoverGLB) plus two smaller satellite shrubs
+      // for the clustered silhouette the procedural 3-blob bush had.
+      // Decor only satellites: no extra collider, stats unchanged.
+      function addBushGLB(x, z, w, h, d, i) {
+        addCoverGLB(glbTemplates.bush, x, z, w, h, d, false, false);
+        // satellite offsets + half-widths stay inside the AABB
+        // footprint (≤ 0.475 of w/d from centre): the old 0.27/0.62
+        // pairing reached 0.58 and spilled leaves into the next
+        // cover spot / walkway — visible clipping.
+        var offs = [[0.20, 0.13, 0.55], [-0.21, -0.14, 0.52]];
+        for (var k = 0; k < 2; k++) {
+          var tpl = glbTemplates.bush;
+          var outer = new THREE.Group();
+          var inner = tpl.root.clone(true);
+          var s = tpl.size;
+          var sw = w * offs[k][2], sh = h * 0.82, sd = d * offs[k][2];
+          inner.scale.set(sw / s.x, sh / s.y, sd / s.z);
+          inner.position.set(-tpl.min.x * inner.scale.x, -tpl.min.y * inner.scale.y, -tpl.min.z * inner.scale.z);
+          outer.add(inner);
+          outer.position.set(x + w * offs[k][0], 0, z + d * offs[k][1]);
+          outer.rotation.y = (i * 1.3 + k * 2.1) % (Math.PI * 2);
+          glbRegister(outer, false);
+        }
+      }
       // Jungle soft cover: a round leafy bush — same crate behaviour.
       function addBush(x, z, w, h, d, i) {
+        if (glbTemplates.bush) { addBushGLB(x, z, w, h, d, i); return; }
         var mat = i % 2 ? bushMat : bushMat2;
         var R = Math.min(w, d) * 0.55;
         // one squash factor for all blobs, so the bush's silhouette
@@ -2145,9 +2224,29 @@
           rebar(x - w * 0.32 + k * w * 0.3, h + 0.2, z, 0.5, (k - 1) * 0.3);
         hardCollider(x, z, w, d, h);
       }
+      // The wreck's long axis (z in file space) follows the AABB's
+      // long side, like the containers: stretched the other way it
+      // read as a sideways-squashed shell wedged across its spot.
+      function addCarGLB(x, z, w, h, d) {
+        var tpl = glbTemplates.car;
+        var outer = new THREE.Group();
+        var inner = tpl.root.clone(true);
+        var s = tpl.size;
+        var alongX = w > d;
+        var sx = (alongX ? d : w) / s.x, sy = h / s.y, sz = (alongX ? w : d) / s.z;
+        inner.scale.set(sx, sy, sz);
+        inner.position.set(-tpl.min.x * sx, -tpl.min.y * sy, -tpl.min.z * sz);
+        outer.add(inner);
+        if (alongX) outer.rotation.y = Math.PI / 2;
+        outer.position.set(x, 0, z);
+        glbRegister(outer, false);
+        softCollider(x, z, w, d, h);
+        return outer;
+      }
       // SOFT: a burnt-out car shell — body, caved cabin, wheels.
       // Bullets pass through, bodies cannot, roof can be stood on.
       function addWreckCar(x, z, w, h, d, i) {
+        if (glbTemplates.car) { addCarGLB(x, z, w, h, d); return; }
         var mat = carMats[i % 3];
         var base = Math.min(0.3, h * 0.3), bodyH = h * 0.5, cabH = h - base - bodyH;
         var body = envMesh(new THREE.Mesh(new THREE.BoxGeometry(w, bodyH, d * 0.86), mat), false);
@@ -2199,8 +2298,213 @@
         win2.position.set(x + w * 0.28, h * 0.62, z + d / 2 + 0.04);
         hardCollider(x, z, w, d, h);
       }
+      /* 废墟都市 dusk pilot cover: the same two gameplay roles in
+         freight-yard dress. HARD = shipping containers in four
+         rotating liveries (slate gray, blue, orange, faded red) with
+         corrugated ribs down the long faces, corner posts and a top
+         rim; SOFT = warm wooden crates, pallet stacks and steel
+         barrels. Every builder files the exact same AABB collider
+         the stone slab / crate pair used, so movement, bullet
+         blocking and aim-assist occlusion are unchanged. */
+      /* Real GLB cover for the dusk city. The model section further
+         down loads three template scenes asynchronously (container /
+         crate / barrel) and pre-tints four container liveries; until
+         a template lands — and forever if a fetch fails — the
+         builders below fall through to the procedural shapes, so the
+         map is always playable. A placement clones its template
+         (geometry and materials stay shared; map teardown removes
+         the group and disposes nothing), and files the exact same
+         AABB collider the procedural piece used. */
+      var glbTemplates = { crate: null, barrel: null, cactus: null, tree: null, pine: null, car: null, bush: null };
+      var glbLiveries = []; // [{root, size, min}] × 4 container liveries
+      function glbRegister(group, shootable) {
+        group.userData.glbModel = true;
+        scene.add(group);
+        envMeshes.push(group);
+        group.traverse(function (o) { if (o.isMesh) { o.name = "cover"; if (shootable) shootables.push(o); } });
+        return group;
+      }
+      function addContainerGLB(x, z, w, h, d, i) {
+        var tpl = glbLiveries[i % 4];
+        var outer = new THREE.Group();
+        var inner = tpl.root.clone(true);
+        var s = tpl.size;
+        // the model's length axis (z) maps to the AABB's long side,
+        // its width (x) to the short side, height stretches to h.
+        // The file's origin is NOT at its footprint centre (the shell
+        // sits ~0.69 units toward +z in file space), so all three
+        // axes are re-centred on the measured min — without the x/z
+        // terms the visual sat ~0.9 m off its collider, sunk into
+        // the neighbouring cover on one side with a phantom wall on
+        // the other (the clipping players reported).
+        var sx = Math.min(w, d) / s.x, sy = h / s.y, sz = Math.max(w, d) / s.z;
+        inner.scale.set(sx, sy, sz);
+        inner.position.set(-tpl.min.x * sx, -tpl.min.y * sy, -tpl.min.z * sz);
+        outer.add(inner);
+        if (w >= d) outer.rotation.y = Math.PI / 2;
+        outer.position.set(x, 0, z);
+        glbRegister(outer, true);
+        hardCollider(x, z, w, d, h);
+      }
+      function addCrateGLB(x, z, w, h, d) {
+        var tpl = glbTemplates.crate;
+        var outer = new THREE.Group();
+        var inner = tpl.root.clone(true);
+        var s = tpl.size;
+        inner.scale.set(w / s.x, h / s.y, d / s.z);
+        inner.position.set(-tpl.min.x * inner.scale.x, -tpl.min.y * inner.scale.y, -tpl.min.z * inner.scale.z);
+        outer.add(inner);
+        outer.position.set(x, 0, z);
+        glbRegister(outer, false);
+        softCollider(x, z, w, d, h);
+      }
+      function addBarrelGLB(bx, bz, h, tpl) {
+        var outer = new THREE.Group();
+        var inner = tpl.root.clone(true);
+        var s = h / tpl.size.y; // uniform: a barrel keeps its round proportions
+        inner.scale.set(s, s, s);
+        inner.position.set(-tpl.center.x * s, -tpl.min.y * s, -tpl.center.z * s);
+        outer.add(inner);
+        outer.position.set(bx, 0, bz);
+        glbRegister(outer, false);
+        return outer;
+      }
+      /* Generic real-model cover for the other maps (Quaternius CC0,
+         via Poly Pizza — credits in the changelog): the clone is
+         stretched onto the exact AABB the procedural piece used and
+         files the identical collider, so cover stats never move. */
+      function addCoverGLB(tpl, x, z, w, h, d, shootable, hard) {
+        var outer = new THREE.Group();
+        var inner = tpl.root.clone(true);
+        var s = tpl.size;
+        inner.scale.set(w / s.x, h / s.y, d / s.z);
+        inner.position.set(-tpl.min.x * inner.scale.x, -tpl.min.y * inner.scale.y, -tpl.min.z * inner.scale.z);
+        outer.add(inner);
+        outer.position.set(x, 0, z);
+        glbRegister(outer, shootable);
+        if (hard) hardCollider(x, z, w, d, h); else softCollider(x, z, w, d, h);
+        return outer;
+      }
+      // The jungle tree keeps its natural proportions (uniform scale,
+      // so it is never squashed onto the AABB): the total height runs
+      // ~1.85× the collider height, which puts the trunk at roughly
+      // collider height and the canopy crowning above it, exactly the
+      // split the procedural tree had. The whole model registers as
+      // bullet-stopping like the old trunk did.
+      function addTreeGLB(x, z, w, h, d, i) {
+        var tpl = glbTemplates.tree;
+        var outer = new THREE.Group();
+        var inner = tpl.root.clone(true);
+        var s = tpl.size;
+        var sc = (h * 1.85) / s.y;
+        inner.scale.set(sc, sc, sc);
+        inner.position.set(-tpl.center.x * sc, -tpl.min.y * sc, -tpl.center.z * sc);
+        outer.add(inner);
+        outer.position.set(x, 0, z);
+        outer.rotation.y = (i * 1.7) % (Math.PI * 2);
+        glbRegister(outer, true);
+        hardCollider(x, z, w, d, h);
+        return outer;
+      }
+      // Snowy pines are pure backdrop dressing on the ice field:
+      // outside the walls, no collider, tagged farDecor so they never
+      // cast real-time shadows.
+      function addPineDecor(x, z, s, rot) {
+        var tpl = glbTemplates.pine;
+        var outer = new THREE.Group();
+        var inner = tpl.root.clone(true);
+        inner.scale.set(s, s, s);
+        inner.position.set(-tpl.center.x * s, -tpl.min.y * s, -tpl.center.z * s);
+        outer.add(inner);
+        outer.position.set(x, 0, z);
+        outer.rotation.y = rot;
+        glbRegister(outer, false);
+        outer.userData.farDecor = true;
+        return outer;
+      }
+      var containerMats = [0x5b6773, 0x40648a, 0xcd7033, 0xa34d3c].map(function (c) {
+        return new THREE.MeshLambertMaterial({ color: c });
+      });
+      var containerDarkMats = [0x454f59, 0x2f4c6b, 0xa55727, 0x7e3d2f].map(function (c) {
+        return new THREE.MeshLambertMaterial({ color: c });
+      });
+      function addContainer(x, z, w, h, d, i) {
+        if (glbLiveries.length === 4) { addContainerGLB(x, z, w, h, d, i); return; }
+        var ci = i % 4;
+        var body = envMesh(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), containerMats[ci]), true);
+        body.position.set(x, h / 2, z);
+        // corner posts in the darker shade of the same livery
+        var pw = 0.2;
+        [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (s) {
+          var p = envMesh(new THREE.Mesh(new THREE.BoxGeometry(pw, h, pw), containerDarkMats[ci]), true);
+          p.position.set(x + s[0] * (w / 2 - pw / 2), h / 2, z + s[1] * (d / 2 - pw / 2));
+        });
+        // top rim rail
+        var rim = envMesh(new THREE.Mesh(new THREE.BoxGeometry(w + 0.08, 0.1, d + 0.08), containerDarkMats[ci]), true);
+        rim.position.set(x, h - 0.05, z);
+        // corrugation ribs down the two long faces
+        var longX = w >= d;
+        var len = longX ? w : d, dep = longX ? d : w;
+        var n = Math.max(2, Math.floor(len / 0.6));
+        for (var rI = 0; rI < n; rI++) {
+          var t = -len / 2 + (rI + 0.5) * (len / n);
+          for (var side = -1; side <= 1; side += 2) {
+            var rib = envMesh(new THREE.Mesh(
+              new THREE.BoxGeometry(longX ? 0.14 : 0.07, h * 0.94, longX ? 0.07 : 0.14),
+              containerDarkMats[ci]), false);
+            if (longX) rib.position.set(x + t, h / 2, z + side * (dep / 2 + 0.015));
+            else rib.position.set(x + side * (dep / 2 + 0.015), h / 2, z + t);
+          }
+        }
+        hardCollider(x, z, w, d, h);
+      }
+      var palletMat = new THREE.MeshLambertMaterial({ color: 0xb08954 });
+      var palletDarkMat = new THREE.MeshLambertMaterial({ color: 0x9a7648 });
+      var barrelMat = new THREE.MeshLambertMaterial({ color: 0x8a4f36 });
+      var barrelMat2 = new THREE.MeshLambertMaterial({ color: 0x67737d });
+      var barrelDarkMat = new THREE.MeshLambertMaterial({ color: 0x4c443c });
+      function addCitySoft(x, z, w, h, d, i) {
+        var kind = i % 3;
+        if (kind === 0) {
+          if (glbTemplates.crate) { addCrateGLB(x, z, w, h, d); return; }
+          addCrate(x, z, w, h, d, crateMats[i % 3]); return;
+        }
+        if (kind === 1) {
+          // pallet stack: deck boards over skid blocks, top exactly at h
+          var layers = Math.max(1, Math.round(h / 0.31));
+          var lh = h / layers;
+          for (var li = 0; li < layers; li++) {
+            var deck = envMesh(new THREE.Mesh(new THREE.BoxGeometry(w, lh * 0.45, d), palletMat), false);
+            deck.position.set(x, li * lh + lh * 0.72, z);
+            var skids = envMesh(new THREE.Mesh(new THREE.BoxGeometry(w * 0.96, lh * 0.4, d * 0.9), palletDarkMat), false);
+            skids.position.set(x, li * lh + lh * 0.2, z);
+          }
+          softCollider(x, z, w, d, h);
+          return;
+        }
+        // steel barrels in a loose grid, each with a darker rim band
+        if (glbTemplates.barrel) {
+          var nx2 = w >= 2.8 ? 2 : 1, nz2 = d >= 2.8 ? 2 : 1;
+          for (var gx2 = 0; gx2 < nx2; gx2++) for (var gz2 = 0; gz2 < nz2; gz2++)
+            addBarrelGLB(x + (gx2 - (nx2 - 1) / 2) * w * 0.48, z + (gz2 - (nz2 - 1) / 2) * d * 0.48, h, glbTemplates.barrel);
+          softCollider(x, z, w, d, h);
+          return;
+        }
+        var r = Math.min(w, d) * 0.23;
+        var bmat = i % 2 ? barrelMat : barrelMat2;
+        var nx = w >= 2.8 ? 2 : 1, nz = d >= 2.8 ? 2 : 1;
+        for (var gx = 0; gx < nx; gx++) for (var gz = 0; gz < nz; gz++) {
+          var bx = x + (gx - (nx - 1) / 2) * w * 0.48;
+          var bz = z + (gz - (nz - 1) / 2) * d * 0.48;
+          var bar = envMesh(new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 12), bmat), false);
+          bar.position.set(bx, h / 2, bz);
+          var band = envMesh(new THREE.Mesh(new THREE.CylinderGeometry(r * 1.05, r * 1.05, 0.09, 12), barrelDarkMat), false);
+          band.position.set(bx, h * 0.72, bz);
+        }
+        softCollider(x, z, w, d, h);
+      }
       var HARD_BUILDERS = [
-        function (x, z, w, h, d, i) { addSlab(x, z, w, h, d, slabMats[i % 2]); },
+        addContainer,
         addPillar, addIceSpire, addTree,
         function (x, z, w, h, d, i) {
           if (i % 3 === 0) addBridgePier(x, z, w, h, d, i);
@@ -2210,10 +2514,10 @@
         addTownBuilding
       ];
       var SOFT_BUILDERS = [
-        function (x, z, w, h, d, i) { addCrate(x, z, w, h, d, crateMats[i % 3]); },
+        addCitySoft,
         addCactus, addIceBlock, addBush,
         function (x, z, w, h, d, i) { if (h >= 2.2 || i % 2) addRubble(x, z, w, h, d, i); else addWreckCar(x, z, w, h, d, i); },
-        function (x, z, w, h, d, i) { if (i % 3 === 2) addRubble(x, z, w, h, d, i); else addCrate(x, z, w, h, d, crateMats[i % 3]); }
+        function (x, z, w, h, d, i) { if (i % 3 === 2) addRubble(x, z, w, h, d, i); else if (glbTemplates.crate) addCrateGLB(x, z, w, h, d); else addCrate(x, z, w, h, d, crateMats[i % 3]); }
       ];
       /* Cover layouts, one per map: [x, z, w, h, d] for the HARD cover
          spots (every one stands taller than the tallest soft cover,
@@ -2382,7 +2686,50 @@
             }
           }
         }
+        if (M.layout === 0) buildDuskCity();
         if (M.layout === 4) buildBridge();
+        // ice field dressing: a loose ring of snowy pines beyond the
+        // walls (real model when loaded, skipped silently otherwise)
+        if (M.layout === 2 && glbTemplates.pine) {
+          [[-46, -20, 2.6], [48, -30, 3.1], [-50, 26, 2.3], [44, 38, 2.9], [0, -50, 3.4], [-24, 48, 2.5], [26, -46, 2.2], [50, 6, 3.0], [-48, -44, 2.8], [16, 50, 2.4]].forEach(function (p, pi) {
+            addPineDecor(p[0], p[1], p[2], pi * 1.31);
+          });
+        }
+      }
+      /* 废墟都市 dusk pilot backdrop extras (decor only, no
+         colliders): antenna rods on a few near-ring rooftops, two
+         watchtower silhouettes outside the walls, and dark scorch
+         stains on the arena floor. The skyline itself comes from
+         the shared rings above, graded to the silhouette colour by
+         this map's `ruin` entry (#333c55) and the warm fog. */
+      var scorchMat = new THREE.MeshLambertMaterial({ color: 0x2e2019, transparent: true, opacity: 0.38, depthWrite: false });
+      function buildDuskCity() {
+        [2, 5, 9].forEach(function (ri) {
+          var ang = (ri / 14) * Math.PI * 2 + 0.2;
+          var dist = 62 + (ri % 3) * 14;
+          var bh = 10 + ((ri * 7) % 16);
+          var px = Math.cos(ang) * dist, pz = Math.sin(ang) * dist;
+          var rod = envMesh(new THREE.Mesh(new THREE.BoxGeometry(0.16, 3.4, 0.16), ruinMat), false);
+          rod.position.set(px, bh - 1 + 1.7, pz);
+          var cross = envMesh(new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.14, 0.14), ruinMat), false);
+          cross.position.set(px, bh - 1 + 2.6, pz);
+          cross.rotation.y = ang;
+        });
+        [[-54, -34], [50, 30]].forEach(function (tp) {
+          var leg = envMesh(new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.7, 7.6, 4), ruinMat), false);
+          leg.position.set(tp[0], 3.8, tp[1]);
+          leg.rotation.y = Math.PI / 4;
+          var cabin = envMesh(new THREE.Mesh(new THREE.BoxGeometry(3, 1.9, 3), ruinMat), false);
+          cabin.position.set(tp[0], 8.55, tp[1]);
+          var roof = envMesh(new THREE.Mesh(new THREE.ConeGeometry(2.4, 1.4, 4), ruinMat), false);
+          roof.position.set(tp[0], 10.2, tp[1]);
+          roof.rotation.y = Math.PI / 4;
+        });
+        [[11, 15, 2.6], [-19, -13, 3.1], [17, -21, 2.2], [-7, 27, 1.9], [25, 7, 2.4]].forEach(function (sp) {
+          var disc = envMesh(new THREE.Mesh(new THREE.CircleGeometry(sp[2], 20), scorchMat), false);
+          disc.rotation.x = -Math.PI / 2;
+          disc.position.set(sp[0], 0.225, sp[1]);
+        });
       }
       /* 废土断桥's signature set piece: the snapped elevated highway
          along the north edge — two deck stubs at y≈9 with a gap in
@@ -2442,11 +2789,17 @@
       var skyCanvas = document.createElement("canvas");
       skyCanvas.width = 4; skyCanvas.height = 256;
       var skyTex = new THREE.CanvasTexture(skyCanvas);
-      function paintSky(topHex, horizonHex) {
+      function paintSky(topHex, horizonHex, midHex) {
         var c2 = skyCanvas.getContext("2d");
         var gr = c2.createLinearGradient(0, 0, 0, 256);
         gr.addColorStop(0, topHex);
-        gr.addColorStop(0.55, horizonHex);
+        if (midHex) {
+          // dusk grade: zenith → warm transition band → sunset horizon
+          gr.addColorStop(0.42, midHex);
+          gr.addColorStop(0.58, horizonHex);
+        } else {
+          gr.addColorStop(0.55, horizonHex);
+        }
         gr.addColorStop(1, horizonHex);
         c2.fillStyle = gr;
         c2.fillRect(0, 0, 4, 256);
@@ -2457,6 +2810,30 @@
         new THREE.MeshBasicMaterial({ map: skyTex, side: THREE.BackSide, fog: false, depthWrite: false })
       );
       scene.add(skyDome);
+      skyDome.material.toneMapped = false; // the gradient is authored final-colour; ACES must not re-grade it
+      /* Sun glare for the dusk city: one additive radial-gradient
+         sprite parked far out along the sun direction, so looking
+         toward the low sun blooms warm light over the skyline. Only
+         废墟都市 shows it (applyMap toggles visibility/position). */
+      var glareCanvas = document.createElement("canvas");
+      glareCanvas.width = glareCanvas.height = 256;
+      (function () {
+        var c2 = glareCanvas.getContext("2d");
+        var gr = c2.createRadialGradient(128, 128, 0, 128, 128, 128);
+        gr.addColorStop(0, "rgba(255,236,200,0.95)");
+        gr.addColorStop(0.18, "rgba(255,196,120,0.55)");
+        gr.addColorStop(0.45, "rgba(255,158,87,0.20)");
+        gr.addColorStop(1, "rgba(255,140,70,0)");
+        c2.fillStyle = gr; c2.fillRect(0, 0, 256, 256);
+      })();
+      var sunGlare = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(glareCanvas), blending: THREE.AdditiveBlending,
+        depthWrite: false, transparent: true, fog: false, opacity: 0.95
+      }));
+      sunGlare.material.toneMapped = false;
+      sunGlare.scale.set(150, 150, 1);
+      sunGlare.visible = false;
+      scene.add(sunGlare);
       function hexCss(h) { return "#" + ("000000" + h.toString(16)).slice(-6); }
       /* Cracked-street overlay for 废土断桥's pad: dark fracture lines
          and dust stains drawn once on a canvas; applyMap() hangs it
@@ -2579,10 +2956,11 @@
          dark, jungle earth damp and deep). Fog values stay inside
          the range the gameplay was balanced around. */
       var MAPS = [
-        { name: "废墟都市", layout: 0, sky: 0x87b5d9, skyTop: 0x5d84ab, fog: 0x9db4c2, fogNear: 38, fogFar: 108,
-          ground: 0x6f7d5c, pad: 0x8d9299, grid1: 0x5d646c, grid2: 0x767d85,
-          wall: 0x707a86, ruin: 0x93a3b5, cloud: 0xffffff, cloudOp: 0.85,
-          hemiSky: 0xbdd8f2, hemiGround: 0x54503e, sun: 0xfff2d8, sunI: 0.85, hemiI: 0.35,
+        { name: "废墟都市", layout: 0, sky: 0xff9e57, skyTop: 0x46538c, skyMid: 0xffc98a, skyHor: 0xff9e57, fog: 0xe9a06b, fogNear: 38, fogFar: 112,
+          ground: 0x8d7c66, pad: 0x7d6f5e, grid1: 0x6b5d4b, grid2: 0x7e6c58,
+          wall: 0x77685a, ruin: 0x7a4030, cloud: 0xffd9b0, cloudOp: 0.4,
+          hemiSky: 0x7f76b8, hemiGround: 0x66452c, sun: 0xffb066, sunI: 1.05, hemiI: 0.5,
+          sunPos: [-40, 16, 14],
           crateTint: [0xffffff, 0xd8c4ae, 0xbfae9d], slabTint: [0xffffff, 0xbfccd8] },
         { name: "灼热荒漠", layout: 1, sky: 0xf0cd96, skyTop: 0x86a9cf, fog: 0xe8c491, fogNear: 34, fogFar: 100,
           ground: 0xc2a06b, pad: 0xb09468, grid1: 0x8a744c, grid2: 0xa68a5c,
@@ -2622,6 +3000,12 @@
         // collide() / supportAt() read ARENA live, so movement,
         // bullet blockers and spawns follow automatically.
         ARENA = M0.arena || 34;
+        // the shadow frustum hugs the arena, so the wider town map
+        // (46) still gets edge-to-edge shadows at the same texel size
+        var scR = ARENA + 2;
+        sun.shadow.camera.left = -scR; sun.shadow.camera.right = scR;
+        sun.shadow.camera.top = scR; sun.shadow.camera.bottom = -scR;
+        sun.shadow.camera.updateProjectionMatrix();
         ground.scale.set((ARENA * 2 + 40) / 108, (ARENA * 2 + 40) / 108, 1);
         pad.scale.set(ARENA / 34, 1, ARENA / 34);
         // the ice field is the bright scene: its touch buttons get the
@@ -2629,12 +3013,36 @@
         document.body.classList.toggle("bright-scene", idx === 2);
         var M = MAPS[idx];
         scene.background.set(M.sky);
-        paintSky(hexCss(M.skyTop), hexCss(M.fog));
+        paintSky(hexCss(M.skyTop), hexCss(M.skyHor || M.fog), M.skyMid ? hexCss(M.skyMid) : null);
         scene.fog.color.set(M.fog); scene.fog.near = M.fogNear; scene.fog.far = M.fogFar;
         hemi.color.set(M.hemiSky); hemi.groundColor.set(M.hemiGround);
         hemi.intensity = M.hemiI;
         sun.color.set(M.sun);
         sun.intensity = M.sunI;
+        // a map may park the sun low (the dusk pilot on 废墟都市);
+        // every other map keeps the classic high sun exactly
+        if (M.sunPos) sun.position.set(M.sunPos[0], M.sunPos[1], M.sunPos[2]);
+        else sun.position.set(30, 50, 20);
+        // filmic grade on every map (rolled out from the dusk city):
+        // ACES tone mapping at 1.1 exposure is what makes the real
+        // GLB models read as sunlit metal and painted steel instead
+        // of flat colour. The transform is palette-neutral — each
+        // map keeps its own sky / fog / sun colours above, so the
+        // desert stays bright noon and the ice field stays steel
+        // blue; only the dusk city gets the warm sun-glare sprite.
+        var wantACES = true;
+        var wantTM = wantACES ? THREE.ACESFilmicToneMapping : THREE.NoToneMapping;
+        if (renderer.toneMapping !== wantTM) {
+          renderer.toneMapping = wantTM;
+          scene.traverse(function (o) {
+            if (!o.material) return;
+            if (Array.isArray(o.material)) o.material.forEach(function (mm) { mm.needsUpdate = true; });
+            else o.material.needsUpdate = true;
+          });
+        }
+        renderer.toneMappingExposure = wantACES ? 1.1 : 1.0;
+        sunGlare.visible = M.layout === 0;
+        if (M.layout === 0) sunGlare.position.copy(sun.position).normalize().multiplyScalar(205);
         // air-perspective rings: mid silhouettes sit halfway to the
         // fog colour, far ones three-quarters — recomputed per map
         ruinMidMat.color.set(M.ruin).lerp(new THREE.Color(M.fog), 0.5);
@@ -2675,7 +3083,7 @@
         var picks = document.querySelectorAll(".mappick[data-m]");
         for (var j = 0; j < picks.length; j++)
           picks[j].classList.toggle("active", parseInt(picks[j].getAttribute("data-m"), 10) === idx);
-        refreshShadowFlags(); // a rebuilt layout re-takes the 精美 shadow flags
+        applyQuality(); // re-takes shadow flags for the rebuilt layout
       }
       applyMap(0);
 
@@ -2753,6 +3161,7 @@
         gunBox(0.025, 0.06, 0.025, 0, 0.09, -0.12, M.accent, g);
         return finishGun(g, 0, 0.02, -0.4, 0.85);
       }
+      var redDotMat = new THREE.MeshBasicMaterial({ color: 0xff3b30 });
       function buildRifle() {
         var g = new THREE.Group();
         var M = newGunMats(); WEAPON_MATS.rifle = M;
@@ -2761,6 +3170,27 @@
         gunBox(0.08, 0.2, 0.1, 0, -0.15, 0.14, M.body, g, 0.35);
         gunBox(0.03, 0.07, 0.03, 0, 0.1, -0.1, M.accent, g);
         gunBox(0.06, 0.16, 0.09, 0, -0.13, -0.05, M.accent, g);
+        // detail pass (dusk pilot): top rail with cross segments
+        gunBox(0.04, 0.018, 0.46, 0, 0.078, -0.05, M.dark, g);
+        for (var rs = 0; rs < 5; rs++) gunBox(0.056, 0.02, 0.028, 0, 0.092, -0.24 + rs * 0.1, M.dark, g);
+        // red-dot sight: mount, housing and the glowing dot itself
+        // (own basic material, so the dot stays red under every skin)
+        gunBox(0.03, 0.035, 0.03, 0, 0.105, 0.02, M.dark, g);
+        gunBox(0.06, 0.062, 0.075, 0, 0.15, 0.02, M.dark, g);
+        var rdot = new THREE.Mesh(new THREE.BoxGeometry(0.01, 0.01, 0.006), redDotMat);
+        rdot.position.set(0, 0.152, 0.062); g.add(rdot); // on the housing's rear face, where the shooter's eye is
+        // handguard ribs around the barrel shroud
+        [-0.28, -0.36, -0.44, -0.51].forEach(function (rz) { gunBox(0.064, 0.064, 0.03, 0, 0.03, rz, M.dark, g); });
+        // magazine lower segment, tilted to suggest the curve
+        gunBox(0.055, 0.11, 0.08, 0, -0.245, -0.028, M.accent, g, 0.18);
+        // muzzle brake: steel sleeve with two dark slots, sitting
+        // around — not past — the unchanged muzzle point (-0.55)
+        gunBox(0.058, 0.058, 0.1, 0, 0.03, -0.545, M.steel, g);
+        gunBox(0.064, 0.064, 0.018, 0, 0.03, -0.515, M.dark, g);
+        gunBox(0.064, 0.064, 0.018, 0, 0.03, -0.575, M.dark, g);
+        // buttstock behind the receiver
+        gunBox(0.07, 0.115, 0.17, 0, -0.005, 0.335, M.body, g);
+        gunBox(0.075, 0.13, 0.03, 0, -0.01, 0.425, M.dark, g);
         return finishGun(g, 0, 0.03, -0.55, 1);
       }
       function buildSniper() {
@@ -2840,6 +3270,503 @@
       var gun = guns.rifle; gun.visible = true;
       var curMuzzle = gun.userData.muzzle, curFlash = gun.userData.flash;
       scene.add(camera);
+
+      /* ================= Real 3D models (GLB) =================
+         The first-person guns and the maps' freight are real
+         GLB model files under assets/models/ — the CC0 low-poly gun
+         pack by Polyy.AI (Polyy.AI, itch.io), CC0 crate, barrel,
+         cactus, tree, snowy pine and broken car by Quaternius, and
+         the CC-BY shipping container by Clint
+         Chilcott (all via Poly Pizza; credits in the changelog).
+         They load asynchronously and swap in when ready; any failure
+         silently keeps the procedural model, so the game never waits
+         on them and never breaks without them. The bow has no
+         counterpart in the pack and keeps its hand-built model. Gun
+         skins keep working on the shop / results art; a GLB gun wears
+         its authored factory finish (its materials are textured PBR,
+         not the palette slots the procedural skins recolour). */
+      var glbLoader = (typeof THREE !== "undefined" && THREE.GLTFLoader) ? new THREE.GLTFLoader() : null;
+      // rotY turns each pack model's native axis so the muzzle faces
+      // -Z (native muzzle directions differ per file — the pistol
+      // toward -X, the other long guns toward +X, the launcher
+      // toward +Z — measured off each file's geometry: barrel-tip
+      // slabs, scope objective width, sight placement). len is the
+      // on-screen length
+      // the model is scaled to: long guns fill the frame's lower
+      // right like the reference shot. buttZ parks the stock end
+      // behind the viewmodel origin (close to the eye).
+      var GLB_GUNS = {
+        pistol:  { file: "gun-pistol.glb",  rotY: -Math.PI / 2, len: 0.55, x: 0.27, baseY: -0.25, buttZ: 0.22, lift: 0.10, flash: 0.8 },
+        smg:     { file: "gun-smg.glb",     rotY:  Math.PI / 2, len: 0.8,  x: 0.29, baseY: -0.26, buttZ: 0.3,  lift: 0.14, flash: 0.85 },
+        rifle:   { file: "gun-rifle.glb",   rotY:  Math.PI / 2, len: 1.03, x: 0.32, baseY: -0.28, buttZ: 0.06, lift: 0.18, flash: 1 },
+        sniper:  { file: "gun-sniper.glb",  rotY:  Math.PI / 2, len: 1.24, x: 0.3,  baseY: -0.27, buttZ: 0.16, lift: 0.22, flash: 1.5 },
+        shotgun: { file: "gun-shotgun.glb", rotY:  Math.PI / 2, len: 1.12, x: 0.3,  baseY: -0.27, buttZ: 0.34, lift: 0.16, flash: 1.7 },
+        rocket:  { file: "gun-rocket.glb",  rotY:  Math.PI,     len: 1.2,  x: 0.31, baseY: -0.28, buttZ: 0.3,  lift: 0.04, flash: 2.4 }
+      };
+      function glbFixMaterials(root, metalCap) {
+        root.traverse(function (o) {
+          if (!o.isMesh) return;
+          var ms = Array.isArray(o.material) ? o.material : [o.material];
+          ms.forEach(function (m) {
+            // the game's colour pipeline is raw (no output-encoding
+            // pass), so GLB textures must be read raw as well, or the
+            // finishes land a stop too dark next to everything else
+            if (m.map) { m.map.encoding = THREE.LinearEncoding; m.map.needsUpdate = true; }
+            if (metalCap !== undefined && m.metalness !== undefined && m.metalness > metalCap) m.metalness = metalCap;
+          });
+        });
+      }
+      function makeViewmodel(kind, gltf) {
+        var cfg = GLB_GUNS[kind];
+        var wrap = new THREE.Group();
+        var inner = new THREE.Group();
+        inner.rotation.y = cfg.rotY;
+        inner.add(gltf.scene);
+        wrap.add(inner);
+        wrap.updateMatrixWorld(true);
+        var box = new THREE.Box3().setFromObject(inner);
+        var size = box.getSize(new THREE.Vector3());
+        var ctr = box.getCenter(new THREE.Vector3());
+        wrap.scale.setScalar(cfg.len / size.z);
+        // centre the gun under the crosshair axis and park the butt
+        // at buttZ; the muzzle anchor then sits on the front face at
+        // barrel height, so flash / tracers / rockets leave from the
+        // real muzzle tip exactly like the procedural guns
+        inner.position.x += -ctr.x;
+        inner.position.y += -ctr.y - 0.02;
+        inner.position.z += cfg.buttZ - box.max.z;
+        var mz = new THREE.Object3D();
+        mz.position.set(0, -0.02 + size.y * cfg.lift, box.min.z + inner.position.z);
+        wrap.add(mz);
+        var fl = new THREE.Mesh(flashGeo, flashMatMesh);
+        fl.visible = false; fl.scale.setScalar(cfg.flash); mz.add(fl);
+        wrap.userData.muzzle = mz; wrap.userData.flash = fl;
+        wrap.userData.flashBase = cfg.flash;
+        wrap.userData.baseY = cfg.baseY;
+        wrap.position.set(cfg.x, cfg.baseY, -0.55);
+        wrap.visible = false;
+        camera.add(wrap);
+        return wrap;
+      }
+      function swapGunModel(kind, wrap) {
+        var old = guns[kind];
+        if (!old || old === wrap) return;
+        guns[kind] = wrap;
+        if (gun === old) {
+          gun = wrap;
+          wrap.visible = old.visible;
+          old.visible = false;
+          curMuzzle = wrap.userData.muzzle;
+          curFlash = wrap.userData.flash;
+        }
+      }
+      function measureTemplate(root) {
+        root.updateMatrixWorld(true);
+        var box = new THREE.Box3().setFromObject(root);
+        return { root: root, size: box.getSize(new THREE.Vector3()), min: box.min.clone(), center: box.getCenter(new THREE.Vector3()) };
+      }
+      var CONTAINER_LIVERIES = [0x5b6773, 0x40648a, 0xcd7033, 0xa34d3c]; // same four as the procedural paint
+      function buildContainerLiveries(srcScene) {
+        glbFixMaterials(srcScene, 0.2);
+        function tris(o) { var g = o.geometry; return (g.index ? g.index.count : g.attributes.position.count) / 3; }
+        glbLiveries = CONTAINER_LIVERIES.map(function (hex) {
+          var root = srcScene.clone(true);
+          var parts = [];
+          root.traverse(function (o) { if (o.isMesh) { o.material = o.material.clone(); parts.push(o); } });
+          parts.sort(function (a, b) { return tris(b) - tris(a); });
+          // the largest part is the corrugated shell: full livery.
+          // Any other large, light part (roof / door panels) takes
+          // the livery lightened a step; dark frame pieces and small
+          // fittings keep their authored colours.
+          if (parts[0]) parts[0].material.color.setHex(hex);
+          for (var k = 1; k < parts.length; k++) {
+            var col = parts[k].material.color;
+            var lum = 0.3 * col.r + 0.59 * col.g + 0.11 * col.b;
+            if (lum > 0.35 && tris(parts[k]) >= tris(parts[0]) * 0.2)
+              col.setHex(hex).lerp(new THREE.Color(0xffffff), 0.3);
+          }
+          return measureTemplate(root);
+        });
+      }
+      if (glbLoader) {
+        Object.keys(GLB_GUNS).forEach(function (kind) {
+          glbLoader.load("assets/models/" + GLB_GUNS[kind].file, function (gltf) {
+            glbFixMaterials(gltf.scene, 0.6);
+            swapGunModel(kind, makeViewmodel(kind, gltf));
+          }, undefined, function () { /* load failed: the procedural gun stays */ });
+        });
+        // cover templates: when all seven have settled (in any
+        // state), rebuild the visible map once if the player is
+        // still in the menus, so the start screen already shows the
+        // real models; mid-match the swap waits for the next rebuild
+        var glbPending = 8;
+        function glbSettled() {
+          if (--glbPending > 0) return;
+          if (typeof STATE !== "undefined" && STATE.mode !== "play") applyMap(currentMap);
+        }
+        glbLoader.load("assets/models/container.glb", function (gltf) { buildContainerLiveries(gltf.scene); glbSettled(); }, undefined, glbSettled);
+        glbLoader.load("assets/models/crate.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.crate = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
+        glbLoader.load("assets/models/barrel.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.15); glbTemplates.barrel = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
+        glbLoader.load("assets/models/cactus.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.cactus = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
+        glbLoader.load("assets/models/tree.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.3); glbTemplates.tree = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
+        glbLoader.load("assets/models/pine-snow.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.pine = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
+        glbLoader.load("assets/models/bush.glb", function (gltf) { glbFixMaterials(gltf.scene, 0.1); glbTemplates.bush = measureTemplate(gltf.scene); glbSettled(); }, undefined, glbSettled);
+        glbLoader.load("assets/models/car-wreck.glb", function (gltf) {
+          glbFixMaterials(gltf.scene, 0.25);
+          // pre-wrecked in the file already; one darkening pass over
+          // each unique material sells the burnt-out wasteland read
+          var seen = [];
+          gltf.scene.traverse(function (o) {
+            if (!o.isMesh) return;
+            (Array.isArray(o.material) ? o.material : [o.material]).forEach(function (m) {
+              if (m.color && seen.indexOf(m) < 0) { seen.push(m); m.color.multiplyScalar(0.78); }
+            });
+          });
+          glbTemplates.car = measureTemplate(gltf.scene); glbSettled();
+        }, undefined, glbSettled);
+      }
+      /* ================= Real 3D characters (Q-style GLB) =================
+         Heroes and humanoid enemies wear real rigged GLB models in a
+         unified chibi read — big heads, short bodies: KayKit
+         Adventurers + Skeleton Warrior (Kay Lousberg, CC0, official
+         KayKit-Game-Assets GitHub) for every humanoid family, and the
+         Quaternius Animated Robot (CC0, via Poly Pizza) for the robot
+         / mech family, its head bone scaled up and body squashed a
+         touch so it sits in the same Q proportions. Files were
+         slimmed at build time to the clips the game plays (idle /
+         walk / run / attack / cast / shoot / hit / death), ~0.75 MB
+         each. The procedural figures stay as the gameplay layer:
+         body / head hitboxes, hit-flash material swaps, flinch,
+         LOD tagging and the bomb-mode arm anchoring all keep working
+         exactly as before — when a family template has loaded, the
+         procedural meshes are hidden and the GLB visual (with its
+         own AnimationMixer) rides the same group. Any load failure
+         silently keeps the procedural figure, so spawning never
+         waits and never breaks. Exotic creatures with no credible
+         free model （蜘蛛 / 毒液爬行者 / 石像鬼 / 恶魔 / 蜂巢女王 /
+         深渊触手怪 / 荆棘树妖 / 熔火魔君 / 不死凤凰 / 虚空魔龙）
+         keep their procedural builds entirely. */
+      var CHAR_CLIPS_KAYKIT = { idle: "Idle", walk: "Walking_A", run: "Running_A", attack: "Unarmed_Melee_Attack_Punch_A", slice: "1H_Melee_Attack_Slice_Horizontal", cast: "Spellcast_Shoot", shoot: "1H_Ranged_Shooting", aim: "1H_Ranged_Aiming", death: "Death_A", hit: "Hit_A" };
+      var CHAR_TPL_DEFS = {
+        knight:       { file: "char-knight.glb",       clips: CHAR_CLIPS_KAYKIT, rotY: Math.PI, headBone: "head", headScale: 1.08, squashX: 1, squashY: 1 },
+        barbarian:    { file: "char-barbarian.glb",    clips: CHAR_CLIPS_KAYKIT, rotY: Math.PI, headBone: "head", headScale: 1.08, squashX: 1, squashY: 1 },
+        mage:         { file: "char-mage.glb",         clips: CHAR_CLIPS_KAYKIT, rotY: Math.PI, headBone: "head", headScale: 1.08, squashX: 1, squashY: 1 },
+        rogue:        { file: "char-rogue.glb",        clips: CHAR_CLIPS_KAYKIT, rotY: Math.PI, headBone: "head", headScale: 1.08, squashX: 1, squashY: 1 },
+        rogueHooded:  { file: "char-rogue-hooded.glb", clips: CHAR_CLIPS_KAYKIT, rotY: Math.PI, headBone: "head", headScale: 1.08, squashX: 1, squashY: 1 },
+        skeleton:     { file: "char-skeleton.glb",     clips: CHAR_CLIPS_KAYKIT, rotY: Math.PI, headBone: "head", headScale: 1.08, squashX: 1, squashY: 1 },
+        robot:        { file: "char-robot.glb",        clips: { idle: "RobotArmature|Robot_Idle", walk: "RobotArmature|Robot_Walking", run: "RobotArmature|Robot_Running", attack: "RobotArmature|Robot_Punch", slice: "RobotArmature|Robot_Punch", cast: "RobotArmature|Robot_Punch", shoot: "RobotArmature|Robot_Punch", aim: "RobotArmature|Robot_Idle", death: "RobotArmature|Robot_Death", hit: "RobotArmature|Robot_Idle" }, rotY: Math.PI, headBone: "Head", headScale: 1.3, squashX: 1.07, squashY: 0.9 }
+      };
+      var charTemplates = {}; // key → { scene, animations, size, min, center, def }
+      var CHAR_ACCESSORY_RE = /sword|shield|axe|dagger|wand|staff|spellbook|crossbow|quiver|mug|smokebomb|arrow/i;
+      function findNodeByName(root, name) {
+        var found = null;
+        root.traverse(function (o) { if (!found && o.name === name) found = o; });
+        return found;
+      }
+      function findClipByName(clips, name) {
+        for (var i = 0; i < clips.length; i++) if (clips[i].name === name) return clips[i];
+        return null;
+      }
+      /* Template bounds for characters, measured the way instances
+         are actually drawn: KayKit files carry every accessory
+         variant (swords / shields / crossbows / staffs…) in the hand
+         slots, and makeCharInstance hides them all — but the raw
+         setFromObject bounds include them, which dragged the fitted
+         centre up to ~0.5 m off the body (knight +z, rogue −x), so
+         the visible figure stood half a metre away from its hitbox
+         and sank into walls and cover. This walk skips any subtree
+         whose name matches the same accessory test the hider uses. */
+      function measureCharTemplate(root) {
+        root.updateMatrixWorld(true);
+        var box = new THREE.Box3();
+        var tmp = new THREE.Box3();
+        (function walk(o, blocked) {
+          var b = blocked || !!(o.name && CHAR_ACCESSORY_RE.test(o.name));
+          if (!b && o.isMesh) {
+            if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+            tmp.copy(o.geometry.boundingBox).applyMatrix4(o.matrixWorld);
+            box.union(tmp);
+          }
+          for (var ci = 0; ci < o.children.length; ci++) walk(o.children[ci], b);
+        })(root, false);
+        return { root: root, size: box.getSize(new THREE.Vector3()), min: box.min.clone(), center: box.getCenter(new THREE.Vector3()) };
+      }
+      /* Skeleton-aware clone (the SkeletonUtils pattern, inlined):
+         a plain .clone(true) shares one skeleton across every copy,
+         so all copies would strike the same pose. Here each clone
+         gets its own Skeleton built from the cloned bones with the
+         original bind inverses, plus per-instance material clones
+         (tinting / flash must never leak between instances). Shared
+         geometry keeps the GPU cost at one upload per model file. */
+      function cloneCharRoot(tpl) {
+        var srcRoot = tpl.scene;
+        var clone = srcRoot.clone(true);
+        var srcNodes = [], cloneNodes = [];
+        srcRoot.traverse(function (o) { srcNodes.push(o); });
+        clone.traverse(function (o) { cloneNodes.push(o); });
+        var nodeMap = {};
+        for (var i = 0; i < srcNodes.length; i++) nodeMap[srcNodes[i].uuid] = cloneNodes[i];
+        var mats = [];
+        for (var k = 0; k < srcNodes.length; k++) {
+          var so = srcNodes[k], co = cloneNodes[k];
+          if (so.isMesh) {
+            var wasArr = Array.isArray(so.material);
+            var ms = wasArr ? so.material : [so.material];
+            var cms = ms.map(function (m) {
+              var cm = m.clone();
+              cm.userData.origColor = cm.color ? cm.color.getHex() : 0xffffff;
+              if (mats.indexOf(cm) < 0) mats.push(cm);
+              return cm;
+            });
+            co.material = wasArr ? cms : cms[0];
+          }
+        }
+        clone.updateMatrixWorld(true);
+        for (var k2 = 0; k2 < srcNodes.length; k2++) {
+          var so2 = srcNodes[k2], co2 = cloneNodes[k2];
+          if (so2.isSkinnedMesh && so2.skeleton) {
+            var bones = so2.skeleton.bones.map(function (b) { return nodeMap[b.uuid]; });
+            var inverses = so2.skeleton.boneInverses.map(function (m) { return m.clone(); });
+            co2.bind(new THREE.Skeleton(bones, inverses), so2.bindMatrix);
+          }
+        }
+        return { root: clone, mats: mats };
+      }
+      /* Tint an instance's materials: textured KayKit materials are
+         white-based, so the tint IS the multiply colour; untextured
+         robot materials multiply their authored colour instead. The
+         original colour is captured per material at clone time, so
+         repeated tints (hero skins) never compound. */
+      function applyCharTint(mats, hex, opacity) {
+        var tc = new THREE.Color(hex);
+        for (var i = 0; i < mats.length; i++) {
+          var m = mats[i];
+          if (m.color) m.color.setHex(m.userData.origColor !== undefined ? m.userData.origColor : 0xffffff).multiply(tc);
+          if (opacity !== undefined && opacity < 1) { m.transparent = true; m.opacity = opacity; }
+          else if (opacity !== undefined) { m.transparent = false; m.opacity = 1; }
+        }
+      }
+      function makeCharInstance(key, targetH, tintHex, opacity) {
+        var tpl = charTemplates[key];
+        if (!tpl) return null;
+        var def = tpl.def;
+        var c = cloneCharRoot(tpl);
+        c.root.traverse(function (o) { if (o.name && CHAR_ACCESSORY_RE.test(o.name)) o.visible = false; });
+        applyCharTint(c.mats, tintHex, opacity);
+        var sc = targetH / tpl.size.y;
+        var inner = c.root;
+        inner.scale.set(sc * def.squashX, sc * def.squashY, sc * def.squashX);
+        inner.position.set(-tpl.center.x * sc * def.squashX, -tpl.min.y * sc * def.squashY, -tpl.center.z * sc * def.squashX);
+        inner.rotation.y = def.rotY;
+        var wrap = new THREE.Group();
+        wrap.add(inner);
+        if (def.headBone && def.headScale !== 1) {
+          var hb = findNodeByName(inner, def.headBone);
+          if (hb) hb.scale.multiplyScalar(def.headScale);
+        }
+        var mixer = new THREE.AnimationMixer(inner);
+        var actions = {};
+        for (var role in def.clips) {
+          var clip = findClipByName(tpl.animations, def.clips[role]);
+          if (clip) actions[role] = mixer.clipAction(clip);
+        }
+        return { key: key, wrap: wrap, inner: inner, mats: c.mats, mixer: mixer, actions: actions, role: "",
+                 handR: findNodeByName(inner, "handslot.r") || findNodeByName(inner, "hand.r") || findNodeByName(inner, "Hand.R"),
+                 lx: null, lz: null, acc: 0, kind: "", ref: null, hostGroup: null };
+      }
+      function setCharRole(inst, role) {
+        if (!inst || inst.role === role) return;
+        var next = inst.actions[role] || inst.actions.attack || inst.actions.idle;
+        if (!next) return;
+        var prev = inst.actions[inst.role];
+        inst.role = role;
+        next.reset(); next.setLoop(THREE.LoopRepeat, Infinity); next.fadeIn(0.16); next.play();
+        if (prev && prev !== next) prev.fadeOut(0.16);
+      }
+      var charAnimInstances = [];
+      function registerCharAnim(inst, kind, ref, hostGroup) {
+        inst.kind = kind; inst.ref = ref; inst.hostGroup = hostGroup;
+        charAnimInstances.push(inst);
+      }
+      function unregisterCharAnim(inst) {
+        var i = charAnimInstances.indexOf(inst);
+        if (i >= 0) charAnimInstances.splice(i, 1);
+        if (inst.mixer) inst.mixer.stopAllAction();
+      }
+      /* Per-frame animation driver (called from animate()): role is
+         derived from the same facts the AI already computes —
+         position delta for locomotion, range / role flags for
+         attacks — never from new gameplay state. Far enemies tick
+         their mixers one frame in three, like the walk-cycle LOD. */
+      function updateCharAnims(dt) {
+        for (var i = charAnimInstances.length - 1; i >= 0; i--) {
+          var inst = charAnimInstances[i];
+          var host = inst.hostGroup;
+          if (!host) continue;
+          var vis = true, o = host;
+          while (o) { if (!o.visible) { vis = false; break; } o = o.parent; }
+          if (!vis) continue;
+          var px = host.position.x, pz = host.position.z;
+          var moved = 0;
+          if (inst.lx !== null) { var mdx = px - inst.lx, mdz = pz - inst.lz; moved = Math.sqrt(mdx * mdx + mdz * mdz); }
+          inst.lx = px; inst.lz = pz;
+          var moving = moved > 0.012;
+          var role = "idle";
+          if (inst.kind === "enemy") {
+            var u = inst.ref;
+            var pdx = player.pos.x - px, pdz = player.pos.z - pz;
+            var dist = Math.sqrt(pdx * pdx + pdz * pdz);
+            if (u.dead) role = "death";
+            else if (u.bombRole) role = (!moving && dist < 30) ? "shoot" : (moving ? (u.speed >= 2 ? "run" : "walk") : "idle");
+            else if (u.ranged) role = (!moving && dist < 34) ? "cast" : (moving ? (u.speed >= 2 ? "run" : "walk") : "idle");
+            else if (dist <= (u.range || 1.45) + 0.3) role = "attack";
+            else if (moving) role = u.speed >= 2 ? "run" : "walk";
+            if (dist > 42 && (frameNo + i) % 3 !== 0) { inst.acc += dt; continue; }
+          } else if (inst.kind === "hero") {
+            if (typeof firing !== "undefined" && (firing || fireHeld)) role = "shoot";
+            else if (moving) role = "run";
+            else role = (typeof STATE !== "undefined" && STATE.mode === "play") ? "aim" : "idle";
+          } else { // mate
+            if (host.rotation.x < -1) continue; // down for the round: the fall pose owns the figure
+            var nearFoe = false;
+            for (var ei = 0; ei < enemies.length; ei++) {
+              var eg = enemies[ei];
+              var edx = eg.position.x - px, edz = eg.position.z - pz;
+              if (edx * edx + edz * edz < 484) { nearFoe = true; break; }
+            }
+            role = (!moving && nearFoe) ? "shoot" : (moving ? "walk" : "idle");
+          }
+          setCharRole(inst, role);
+          inst.mixer.update(dt + inst.acc);
+          inst.acc = 0;
+        }
+      }
+      /* Enemy family map, index-aligned with ENEMY_TYPES (defined
+         below): tpl key + tint + extra scale (+ opacity for the
+         ghost). null = no credible free Q model — the procedural
+         build stays （蜘蛛 / 石像鬼 / 恶魔 / 毒液爬行者 / 蜂巢女王 /
+         深渊触手怪 / 荆棘树妖 / 熔火魔君 / 不死凤凰 / 虚空魔龙）. */
+      var ENEMY_GLB_FAMILY = [
+        { tpl: "robot",       tint: 0xffffff },              // 0 机器人
+        { tpl: "barbarian",   tint: 0xc89858 },              // 1 傀儡 （木色）
+        null,                                                // 2 蜘蛛
+        { tpl: "barbarian",   tint: 0x8a6a4a, scale: 1.05 }, // 3 狼人
+        { tpl: "skeleton",    tint: 0xffffff },              // 4 骷髅兵
+        null,                                                // 5 石像鬼
+        { tpl: "skeleton",    tint: 0xbfe0ff, opacity: 0.55 }, // 6 幽灵
+        null,                                                // 7 恶魔
+        { tpl: "rogue",       tint: 0x9fe08a },              // 8 外星猎手
+        { tpl: "robot",       tint: 0xd8b28a, scale: 1.18 }, // 9 重装机甲
+        null,                                                // 10 毒液爬行者
+        { tpl: "rogue",       tint: 0x6a5acd },              // 11 影子刺客
+        { tpl: "barbarian",   tint: 0xb0563a, scale: 1.25 }, // 12 熔岩魔像
+        { tpl: "mage",        tint: 0xbfe6ff },              // 13 寒冰女巫
+        { tpl: "knight",      tint: 0xd84a5a },              // 14 血月骑士
+        { tpl: "rogueHooded", tint: 0x9a6aff, opacity: 0.92 }, // 15 虚空行者
+        null,                                                // 16 蜂巢女王
+        { tpl: "robot",       tint: 0x9adcff, scale: 1.18 }, // 17 雷电机甲
+        null,                                                // 18 深渊触手怪
+        null,                                                // 19 荆棘树妖
+        { tpl: "rogueHooded", tint: 0x4a3a6e, scale: 1.3 },  // 20 暗影君主
+        null,                                                // 21 熔火魔君
+        { tpl: "rogue",       tint: 0xa88fd0 },              // 22 星际掠夺者
+        null,                                                // 23 不死凤凰
+        { tpl: "mage",        tint: 0xd07aff },              // 24 混沌法师
+        { tpl: "barbarian",   tint: 0xa8906a, scale: 1.35 }, // 25 泰坦巨兽
+        { tpl: "rogue",       tint: 0x7affd0 },              // 26 时空猎手
+        null,                                                // 27 虚空魔龙
+        { tpl: "knight",      tint: 0x8a8f9e, scale: 1.3 },  // 28 末日骑士王
+        { tpl: "knight",      tint: 0xff5a4a },              // 29 终焉主宰 (boss ×1.6 on top)
+        { tpl: "mage",        tint: 0x9ae04a, scale: 0.8 },  // 30 喷吐者
+        { tpl: "robot",       tint: 0xffd9a0 },              // 31 轨道炮手
+        { tpl: "mage",        tint: 0x8a5aff }               // 32 虚空炮手
+      ];
+      /* The five heroes as Q models: Knight / Barbarian / Mage /
+         Rogue-Hooded / Rogue — distinct silhouettes and professions
+         before tinting; tint is the wash the hero skins re-aim. */
+      var HERO_GLB = [
+        { tpl: "knight",      tint: 0xffffff }, // 蓝盾队长
+        { tpl: "barbarian",   tint: 0xffffff }, // 荒漠游侠
+        { tpl: "mage",        tint: 0xd8ecfa }, // 极地雪卫 （冰蓝法袍）
+        { tpl: "rogueHooded", tint: 0xcfe8b0 }, // 丛林猎手 （叶绿兜帽）
+        { tpl: "rogue",       tint: 0x9aa2b5 }  // 暗夜特工 （冷灰）
+      ];
+      function attachEnemyVisual(g, typeIdx, T) {
+        var fam = ENEMY_GLB_FAMILY[typeIdx];
+        if (!fam || !charTemplates[fam.tpl]) return;
+        var u = g.userData;
+        var targetH = ((T.aimY || 1.3) + 0.72) * (fam.scale || 1) * (u.isBoss ? 1.6 : 1);
+        var inst = makeCharInstance(fam.tpl, targetH, fam.tint, fam.opacity || 1);
+        if (!inst) return;
+        // hide the procedural figure (hitboxes stay live: r128's
+        // raycaster ignores visibility, flinch / flash keep working
+        // on the hidden meshes, and the GLB gets its own emissive
+        // flash through damageEnemy / the AI restore block)
+        g.traverse(function (o) { if (o.isMesh && o !== u.blob) o.visible = false; });
+        g.add(inst.wrap);
+        u.glbInst = inst;
+        u.glbMats = inst.mats;
+        registerCharAnim(inst, "enemy", u, g);
+        if (qualityTier === "fancy" || qualityTier === "balanced")
+          inst.wrap.traverse(function (o) { if (o.isMesh) o.castShadow = true; });
+      }
+      function upgradeFigure(lig, heroIdx, isMate) {
+        if (!lig || lig.glbInst) return;
+        var def = HERO_GLB[heroIdx];
+        if (!def || !charTemplates[def.tpl]) return;
+        var inst = makeCharInstance(def.tpl, 2.02, def.tint, 1);
+        if (!inst) return;
+        var keep = {};
+        if (lig.propGun) lig.propGun.traverse(function (o) { keep[o.uuid] = true; });
+        lig.group.traverse(function (o) { if (o.isMesh && !keep[o.uuid]) o.visible = false; });
+        lig.group.add(inst.wrap);
+        lig.glbInst = inst;
+        lig.glbMats = inst.mats;
+        inst.hostGroup = lig.group;
+        registerCharAnim(inst, isMate ? "mate" : "hero", lig, lig.group);
+        if (!isMate && lig.propGun && inst.handR) {
+          // the toy rifle moves into the model's right hand; the
+          // main loop's reload-dip only drives it while it is still
+          // parented to the figure root (guarded there)
+          inst.handR.add(lig.propGun);
+          lig.propGun.position.set(0, 0.02, -0.08);
+          lig.propGun.rotation.set(0, 0, 0);
+        }
+        if (qualityTier === "fancy" || qualityTier === "balanced")
+          inst.wrap.traverse(function (o) { if (o.isMesh) o.castShadow = true; });
+        if (!isMate && typeof applyCharSkinIdx === "function") applyCharSkinIdx(heroIdx);
+      }
+      function upgradeAllHeroFigures() {
+        if (typeof charFigures === "undefined") return;
+        for (var i = 0; i < charFigures.length; i++) upgradeFigure(charFigures[i], i, false);
+        // bomb-mode mates built before a template landed upgrade too
+        if (typeof mates !== "undefined")
+          for (var mi = 0; mi < mates.length; mi++)
+            if (mates[mi].fig) upgradeFigure(mates[mi].fig, (currentChar + 1 + mates[mi].slot) % CHARACTERS.length, true);
+        // enemies already on the field when a template lands swap
+        // in too, exactly like the gun models do
+        if (typeof enemies !== "undefined" && typeof ENEMY_TYPES !== "undefined")
+          for (var ei = 0; ei < enemies.length; ei++) {
+            var eg = enemies[ei];
+            if (!eg.userData.glbInst && eg.userData.typeIdx !== undefined)
+              attachEnemyVisual(eg, eg.userData.typeIdx, ENEMY_TYPES[eg.userData.typeIdx]);
+          }
+      }
+      if (glbLoader) {
+        Object.keys(CHAR_TPL_DEFS).forEach(function (key) {
+          var def = CHAR_TPL_DEFS[key];
+          glbLoader.load("assets/models/" + def.file, function (gltf) {
+            glbFixMaterials(gltf.scene, 0.35);
+            var mt = measureCharTemplate(gltf.scene);
+            mt.scene = gltf.scene;
+            mt.animations = gltf.animations || [];
+            mt.def = def;
+            charTemplates[key] = mt;
+            upgradeAllHeroFigures();
+          }, undefined, function () { /* load failed: procedural figures stay */ });
+        });
+      }
+
       var flashLight = new THREE.PointLight(0xffc860, 0, 9); scene.add(flashLight);
 
       /* Player characters shown in third-person view (hidden in first
@@ -3020,68 +3947,68 @@
       var STOCK_PAL = { body: 0x2b2f36, dark: 0x1d2025, accent: 0xffb020, steel: 0x9aa4ae, wood: 0x8a5a2a, woodDark: 0x6e4520, olive: 0x5d7048, war: 0xe8481c };
       var WEAPON_SKINS = {
         pistol: [
-          { id: "stock", name: "原厂黑钢", price: 0,  img: "assets/asset-bf9d6e63a733.jpg", pal: STOCK_PAL },
-          { id: "gold",  name: "黄金手枪", price: 40, img: "assets/asset-60f2d22e0ee2.jpg", pal: { body: 0xd8a832, dark: 0x6e5516, accent: 0xffe27a, steel: 0xf0dca0 } },
-          { id: "sakura", name: "粉樱物语", price: 50, img: "assets/asset-9752b177c1bb.jpg", pal: { body: 0xd77a9e, dark: 0x7a3350, accent: 0xffd7e8, steel: 0xf3c3d6 } }
+          { id: "stock", name: "原厂黑钢", price: 0,  img: "assets/weapon-pistol.jpg", pal: STOCK_PAL },
+          { id: "gold",  name: "黄金手枪", price: 40, img: "assets/skin-pistol-gold.jpg", pal: { body: 0xd8a832, dark: 0x6e5516, accent: 0xffe27a, steel: 0xf0dca0 } },
+          { id: "sakura", name: "粉樱物语", price: 50, img: "assets/skin-pistol-sakura.jpg", pal: { body: 0xd77a9e, dark: 0x7a3350, accent: 0xffd7e8, steel: 0xf3c3d6 } }
         ],
         smg: [
-          { id: "stock", name: "原厂黑钢", price: 0,  img: "assets/asset-5394615b67d8.jpg", pal: STOCK_PAL },
-          { id: "camo",  name: "丛林迷彩", price: 40, img: "assets/asset-a888ab97ce65.jpg", pal: { body: 0x51682f, dark: 0x2c3d1e, accent: 0xa8c256, steel: 0x77875f } },
-          { id: "ocean", name: "深海蓝鲨", price: 50, img: "assets/asset-7528d853b5dd.jpg", pal: { body: 0x2a6db0, dark: 0x14324f, accent: 0x53d7e8, steel: 0x9fc6dd } }
+          { id: "stock", name: "原厂黑钢", price: 0,  img: "assets/weapon-smg.jpg", pal: STOCK_PAL },
+          { id: "camo",  name: "丛林迷彩", price: 40, img: "assets/skin-smg-camo.jpg", pal: { body: 0x51682f, dark: 0x2c3d1e, accent: 0xa8c256, steel: 0x77875f } },
+          { id: "ocean", name: "深海蓝鲨", price: 50, img: "assets/skin-smg-ocean.jpg", pal: { body: 0x2a6db0, dark: 0x14324f, accent: 0x53d7e8, steel: 0x9fc6dd } }
         ],
         rifle: [
-          { id: "stock", name: "原厂黑钢", price: 0,  img: "assets/asset-b61f70ac999c.jpg", pal: STOCK_PAL },
-          { id: "frost", name: "极影寒域", price: 60, img: "assets/asset-5af0f1daf7e2.jpg", pal: { body: 0x8fc3e8, dark: 0x2c5f7d, accent: 0xeaf7ff, steel: 0xd7ecfa } },
-          { id: "magma", name: "赤焰熔岩", price: 70, img: "assets/asset-f2e90e7352d7.jpg", pal: { body: 0x8a2f1a, dark: 0x38120c, accent: 0xff7a26, steel: 0xd98a5a } }
+          { id: "stock", name: "原厂黑钢", price: 0,  img: "assets/weapon-rifle.jpg", pal: STOCK_PAL },
+          { id: "frost", name: "极影寒域", price: 60, img: "assets/skin-rifle-frost.jpg", pal: { body: 0x8fc3e8, dark: 0x2c5f7d, accent: 0xeaf7ff, steel: 0xd7ecfa } },
+          { id: "magma", name: "赤焰熔岩", price: 70, img: "assets/skin-rifle-magma.jpg", pal: { body: 0x8a2f1a, dark: 0x38120c, accent: 0xff7a26, steel: 0xd98a5a } }
         ],
         sniper: [
-          { id: "stock", name: "原厂黑钢", price: 0,  img: "assets/asset-405690f282aa.jpg", pal: STOCK_PAL },
-          { id: "night", name: "暗夜紫影", price: 60, img: "assets/asset-da84e89f0bdd.jpg", pal: { body: 0x332a4a, dark: 0x17121f, accent: 0xb46aff, steel: 0x6a5a8a } },
-          { id: "snow",  name: "雪原白狼", price: 70, img: "assets/asset-16f0624755ba.jpg", pal: { body: 0xdfe6ec, dark: 0x5d6a76, accent: 0x7fb2d9, steel: 0xf2f6f9 } }
+          { id: "stock", name: "原厂黑钢", price: 0,  img: "assets/weapon-sniper.jpg", pal: STOCK_PAL },
+          { id: "night", name: "暗夜紫影", price: 60, img: "assets/skin-sniper-night.jpg", pal: { body: 0x332a4a, dark: 0x17121f, accent: 0xb46aff, steel: 0x6a5a8a } },
+          { id: "snow",  name: "雪原白狼", price: 70, img: "assets/skin-sniper-snow.jpg", pal: { body: 0xdfe6ec, dark: 0x5d6a76, accent: 0x7fb2d9, steel: 0xf2f6f9 } }
         ],
         bow: [
-          { id: "stock", name: "原木猎弓", price: 0,  img: "assets/asset-9570031cd8b8.jpg", pal: STOCK_PAL },
-          { id: "jade",  name: "翡翠灵弓", price: 50, img: "assets/asset-4f5c6cf34f7e.jpg", pal: { wood: 0x2e8b57, woodDark: 0x1d5c39, accent: 0xffd23e, steel: 0xd8e6c8 } },
-          { id: "maple", name: "枫火猎弓", price: 60, img: "assets/asset-fe3a45d173e4.jpg", pal: { wood: 0xa83c14, woodDark: 0x5c1e08, accent: 0xffb020, steel: 0xe8b06a } }
+          { id: "stock", name: "原木猎弓", price: 0,  img: "assets/weapon-bow.jpg", pal: STOCK_PAL },
+          { id: "jade",  name: "翡翠灵弓", price: 50, img: "assets/skin-bow-jade.jpg", pal: { wood: 0x2e8b57, woodDark: 0x1d5c39, accent: 0xffd23e, steel: 0xd8e6c8 } },
+          { id: "maple", name: "枫火猎弓", price: 60, img: "assets/skin-bow-maple.jpg", pal: { wood: 0xa83c14, woodDark: 0x5c1e08, accent: 0xffb020, steel: 0xe8b06a } }
         ],
         rocket: [
-          { id: "stock", name: "原厂军绿", price: 0,  img: "assets/asset-b42792f874b2.jpg", pal: STOCK_PAL },
-          { id: "lava",  name: "熔火重炮", price: 80, img: "assets/asset-42c4543c16a6.jpg", pal: { olive: 0xc2451a, war: 0xffcf3e, body: 0x7a2410, dark: 0x38120c, accent: 0xff8a2a, steel: 0xb0563a } },
-          { id: "frost", name: "极寒冰炮", price: 90, img: "assets/asset-d305e0867120.jpg", pal: { olive: 0x3f7fa8, war: 0xbfeaff, body: 0x274b63, dark: 0x122a3a, accent: 0x8fe0ff, steel: 0xcfeaf7 } }
+          { id: "stock", name: "原厂军绿", price: 0,  img: "assets/weapon-rocket.jpg", pal: STOCK_PAL },
+          { id: "lava",  name: "熔火重炮", price: 80, img: "assets/skin-rocket-lava.jpg", pal: { olive: 0xc2451a, war: 0xffcf3e, body: 0x7a2410, dark: 0x38120c, accent: 0xff8a2a, steel: 0xb0563a } },
+          { id: "frost", name: "极寒冰炮", price: 90, img: "assets/skin-rocket-frost.jpg", pal: { olive: 0x3f7fa8, war: 0xbfeaff, body: 0x274b63, dark: 0x122a3a, accent: 0x8fe0ff, steel: 0xcfeaf7 } }
         ],
         shotgun: [
-          { id: "stock", name: "原厂黑钢", price: 0,  img: "assets/asset-b92ed973c3fc.jpg", pal: STOCK_PAL },
-          { id: "desert", name: "沙漠风暴", price: 60, img: "assets/asset-3e41e30b46df.jpg", pal: { body: 0xc8a165, dark: 0x6e4a20, accent: 0xff8c2a, steel: 0xd8c4a0, wood: 0xa5713d, woodDark: 0x7a4f24 } },
-          { id: "neon",  name: "霓虹脉冲", price: 70, img: "assets/asset-9a7e21d15c7f.jpg", pal: { body: 0x23242c, dark: 0x101016, accent: 0x35e0ff, steel: 0x8a97a5, wood: 0x2a2f38, woodDark: 0x171a20 } }
+          { id: "stock", name: "原厂黑钢", price: 0,  img: "assets/weapon-shotgun.jpg", pal: STOCK_PAL },
+          { id: "desert", name: "沙漠风暴", price: 60, img: "assets/skin-shotgun-desert.jpg", pal: { body: 0xc8a165, dark: 0x6e4a20, accent: 0xff8c2a, steel: 0xd8c4a0, wood: 0xa5713d, woodDark: 0x7a4f24 } },
+          { id: "neon",  name: "霓虹脉冲", price: 70, img: "assets/skin-shotgun-neon.jpg", pal: { body: 0x23242c, dark: 0x101016, accent: 0x35e0ff, steel: 0x8a97a5, wood: 0x2a2f38, woodDark: 0x171a20 } }
         ]
       };
       // Parallel to CHARACTERS: [0] 蓝盾队长 [1] 荒漠游侠 [2] 极地雪卫
       // [3] 丛林猎手 [4] 暗夜特工. pal null = the hero's own colours.
       var CHAR_SKINS = [
         [
-          { id: "orig",    name: "原始装扮", price: 0,  img: "assets/asset-b0e1eedfc63f.jpg", pal: null },
-          { id: "america", name: "美国队长", price: 60, img: "assets/asset-58db2f507de4.jpg", pal: { body: 0x2456a8, dark: 0xe8e4da, accent: 0xc22f27, pack: 0x9e2b23, shoe: 0xc22f27 } },
-          { id: "darkgold", name: "暗金指挥官", price: 70, img: "assets/asset-7516c12ba3cb.jpg", pal: { body: 0x2b2b30, dark: 0x14151a, accent: 0xffc93e, pack: 0x3a3f47, shoe: 0x14151a } }
+          { id: "orig",    name: "原始装扮", price: 0,  img: "assets/char-captain.jpg", pal: null },
+          { id: "america", name: "美国队长", price: 60, img: "assets/skin-captain-america.jpg", pal: { body: 0x2456a8, dark: 0xe8e4da, accent: 0xc22f27, pack: 0x9e2b23, shoe: 0xc22f27 } },
+          { id: "darkgold", name: "暗金指挥官", price: 70, img: "assets/skin-captain-darkgold.jpg", pal: { body: 0x2b2b30, dark: 0x14151a, accent: 0xffc93e, pack: 0x3a3f47, shoe: 0x14151a } }
         ],
         [
-          { id: "orig", name: "原始装扮", price: 0,  img: "assets/asset-effb49cb3880.jpg", pal: null },
-          { id: "duel", name: "黑金镖客", price: 60, img: "assets/asset-5159ed0d14c5.jpg", pal: { body: 0x23242c, dark: 0x14151a, accent: 0xffc93e, pack: 0x3a3f47, shoe: 0x14151a } },
-          { id: "jade", name: "翡翠游侠", price: 70, img: "assets/asset-67901eca4954.jpg", pal: { body: 0x2e6b46, dark: 0x1d4029, accent: 0xd8b13e, pack: 0x4a5d2f, shoe: 0x2c2118 } }
+          { id: "orig", name: "原始装扮", price: 0,  img: "assets/char-ranger.jpg", pal: null },
+          { id: "duel", name: "黑金镖客", price: 60, img: "assets/skin-ranger-duel.jpg", pal: { body: 0x23242c, dark: 0x14151a, accent: 0xffc93e, pack: 0x3a3f47, shoe: 0x14151a } },
+          { id: "jade", name: "翡翠游侠", price: 70, img: "assets/skin-ranger-jade.jpg", pal: { body: 0x2e6b46, dark: 0x1d4029, accent: 0xd8b13e, pack: 0x4a5d2f, shoe: 0x2c2118 } }
         ],
         [
-          { id: "orig",  name: "原始装扮", price: 0,  img: "assets/asset-5e06e89c8e96.jpg", pal: null },
-          { id: "santa", name: "圣诞老人", price: 70, img: "assets/asset-91cc7cde011d.jpg", pal: { body: 0xc22727, dark: 0x2b2b30, accent: 0xf5efe2, pack: 0x8e1f1f, shoe: 0x1c1c20 } },
-          { id: "aurora", name: "极光雪卫", price: 80, img: "assets/asset-983930ff5008.jpg", pal: { body: 0x3a7f9e, dark: 0x274b63, accent: 0x9e6ae8, pack: 0x2c5f7d, shoe: 0x1d2f3d } }
+          { id: "orig",  name: "原始装扮", price: 0,  img: "assets/char-arctic.jpg", pal: null },
+          { id: "santa", name: "圣诞老人", price: 70, img: "assets/skin-arctic-santa.jpg", pal: { body: 0xc22727, dark: 0x2b2b30, accent: 0xf5efe2, pack: 0x8e1f1f, shoe: 0x1c1c20 } },
+          { id: "aurora", name: "极光雪卫", price: 80, img: "assets/skin-arctic-aurora.jpg", pal: { body: 0x3a7f9e, dark: 0x274b63, accent: 0x9e6ae8, pack: 0x2c5f7d, shoe: 0x1d2f3d } }
         ],
         [
-          { id: "orig",   name: "原始装扮", price: 0,  img: "assets/asset-5a7b0a820b54.jpg", pal: null },
-          { id: "autumn", name: "秋叶猎手", price: 60, img: "assets/asset-84071ffbe1f8.jpg", pal: { body: 0xa85a24, dark: 0x54340f, accent: 0xffc93e, pack: 0x6e4a1f, shoe: 0x4a2c10 } },
-          { id: "nightowl", name: "夜枭猎手", price: 70, img: "assets/asset-f41d9730146e.jpg", pal: { body: 0x33383f, dark: 0x1c1f24, accent: 0x53d7e8, pack: 0x23262c, shoe: 0x101114 } }
+          { id: "orig",   name: "原始装扮", price: 0,  img: "assets/char-jungle.jpg", pal: null },
+          { id: "autumn", name: "秋叶猎手", price: 60, img: "assets/skin-jungle-autumn.jpg", pal: { body: 0xa85a24, dark: 0x54340f, accent: 0xffc93e, pack: 0x6e4a1f, shoe: 0x4a2c10 } },
+          { id: "nightowl", name: "夜枭猎手", price: 70, img: "assets/skin-jungle-nightowl.jpg", pal: { body: 0x33383f, dark: 0x1c1f24, accent: 0x53d7e8, pack: 0x23262c, shoe: 0x101114 } }
         ],
         [
-          { id: "orig",   name: "原始装扮", price: 0,  img: "assets/asset-28df464fcddc.jpg", pal: null },
-          { id: "silver", name: "银翼特工", price: 70, img: "assets/asset-3f7359d4aeb1.jpg", pal: { body: 0xc9d2dc, dark: 0x59636f, accent: 0x35c4e8, pack: 0x8a97a5, shoe: 0x2e3742, visor: 0x35e0ff } },
-          { id: "crimson", name: "绯红特工", price: 80, img: "assets/asset-fcdb14aa3492.jpg", pal: { body: 0x7a1f24, dark: 0x3d1013, accent: 0xffb020, pack: 0x4a1518, shoe: 0x1c0c0d, visor: 0xffcf3e } }
+          { id: "orig",   name: "原始装扮", price: 0,  img: "assets/char-agent.jpg", pal: null },
+          { id: "silver", name: "银翼特工", price: 70, img: "assets/skin-agent-silver.jpg", pal: { body: 0xc9d2dc, dark: 0x59636f, accent: 0x35c4e8, pack: 0x8a97a5, shoe: 0x2e3742, visor: 0x35e0ff } },
+          { id: "crimson", name: "绯红特工", price: 80, img: "assets/skin-agent-crimson.jpg", pal: { body: 0x7a1f24, dark: 0x3d1013, accent: 0xffb020, pack: 0x4a1518, shoe: 0x1c0c0d, visor: 0xffcf3e } }
         ]
       ];
       var ownedWeaponSkins = {}, curWeaponSkin = {};
@@ -3472,6 +4399,9 @@
         if (pal && pal.shoe) f.mats.shoe.color.setHex(pal.shoe);
         else f.mats.shoe.color.setHex(C.shoe);
         if (f.mats.visor) f.mats.visor.color.setHex(pal && pal.visor ? pal.visor : 0xff2a20);
+        // the real Q model wears the same outfit as a tint wash over
+        // its factory finish (same policy as the GLB guns)
+        if (f.glbMats) applyCharTint(f.glbMats, pal ? pal.body : (HERO_GLB[idx] ? HERO_GLB[idx].tint : 0xffffff), 1);
       }
       function applyCharSkin() { applyCharSkinIdx(currentChar); }
       function refreshCoinUI() {
@@ -4351,6 +5281,7 @@
           dmg: T.dmg, range: T.range || 1.45, radius: T.radius || 0.55,
           aimY: T.aimY, score: T.score, deathColor: T.deathColor,
           hitFx: HIT_FX[typeIdx],
+          typeIdx: typeIdx,
           walkPhase: Math.random() * 6, phase: Math.random() * 6,
           attackCd: 0, flashT: 0, dead: false,
           flinchT: 0, flinchDur: 0.15, flinchPeak: 0, flinchHead: 0,
@@ -4414,9 +5345,11 @@
         enemies.push(g);
         shootables.push(u.body);
         if (u.head) shootables.push(u.head);
+        attachEnemyVisual(g, typeIdx, T); // real Q model rides the group when its template has loaded
         return g;
       }
       function removeEnemy(g) {
+        if (g.userData.glbInst) unregisterCharAnim(g.userData.glbInst);
         scene.remove(g);
         var ix = enemies.indexOf(g); if (ix >= 0) enemies.splice(ix, 1);
         [g.userData.body, g.userData.head].forEach(function (m) {
@@ -5433,6 +6366,7 @@
         u.flashT = Math.min(0.16, (fx.flashT || 0.09) * 1.35);
         var fm = flashMatFor(fx.flash);
         u.body.material = fm; if (u.head) u.head.material = fm;
+        if (u.glbMats) for (var gi = 0; gi < u.glbMats.length; gi++) if (u.glbMats[gi].emissive) u.glbMats[gi].emissive.setHex(fx.flash);
         // hit burst in this kind's own colours / form (headshots burst harder)
         spawnParticles(point, fx.c1, fx.n + (isHead ? 3 : 0), fx.sp, fx.up,
           { color2: fx.c2, size: fx.size * (isHead ? 1.2 : 1), life: fx.life, grav: fx.grav, opacity: fx.op });
@@ -5671,9 +6605,9 @@
          buttons, hand-held hint, wheel, and the medallion the 3D item
          itself wears), and the STATE field holding its count. */
       var THROW_META = {
-        fire: { name: "燃烧弹", img: "assets/asset-6f64d11b1620.jpg", field: "molotov" },
-        ice: { name: "冰球", img: "assets/asset-d2390c54a7ba.jpg", field: "iceball" },
-        grenade: { name: "手榴弹", img: "assets/asset-201d4d3a85e3.jpg", field: "grenade" }
+        fire: { name: "燃烧弹", img: "assets/item-molotov.jpg", field: "molotov" },
+        ice: { name: "冰球", img: "assets/item-iceball.jpg", field: "iceball" },
+        grenade: { name: "手榴弹", img: "assets/item-grenade.jpg", field: "grenade" }
       };
       var THROW_ORDER = ["fire", "ice", "grenade"];
       function throwCount(kind) { return STATE[THROW_META[kind].field]; }
@@ -6782,13 +7716,13 @@
          same generated art as the map previews and character
          portraits, so picker, tiles and heroes all read as one game. */
       var GUN_IMG = {
-        pistol: "assets/asset-bf9d6e63a733.jpg",
-        smg: "assets/asset-5394615b67d8.jpg",
-        rifle: "assets/asset-b61f70ac999c.jpg",
-        sniper: "assets/asset-405690f282aa.jpg",
-        bow: "assets/asset-9570031cd8b8.jpg",
-        rocket: "assets/asset-b42792f874b2.jpg",
-        shotgun: "assets/asset-b92ed973c3fc.jpg"
+        pistol: "assets/weapon-pistol.jpg",
+        smg: "assets/weapon-smg.jpg",
+        rifle: "assets/weapon-rifle.jpg",
+        sniper: "assets/weapon-sniper.jpg",
+        bow: "assets/weapon-bow.jpg",
+        rocket: "assets/weapon-rocket.jpg",
+        shotgun: "assets/weapon-shotgun.jpg"
       };
       var gunpics = document.querySelectorAll(".gunpic");
       for (var gi = 0; gi < gunpics.length; gi++) {
@@ -7111,6 +8045,29 @@
       var AI_AIM_R = 1.02, AI_AIM_L = 1.22;
       function armBombEnemy(g, u) {
         var gun = buildAIGun();
+        if (u.glbInst) {
+          // real-model path: the rifle rides the model's right hand
+          // bone (its shooting clip poses the arm), and the red team
+          // strips sit at fixed heights derived from aimY — the
+          // procedural arms they used to sit on are hidden
+          if (u.glbInst.handR) {
+            gun.position.set(0, 0.02, -0.05);
+            gun.rotation.set(0, 0, 0);
+            u.glbInst.handR.add(gun);
+          } else {
+            gun.position.set(0.18, 1.24, -0.42);
+            g.add(gun);
+          }
+          u.gunMesh = gun;
+          // strips hug the Q model's own proportions: shoulders at
+          // ~71% of its fitted height, band just under the head top
+          var fitH = (u.aimY || 1.3) + 0.72;
+          var stripY = fitH * 0.71;
+          ebox(0.3, 0.09, 0.32, foeMarkMat, -0.4, stripY, 0, g);
+          ebox(0.3, 0.09, 0.32, foeMarkMat, 0.4, stripY, 0, g);
+          ebox(0.62, 0.09, 0.62, foeMarkMat, 0, fitH - 0.18, 0, g);
+          return;
+        }
         if (u.armR) {
           // Anchor the rifle to the RIGHT HAND: pose both arms into
           // the carry, then parent the gun to the right arm mesh
@@ -7667,6 +8624,7 @@
           var C = CHARACTERS[(currentChar + 1 + i) % CHARACTERS.length];
           var fig = buildPlayerFigure(C);
           var grp = fig.group;
+          upgradeFigure(fig, (currentChar + 1 + i) % CHARACTERS.length, true); // real Q hero model when loaded
           grp.visible = false;
           var blob = new THREE.Mesh(blobGeo, blobMat);
           blob.rotation.x = -Math.PI / 2;
@@ -7686,20 +8644,36 @@
           // hand sits at the same local point on every hero.
           if (fig.propGun) fig.propGun.visible = false;
           var aiGun = buildAIGun();
-          aiGun.quaternion.copy(fig.shR.quaternion).invert();
-          var mGripW = new THREE.Vector3(0, -0.15, 0.17).applyQuaternion(aiGun.quaternion);
-          aiGun.position.set(0, -0.84, 0).sub(mGripW);
-          fig.shR.add(aiGun);
+          if (fig.glbInst && fig.glbInst.handR) {
+            // real-model path: the rifle rides the model's right hand bone
+            aiGun.position.set(0, 0.02, -0.05);
+            fig.glbInst.handR.add(aiGun);
+          } else {
+            aiGun.quaternion.copy(fig.shR.quaternion).invert();
+            var mGripW = new THREE.Vector3(0, -0.15, 0.17).applyQuaternion(aiGun.quaternion);
+            aiGun.position.set(0, -0.84, 0).sub(mGripW);
+            fig.shR.add(aiGun);
+          }
           // blue team ID: a strip across each shoulder pad…
-          ebox(0.34, 0.09, 0.38, mateMarkMat, 0, 0.16, 0, fig.shL);
-          ebox(0.34, 0.09, 0.38, mateMarkMat, 0, 0.16, 0, fig.shR);
-          // …and a band around the headgear (sized per hero's hat / hood)
-          var hb = { w: 0.56, d: 0.56, y: 2.02, z: 0 };
-          if (C.gear === "ranger") hb = { w: 0.52, d: 0.52, y: 2.1, z: 0 };
-          else if (C.gear === "arctic") hb = { w: 0.66, d: 0.68, y: 1.98, z: 0.08 };
-          else if (C.gear === "jungle") hb = { w: 0.62, d: 0.62, y: 1.98, z: 0.06 };
-          else if (C.gear === "agent") hb = { w: 0.54, d: 0.54, y: 1.99, z: 0.01 };
-          ebox(hb.w, 0.09, hb.d, mateMarkMat, 0, hb.y, hb.z, grp);
+          if (fig.glbInst) {
+            // real-model mates: the strips hug the Q model's own
+            // proportions (shoulders ~71% of its 2.02 height, band
+            // just under the head top) instead of the hidden
+            // procedural shoulder pivots
+            ebox(0.3, 0.09, 0.32, mateMarkMat, -0.4, 1.44, 0, grp);
+            ebox(0.3, 0.09, 0.32, mateMarkMat, 0.4, 1.44, 0, grp);
+            ebox(0.62, 0.09, 0.62, mateMarkMat, 0, 1.84, 0, grp);
+          } else {
+            ebox(0.34, 0.09, 0.38, mateMarkMat, 0, 0.16, 0, fig.shL);
+            ebox(0.34, 0.09, 0.38, mateMarkMat, 0, 0.16, 0, fig.shR);
+            // …and a band around the headgear (sized per hero's hat / hood)
+            var hb = { w: 0.56, d: 0.56, y: 2.02, z: 0 };
+            if (C.gear === "ranger") hb = { w: 0.52, d: 0.52, y: 2.1, z: 0 };
+            else if (C.gear === "arctic") hb = { w: 0.66, d: 0.68, y: 1.98, z: 0.08 };
+            else if (C.gear === "jungle") hb = { w: 0.62, d: 0.62, y: 1.98, z: 0.06 };
+            else if (C.gear === "agent") hb = { w: 0.54, d: 0.54, y: 1.99, z: 0.01 };
+            ebox(hb.w, 0.09, hb.d, mateMarkMat, 0, hb.y, hb.z, grp);
+          }
           // overhead arrow: depth test OFF at low opacity, so a
           // teammate behind cover still shows a faint blue arrow —
           // you can always find your squad (enemies get no such mark)
@@ -7710,7 +8684,7 @@
           grp.add(mk);
           scene.add(grp);
           mates.push({
-            grp: grp, name: MATE_NAMES[i], slot: i, marker: mk,
+            grp: grp, fig: fig, name: MATE_NAMES[i], slot: i, marker: mk,
             legL: grp.userData.legL, legR: grp.userData.legR,
             hp: 100, dead: false, fireT: 1,
             walkPhase: Math.random() * 6,
@@ -8757,6 +9731,31 @@
             cx3 = Math.max(-ARENA + 0.6, Math.min(ARENA - 0.6, cx3));
             cz3 = Math.max(-ARENA + 0.6, Math.min(ARENA - 0.6, cz3));
             if (cy3 < 0.5) cy3 = 0.5;
+            // pull the camera in front of any cover it would sink
+            // into: march the pivot→camera segment against the same
+            // AABB colliders movement uses (a hair of margin), and
+            // stop at the last clear step — backing against a
+            // container no longer puts the view inside the box
+            var pivY = player.pos.y + 0.55, camT = 0.05;
+            for (var cti = 1; cti <= 20; cti++) {
+              var ct2 = cti / 20;
+              var px3 = player.pos.x + (cx3 - player.pos.x) * ct2;
+              var py3 = pivY + (cy3 - pivY) * ct2;
+              var pz3 = player.pos.z + (cz3 - player.pos.z) * ct2;
+              var blocked3 = false;
+              for (var cci = 0; cci < colliders.length; cci++) {
+                var cc3 = colliders[cci];
+                if (py3 < cc3.top + 0.05 && px3 > cc3.minX - 0.22 && px3 < cc3.maxX + 0.22 && pz3 > cc3.minZ - 0.22 && pz3 < cc3.maxZ + 0.22) { blocked3 = true; break; }
+              }
+              if (blocked3) break;
+              camT = ct2;
+            }
+            if (camT < 1) {
+              cx3 = player.pos.x + (cx3 - player.pos.x) * camT;
+              cy3 = pivY + (cy3 - pivY) * camT;
+              cz3 = player.pos.z + (cz3 - player.pos.z) * camT;
+              if (cy3 < 0.35) cy3 = 0.35;
+            }
             camera.position.set(cx3, cy3, cz3);
             // sync the character model with the player transform
             playerModel.position.set(player.pos.x, player.feetY, player.pos.z);
@@ -8810,8 +9809,10 @@
           gun.position.y = gBaseY + (moving ? Math.abs(Math.sin(player.bobT)) * 0.012 : 0) - rdip * 0.17;
           gun.rotation.x = recoil * 0.16 + rdip * 0.85;
           gun.rotation.z = rdip * 0.35;
-          propGun.rotation.x = rdip * 0.7;
-          propGun.position.y = 1.36 - rdip * 0.16;
+          if (propGun && propGun.parent === playerModel) { // a hand-bone-parented prop gun (real hero model) is posed by the rig instead
+            propGun.rotation.x = rdip * 0.7;
+            propGun.position.y = 1.36 - rdip * 0.16;
+          }
 
           // spawning (campaign waves only — bomb rounds spawn their
           // own bot squad in startBombRound)
@@ -8863,6 +9864,10 @@
               var tintM = u.burnT > 0 ? statusBurnMat : (u.frostT > 0 ? statusFrostMat : null);
               u.body.material = tintM || u.bodyMat;
               if (u.head) u.head.material = tintM || u.headMat;
+              if (u.glbMats) {
+                var emHex = u.burnT > 0 ? 0xe85a1e : (u.frostT > 0 ? 0x8fd4ff : 0x000000);
+                for (var ge = 0; ge < u.glbMats.length; ge++) if (u.glbMats[ge].emissive) u.glbMats[ge].emissive.setHex(emHex);
+              }
             }
             // status effects from throwables: burning drains HP over
             // time (and can finish an enemy off), frost just counts down
@@ -8994,6 +9999,7 @@
         }
         updateParticles(dt);
         updateDmgNums(dt);
+        updateCharAnims(dt);
         renderer.render(scene, camera);
       }
       /* ================= Restore the local save =================
